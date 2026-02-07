@@ -1,0 +1,10 @@
+Import("env")
+
+
+def source(file):
+    return "#/src/engine/src/util/" + file
+
+env["source_files"] += [
+    source("random.cpp"),
+    source("util.cpp")
+]

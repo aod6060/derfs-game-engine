@@ -1,0 +1,14 @@
+Import("env")
+
+
+def source(file):
+    return "#/src/engine/src/manager/" + file
+
+env["source_files"] += [
+    source("behavior.cpp"),
+    source("component.cpp"),
+    source("entity.cpp"),
+    source("global.cpp"),
+    source("scene.cpp"),
+    source("transform.cpp")
+]

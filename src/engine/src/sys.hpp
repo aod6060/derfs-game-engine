@@ -1,6 +1,10 @@
 #ifndef SYS_HPP
 #define SYS_HPP
 
+
+
+// Once this file gets above 2000 to 3000 lines of code I'll refactor it.
+
 #include "json/value.h"
 #include <iostream>
 #include <fstream>
