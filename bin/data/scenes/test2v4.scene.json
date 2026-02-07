@@ -1,0 +1,58 @@
+{
+    "name": "scene",
+    "version": 4,
+    "behavior": "data/scripts/scene/test2_scene.lua",
+    "entities": [
+        {
+            "type": "prefab",
+            "path": "data/prefabs/player.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 2.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "name": "floor",
+            "type": "instance",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "floor",
+                    "texture": "snow",
+                    "uv-scale": 32.0
+                }
+            ]
+        }
+    ]
+}

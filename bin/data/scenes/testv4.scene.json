@@ -1,0 +1,246 @@
+{
+    "name": "scene",
+    "version": 4,
+    "behavior": "data/scripts/scene/test1_scene.lua",
+    "entities": [
+        {
+            "type": "prefab",
+            "path": "data/prefabs/player.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 2.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "name": "floor",
+            "type": "instance",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "floor",
+                    "texture": "grass",
+                    "uv-scale": 32.0
+                }
+            ],
+            "entities": [
+                {
+                    "name": "cube",
+                    "type": "instance",
+                    "behavior": null,
+                    "transform": {
+                        "position": {
+                            "x": -10.0,
+                            "y": 2.0,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "cube",
+                            "texture": "angry",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": null
+                },
+                {
+                    "name": "monkey",
+                    "type": "instance",
+                    "behavior": "data/scripts/entity/rotatey_entity.lua",
+                    "transform": {
+                        "position": {
+                            "x": 10.0,
+                            "y": 2.0,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "monkey",
+                            "texture": "sand",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": null
+                },
+                {
+                    "name": "sphere",
+                    "type": "instance",
+                    "behavior": null,
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 2.0,
+                            "z": -10.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "sphere",
+                            "texture": "snow",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": null
+                },
+                {
+                    "name": "tree",
+                    "type": "instance",
+                    "behavior": "data/scripts/entity/treedance_entity.lua",
+                    "transform": {
+                        "position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 10.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "tree",
+                            "texture": "dirt",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": null
+                },
+                {
+                    "name": "monkey1",
+                    "type": "instance",
+                    "behavior": "data/scripts/entity/move_entity.lua",
+                    "transform": {
+                        "position": {
+                            "x": -10.0,
+                            "y": 2.0,
+                            "z": -10.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "monkey",
+                            "texture": "sand",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": null
+                },
+                {
+                    "name": "monkey2",
+                    "type": "instance",
+                    "behavior": "data/scripts/entity/tank_entity.lua",
+                    "transform": {
+                        "position": {
+                            "x": 10.0,
+                            "y": 2.0,
+                            "z": -10.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "monkey",
+                            "texture": "snow",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": null
+                }
+            ]
+        }
+    ]
+}

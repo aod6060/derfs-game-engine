@@ -1,0 +1,48 @@
+{
+    "name": "assets",
+    "version": 1,
+    "meshes": [
+        {
+            "name": "cube",
+            "path": "data/meshes/cube.glb"
+        },
+        {
+            "name": "floor",
+            "path": "data/meshes/floor.glb"
+        },
+        {
+            "name": "monkey",
+            "path": "data/meshes/monkey.glb"
+        },
+        {
+            "name": "sphere",
+            "path": "data/meshes/sphere.glb"
+        },
+        {
+            "name": "tree",
+            "path": "data/meshes/tree.glb"
+        }
+    ],
+    "textures": [
+        {
+            "name": "angry",
+            "path": "data/textures/angry.png"
+        },
+        {
+            "name": "dirt",
+            "path": "data/textures/dirt.png"
+        },
+        {
+            "name": "grass",
+            "path": "data/textures/grass.png"
+        },
+        {
+            "name": "sand",
+            "path": "data/textures/sand.png"
+        },
+        {
+            "name": "snow",
+            "path": "data/textures/snow.png"
+        }
+    ]
+}

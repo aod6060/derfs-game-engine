@@ -1,0 +1,55 @@
+"""
+    This is the main project build system
+"""
+
+import sys
+
+platform = sys.platform
+
+print(platform)
+
+env = Environment(
+    TARGET_ARCH='x86',
+    CPPPATH=[
+        "#/include"
+    ],
+    LIBPATH=[
+        "#/lib"
+    ],
+    LIBS=[
+        'kernel32.lib',
+        'user32.lib',
+        'gdi32.lib',
+        'winspool.lib',
+        'comdlg32.lib',
+        'advapi32.lib' ,
+        'shell32.lib',
+        'ole32.lib',
+        'oleaut32.lib',
+        'uuid.lib',
+        'odbc32.lib',
+        'odbccp32.lib'
+    ],
+    CPPFLAGS=[
+        '/std:c++17',
+        '/Gd',
+        '/EHsc',
+        '/fp:precise',
+        '/MD',
+        '/sdl'
+    ],
+    LINKFLAGS=[
+        '/SUBSYSTEM:CONSOLE',
+        '/MACHINE:X86',
+        '/NODEFAULTLIB:library'])
+
+
+if not (env is None):
+    env["source_files"] = []
+
+    target="#/bin/engine"
+
+    # Add in SConscripts
+    SConscript("#/src/engine/src/SConscript", exports="env")
+
+    env.StaticLibrary(target=target, source=env["source_files"])

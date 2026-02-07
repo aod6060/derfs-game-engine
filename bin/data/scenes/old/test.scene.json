@@ -1,0 +1,188 @@
+{
+    "name": "scene",
+    "version": 1,
+    "camera": {
+        "position": {
+            "x": 0.0,
+            "y": 2.0,
+            "z": 0.0
+        },
+        "rotation": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "fov": 45.0,
+        "znear": 1.0,
+        "zfar": 1024.0
+    },
+    "entities": [
+        {
+            "name": "floor",
+            "script": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "floor",
+            "texture": "grass",
+            "uv-scale": 32.0
+        },
+        {
+            "name": "cube",
+            "script": null,
+            "transform": {
+                "position": {
+                    "x": -10.0,
+                    "y": 2.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "cube",
+            "texture": "angry",
+            "uv-scale": 1.0
+        },
+        {
+            "name": "monkey",
+            "script": "data/scripts/rotatey.lua",
+            "transform": {
+                "position": {
+                    "x": 10.0,
+                    "y": 2.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "monkey",
+            "texture": "sand",
+            "uv-scale": 1.0
+        },
+        {
+            "name": "sphere",
+            "script": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 2.0,
+                    "z": -10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "sphere",
+            "texture": "snow",
+            "uv-scale": 1.0
+        },
+        {
+            "name": "tree",
+            "script": "data/scripts/treedance.lua",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "tree",
+            "texture": "dirt",
+            "uv-scale": 1.0
+        },
+        {
+            "name": "monkey1",
+            "script": "data/scripts/move.lua",
+            "transform": {
+                "position": {
+                    "x": -10.0,
+                    "y": 2.0,
+                    "z": -10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "monkey",
+            "texture": "sand",
+            "uv-scale": 1.0
+        },
+        {
+            "name": "monkey2",
+            "script": "data/scripts/tank.lua",
+            "transform": {
+                "position": {
+                    "x": 10.0,
+                    "y": 2.0,
+                    "z": -10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "mesh": "monkey",
+            "texture": "snow",
+            "uv-scale": 1.0
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+Import("env")
+
+
+def source(file):
+    return "#/src/engine/src/" + file
+
+env["source_files"] += [
+    source("app.cpp"),
+    source("input.cpp"),
+    source("input_mapping.cpp"),
+    source("render.cpp"),
+    source("render_glw.cpp"),
+    source("render_mesh.cpp"),
+    source("assets.cpp"),
+    source("util.cpp"),
+    source("util_random.cpp"),
+    source("manager_global.cpp"),
+    source("manager_scene.cpp"),
+    source("manager_entity.cpp"),
+    source("manager_transform.cpp"),
+    source("manager_component.cpp"),
+    source("manager_behavior.cpp"),
+    source("script.cpp"),
+    source("script_app.cpp"),
+    source("script_input.cpp"),
+    source("script_manager.cpp"),
+    source("script_entity.cpp"),
+    source("script_scene.cpp"),
+    source("script_global.cpp"),
+    source("script_behavior.cpp"),
+    source("script_transform.cpp"),
+    source("script_component_CameraComponent.cpp"),
+    source("script_component_MeshComponent.cpp"),
+    source("script_util_random.cpp")
+]

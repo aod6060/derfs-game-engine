@@ -1,0 +1,569 @@
+#include "lua/lua.hpp"
+#include "sys.hpp"
+#include <vector>
+
+
+namespace script {
+
+    struct KeyboardWrapper {
+        input::Keyboard key;
+        std::string name;
+    };
+
+    struct MouseButtonsWrapper {
+        input::MouseButtons mouseButton;
+        std::string name;
+    };
+
+    std::vector<KeyboardWrapper> keyboardWrapper = {
+    {input::Keyboard::KEYS_UNKNOWN, "KEYS_UNKNOWN"},
+    {input::Keyboard::KEYS_A, "KEYS_A"},
+    {input::Keyboard::KEYS_B, "KEYS_B"},
+    {input::Keyboard::KEYS_C, "KEYS_C"},
+    {input::Keyboard::KEYS_D, "KEYS_D"},
+    {input::Keyboard::KEYS_E, "KEYS_E"},
+    {input::Keyboard::KEYS_F, "KEYS_F"},
+    {input::Keyboard::KEYS_G, "KEYS_G"},
+    {input::Keyboard::KEYS_H, "KEYS_H"},
+    {input::Keyboard::KEYS_I, "KEYS_I"},
+    {input::Keyboard::KEYS_J, "KEYS_J"},
+    {input::Keyboard::KEYS_K, "KEYS_K"},
+    {input::Keyboard::KEYS_L, "KEYS_L"},
+    {input::Keyboard::KEYS_M, "KEYS_M"},
+    {input::Keyboard::KEYS_N, "KEYS_N"},
+    {input::Keyboard::KEYS_O, "KEYS_O"},
+    {input::Keyboard::KEYS_P, "KEYS_P"},
+    {input::Keyboard::KEYS_Q, "KEYS_Q"},
+    {input::Keyboard::KEYS_R, "KEYS_R"},
+    {input::Keyboard::KEYS_S, "KEYS_S"},
+    {input::Keyboard::KEYS_T, "KEYS_T"},
+    {input::Keyboard::KEYS_U, "KEYS_U"},
+    {input::Keyboard::KEYS_V, "KEYS_V"},
+    {input::Keyboard::KEYS_W, "KEYS_W"},
+    {input::Keyboard::KEYS_X, "KEYS_X"},
+    {input::Keyboard::KEYS_Y, "KEYS_Y"},
+    {input::Keyboard::KEYS_Z, "KEYS_Z"},
+    {input::Keyboard::KEYS_1, "KEYS_1"},
+    {input::Keyboard::KEYS_2, "KEYS_2"},
+    {input::Keyboard::KEYS_3, "KEYS_3"},
+    {input::Keyboard::KEYS_4, "KEYS_4"},
+    {input::Keyboard::KEYS_5, "KEYS_5"},
+    {input::Keyboard::KEYS_6, "KEYS_6"},
+    {input::Keyboard::KEYS_7, "KEYS_7"},
+    {input::Keyboard::KEYS_8, "KEYS_8"},
+    {input::Keyboard::KEYS_9, "KEYS_9"},
+    {input::Keyboard::KEYS_0, "KEYS_0"},
+    {input::Keyboard::KEYS_RETURN, "KEYS_RETURN"},
+    {input::Keyboard::KEYS_ESCAPE, "KEYS_ESCAPE"},
+    {input::Keyboard::KEYS_BACKSPACE, "KEYS_BACKSPACE"},
+    {input::Keyboard::KEYS_TAB, "KEYS_TAB"},
+    {input::Keyboard::KEYS_SPACE, "KEYS_SPACE"},
+    {input::Keyboard::KEYS_MINUS, "KEYS_MINUS"},
+    {input::Keyboard::KEYS_EQUALS, "KEYS_EQUALS"},
+    {input::Keyboard::KEYS_LEFTBRACKET, "KEYS_LEFTBRACKET"},
+    {input::Keyboard::KEYS_RIGHTBRACKET, "KEYS_RIGHTBRACKET"},
+    {input::Keyboard::KEYS_BACKSLASH, "KEYS_BACKSLASH"},
+    {input::Keyboard::KEYS_NONUSHASH, "KEYS_NONUSHASH"},
+    {input::Keyboard::KEYS_SEMICOLON, "KEYS_SEMICOLON"},
+    {input::Keyboard::KEYS_APOSTROPHE, "KEYS_APOSTROPHE"},
+    {input::Keyboard::KEYS_GRAVE, "KEYS_GRAVE"},
+    {input::Keyboard::KEYS_COMMA, "KEYS_COMMA"},
+    {input::Keyboard::KEYS_PERIOD, "KEYS_PERIOD"},
+    {input::Keyboard::KEYS_SLASH, "KEYS_SLASH"},
+    {input::Keyboard::KEYS_CAPSLOCK, "KEYS_CAPSLOCK"},
+    {input::Keyboard::KEYS_F1, "KEYS_F1"},
+    {input::Keyboard::KEYS_F2, "KEYS_F2"},
+    {input::Keyboard::KEYS_F3, "KEYS_F3"},
+    {input::Keyboard::KEYS_F4, "KEYS_F4"},
+    {input::Keyboard::KEYS_F5, "KEYS_F5"},
+    {input::Keyboard::KEYS_F6, "KEYS_F6"},
+    {input::Keyboard::KEYS_F7, "KEYS_F7"},
+    {input::Keyboard::KEYS_F8, "KEYS_F8"},
+    {input::Keyboard::KEYS_F9, "KEYS_F9"},
+    {input::Keyboard::KEYS_F10, "KEYS_F10"},
+    {input::Keyboard::KEYS_F11, "KEYS_F11"},
+    {input::Keyboard::KEYS_F12, "KEYS_F12"},
+    {input::Keyboard::KEYS_PRINTSCREEN, "KEYS_PRINTSCREEN"},
+    {input::Keyboard::KEYS_SCROLLLOCK, "KEYS_SCROLLLOCK"},
+    {input::Keyboard::KEYS_PAUSE, "KEYS_PAUSE"},
+    {input::Keyboard::KEYS_INSERT, "KEYS_INSERT"},
+    {input::Keyboard::KEYS_HOME, "KEYS_HOME"},
+    {input::Keyboard::KEYS_PAGEUP, "KEYS_PAGEUP"},
+    {input::Keyboard::KEYS_DELETE, "KEYS_DELETE"},
+    {input::Keyboard::KEYS_END, "KEYS_END"},
+    {input::Keyboard::KEYS_PAGEDOWN, "KEYS_PAGEDOWN"},
+    {input::Keyboard::KEYS_RIGHT, "KEYS_RIGHT"},
+    {input::Keyboard::KEYS_LEFT, "KEYS_LEFT"},
+    {input::Keyboard::KEYS_DOWN, "KEYS_DOWN"},
+    {input::Keyboard::KEYS_UP, "KEYS_UP"},
+    {input::Keyboard::KEYS_NUMLOCKCLEAR, "KEYS_NUMLOCKCLEAR"},
+    {input::Keyboard::KEYS_KP_DIVIDE, "KEYS_KP_DIVIDE"},
+    {input::Keyboard::KEYS_KP_MULTIPLY, "KEYS_KP_MULTIPLY"},
+    {input::Keyboard::KEYS_KP_MINUS, "KEYS_KP_MINUS"},
+    {input::Keyboard::KEYS_KP_PLUS, "KEYS_KP_PLUS"},
+    {input::Keyboard::KEYS_KP_ENTER, "KEYS_KP_ENTER"},
+    {input::Keyboard::KEYS_KP_1, "KEYS_KP_1"},
+    {input::Keyboard::KEYS_KP_2, "KEYS_KP_2"},
+    {input::Keyboard::KEYS_KP_3, "KEYS_KP_3"},
+    {input::Keyboard::KEYS_KP_4, "KEYS_KP_4"},
+    {input::Keyboard::KEYS_KP_5, "KEYS_KP_5"},
+    {input::Keyboard::KEYS_KP_6, "KEYS_KP_6"},
+    {input::Keyboard::KEYS_KP_7, "KEYS_KP_7"},
+    {input::Keyboard::KEYS_KP_8, "KEYS_KP_8"},
+    {input::Keyboard::KEYS_KP_9, "KEYS_KP_9"},
+    {input::Keyboard::KEYS_KP_0, "KEYS_KP_0"},
+    {input::Keyboard::KEYS_KP_PERIOD, "KEYS_KP_PERIOD"},
+    {input::Keyboard::KEYS_NONUSBACKSLASH, "KEYS_NONUSBACKSLASH"},
+    {input::Keyboard::KEYS_APPLICATION, "KEYS_APPLICATION"},
+    {input::Keyboard::KEYS_POWER, "KEYS_POWER"},
+    {input::Keyboard::KEYS_KP_EQUALS, "KEYS_KP_EQUALS"},
+    {input::Keyboard::KEYS_F13, "KEYS_F13"},
+    {input::Keyboard::KEYS_F14, "KEYS_F14"},
+    {input::Keyboard::KEYS_F15, "KEYS_F15"},
+    {input::Keyboard::KEYS_F16, "KEYS_F16"},
+    {input::Keyboard::KEYS_F17, "KEYS_F17"},
+    {input::Keyboard::KEYS_F18, "KEYS_F18"},
+    {input::Keyboard::KEYS_F19, "KEYS_F19"},
+    {input::Keyboard::KEYS_F20, "KEYS_F20"},
+    {input::Keyboard::KEYS_F21, "KEYS_F21"},
+    {input::Keyboard::KEYS_F22, "KEYS_F22"},
+    {input::Keyboard::KEYS_F23, "KEYS_F23"},
+    {input::Keyboard::KEYS_F24, "KEYS_F24"},
+    {input::Keyboard::KEYS_EXECUTE, "KEYS_EXECUTE"},
+    {input::Keyboard::KEYS_HELP, "KEYS_HELP"},
+    {input::Keyboard::KEYS_MENU, "KEYS_MENU"},
+    {input::Keyboard::KEYS_SELECT, "KEYS_SELECT"},
+    {input::Keyboard::KEYS_STOP, "KEYS_STOP"},
+    {input::Keyboard::KEYS_AGAIN, "KEYS_AGAIN"},
+    {input::Keyboard::KEYS_UNDO, "KEYS_UNDO"},
+    {input::Keyboard::KEYS_CUT, "KEYS_CUT"},
+    {input::Keyboard::KEYS_COPY, "KEYS_COPY"},
+    {input::Keyboard::KEYS_PASTE, "KEYS_PASTE"},
+    {input::Keyboard::KEYS_FIND, "KEYS_FIND"},
+    {input::Keyboard::KEYS_MUTE, "KEYS_MUTE"},
+    {input::Keyboard::KEYS_VOLUMEUP, "KEYS_VOLUMEUP"},
+    {input::Keyboard::KEYS_VOLUMEDOWN, "KEYS_VOLUMEDOWN"},
+    {input::Keyboard::KEYS_KP_COMMA, "KEYS_KP_COMMA"},
+    {input::Keyboard::KEYS_KP_EQUALSAS400, "KEYS_KP_EQUALSAS400"},
+    {input::Keyboard::KEYS_INTERNATIONAL1, "KEYS_INTERNATIONAL1"},
+    {input::Keyboard::KEYS_INTERNATIONAL2, "KEYS_INTERNATIONAL2"},
+    {input::Keyboard::KEYS_INTERNATIONAL3, "KEYS_INTERNATIONAL3"},
+    {input::Keyboard::KEYS_INTERNATIONAL4, "KEYS_INTERNATIONAL4"},
+    {input::Keyboard::KEYS_INTERNATIONAL5, "KEYS_INTERNATIONAL5"},
+    {input::Keyboard::KEYS_INTERNATIONAL6, "KEYS_INTERNATIONAL6"},
+    {input::Keyboard::KEYS_INTERNATIONAL7, "KEYS_INTERNATIONAL7"},
+    {input::Keyboard::KEYS_INTERNATIONAL8, "KEYS_INTERNATIONAL8"},
+    {input::Keyboard::KEYS_INTERNATIONAL9, "KEYS_INTERNATIONAL9"},
+    {input::Keyboard::KEYS_LANG1, "KEYS_LANG1"},
+    {input::Keyboard::KEYS_LANG2, "KEYS_LANG2"},
+    {input::Keyboard::KEYS_LANG3, "KEYS_LANG3"},
+    {input::Keyboard::KEYS_LANG4, "KEYS_LANG4"},
+    {input::Keyboard::KEYS_LANG5, "KEYS_LANG5"},
+    {input::Keyboard::KEYS_LANG6, "KEYS_LANG6"},
+    {input::Keyboard::KEYS_LANG7, "KEYS_LANG7"},
+    {input::Keyboard::KEYS_LANG8, "KEYS_LANG8"},
+    {input::Keyboard::KEYS_LANG9, "KEYS_LANG9"},
+    {input::Keyboard::KEYS_ALTERASE, "KEYS_ALTERASE"},
+    {input::Keyboard::KEYS_SYSREQ, "KEYS_SYSREQ"},
+    {input::Keyboard::KEYS_CANCEL, "KEYS_CANCEL"},
+    {input::Keyboard::KEYS_CLEAR, "KEYS_CLEAR"},
+    {input::Keyboard::KEYS_PRIOR, "KEYS_PRIOR"},
+    {input::Keyboard::KEYS_RETURN2, "KEYS_RETURN2"},
+    {input::Keyboard::KEYS_SEPARATOR, "KEYS_SEPARATOR"},
+    {input::Keyboard::KEYS_OUT, "KEYS_OUT"},
+    {input::Keyboard::KEYS_OPER, "KEYS_OPER"},
+    {input::Keyboard::KEYS_CLEARAGAIN, "KEYS_CLEARAGAIN"},
+    {input::Keyboard::KEYS_CRSEL, "KEYS_CRSEL"},
+    {input::Keyboard::KEYS_EXSEL, "KEYS_EXSEL"},
+    {input::Keyboard::KEYS_KP_00, "KEYS_KP_00"},
+    {input::Keyboard::KEYS_KP_000, "KEYS_KP_000"},
+    {input::Keyboard::KEYS_THOUSANDSSEPARATOR, "KEYS_THOUSANDSSEPARATOR"},
+    {input::Keyboard::KEYS_DECIMALSEPARATOR, "KEYS_DECIMALSEPARATOR"},
+    {input::Keyboard::KEYS_CURRENCYUNIT, "KEYS_CURRENCYUNIT"},
+    {input::Keyboard::KEYS_CURRENCYSUBUNIT, "KEYS_CURRENCYSUBUNIT"},
+    {input::Keyboard::KEYS_KP_LEFTPAREN, "KEYS_KP_LEFTPAREN"},
+    {input::Keyboard::KEYS_KP_RIGHTPAREN, "KEYS_KP_RIGHTPAREN"},
+    {input::Keyboard::KEYS_KP_LEFTBRACE, "KEYS_KP_LEFTBRACE"},
+    {input::Keyboard::KEYS_KP_RIGHTBRACE, "KEYS_KP_RIGHTBRACE"},
+    {input::Keyboard::KEYS_KP_TAB, "KEYS_KP_TAB"},
+    {input::Keyboard::KEYS_KP_BACKSPACE, "KEYS_KP_BACKSPACE"},
+    {input::Keyboard::KEYS_KP_A, "KEYS_KP_A"},
+    {input::Keyboard::KEYS_KP_B, "KEYS_KP_B"},
+    {input::Keyboard::KEYS_KP_C, "KEYS_KP_C"},
+    {input::Keyboard::KEYS_KP_D, "KEYS_KP_D"},
+    {input::Keyboard::KEYS_KP_E, "KEYS_KP_E"},
+    {input::Keyboard::KEYS_KP_F, "KEYS_KP_F"},
+    {input::Keyboard::KEYS_KP_XOR, "KEYS_KP_XOR"},
+    {input::Keyboard::KEYS_KP_POWER, "KEYS_KP_POWER"},
+    {input::Keyboard::KEYS_KP_PERCENT, "KEYS_KP_PERCENT"},
+    {input::Keyboard::KEYS_KP_LESS, "KEYS_KP_LESS"},
+    {input::Keyboard::KEYS_KP_GREATER, "KEYS_KP_GREATER"},
+    {input::Keyboard::KEYS_KP_AMPERSAND, "KEYS_KP_AMPERSAND"},
+    {input::Keyboard::KEYS_KP_DBLAMPERSAND, "KEYS_KP_DBLAMPERSAND"},
+    {input::Keyboard::KEYS_KP_VERTICALBAR, "KEYS_KP_VERTICALBAR"},
+    {input::Keyboard::KEYS_KP_DBLVERTICALBAR, "KEYS_KP_DBLVERTICALBAR"},
+    {input::Keyboard::KEYS_KP_COLON, "KEYS_KP_COLON"},
+    {input::Keyboard::KEYS_KP_HASH, "KEYS_KP_HASH"},
+    {input::Keyboard::KEYS_KP_SPACE, "KEYS_KP_SPACE"},
+    {input::Keyboard::KEYS_KP_AT, "KEYS_KP_AT"},
+    {input::Keyboard::KEYS_KP_EXCLAM, "KEYS_KP_EXCLAM"},
+    {input::Keyboard::KEYS_KP_MEMSTORE, "KEYS_KP_MEMSTORE"},
+    {input::Keyboard::KEYS_KP_MEMRECALL, "KEYS_KP_MEMRECALL"},
+    {input::Keyboard::KEYS_KP_MEMCLEAR, "KEYS_KP_MEMCLEAR"},
+    {input::Keyboard::KEYS_KP_MEMADD, "KEYS_KP_MEMADD"},
+    {input::Keyboard::KEYS_KP_MEMSUBTRACT, "KEYS_KP_MEMSUBTRACT"},
+    {input::Keyboard::KEYS_KP_MEMMULTIPLY, "KEYS_KP_MEMMULTIPLY"},
+    {input::Keyboard::KEYS_KP_MEMDIVIDE, "KEYS_KP_MEMDIVIDE"},
+    {input::Keyboard::KEYS_KP_PLUSMINUS, "KEYS_KP_PLUSMINUS"},
+    {input::Keyboard::KEYS_KP_CLEAR, "KEYS_KP_CLEAR"},
+    {input::Keyboard::KEYS_KP_CLEARENTRY, "KEYS_KP_CLEARENTRY"},
+    {input::Keyboard::KEYS_KP_BINARY, "KEYS_KP_BINARY"},
+    {input::Keyboard::KEYS_KP_OCTAL, "KEYS_KP_OCTAL"},
+    {input::Keyboard::KEYS_KP_DECIMAL, "KEYS_KP_DECIMAL"},
+    {input::Keyboard::KEYS_KP_HEXADECIMAL, "KEYS_KP_HEXADECIMAL"},
+    {input::Keyboard::KEYS_LCTRL, "KEYS_LCTRL"},
+    {input::Keyboard::KEYS_LSHIFT, "KEYS_LSHIFT"},
+    {input::Keyboard::KEYS_LALT, "KEYS_LALT"},
+    {input::Keyboard::KEYS_LGUI, "KEYS_LGUI"},
+    {input::Keyboard::KEYS_RCTRL, "KEYS_RCTRL"},
+    {input::Keyboard::KEYS_RSHIFT, "KEYS_RSHIFT"},
+    {input::Keyboard::KEYS_RALT, "KEYS_RALT"},
+    {input::Keyboard::KEYS_RGUI, "KEYS_RGUI"},
+    {input::Keyboard::KEYS_MODE, "KEYS_MODE"},
+    {input::Keyboard::KEYS_AUDIONEXT, "KEYS_AUDIONEXT"},
+    {input::Keyboard::KEYS_AUDIOPREV, "KEYS_AUDIOPREV"},
+    {input::Keyboard::KEYS_AUDIOSTOP, "KEYS_AUDIOSTOP"},
+    {input::Keyboard::KEYS_AUDIOPLAY, "KEYS_AUDIOPLAY"},
+    {input::Keyboard::KEYS_AUDIOMUTE, "KEYS_AUDIOMUTE"},
+    {input::Keyboard::KEYS_MEDIASELECT, "KEYS_MEDIASELECT"},
+    {input::Keyboard::KEYS_WWW, "KEYS_WWW"},
+    {input::Keyboard::KEYS_MAIL, "KEYS_MAIL"},
+    {input::Keyboard::KEYS_CALCULATOR, "KEYS_CALCULATOR"},
+    {input::Keyboard::KEYS_COMPUTER, "KEYS_COMPUTER"},
+    {input::Keyboard::KEYS_AC_SEARCH, "KEYS_AC_SEARCH"},
+    {input::Keyboard::KEYS_AC_HOME, "KEYS_AC_HOME"},
+    {input::Keyboard::KEYS_AC_BACK, "KEYS_AC_BACK"},
+    {input::Keyboard::KEYS_AC_FORWARD, "KEYS_AC_FORWARD"},
+    {input::Keyboard::KEYS_AC_STOP, "KEYS_AC_STOP"},
+    {input::Keyboard::KEYS_AC_REFRESH, "KEYS_AC_REFRESH"},
+    {input::Keyboard::KEYS_AC_BOOKMARKS, "KEYS_AC_BOOKMARKS"},
+    {input::Keyboard::KEYS_BRIGHTNESSDOWN, "KEYS_BRIGHTNESSDOWN"},
+    {input::Keyboard::KEYS_BRIGHTNESSUP, "KEYS_BRIGHTNESSUP"},
+    {input::Keyboard::KEYS_DISPLAYSWITCH, "KEYS_DISPLAYSWITCH"},
+    {input::Keyboard::KEYS_KBDILLUMTOGGLE, "KEYS_KBDILLUMTOGGLE"},
+    {input::Keyboard::KEYS_KBDILLUMDOWN, "KEYS_KBDILLUMDOWN"},
+    {input::Keyboard::KEYS_KBDILLUMUP, "KEYS_KBDILLUMUP"},
+    {input::Keyboard::KEYS_EJECT, "KEYS_EJECT"},
+    {input::Keyboard::KEYS_SLEEP, "KEYS_SLEEP"},
+    {input::Keyboard::KEYS_APP1, "KEYS_APP1"},
+    {input::Keyboard::KEYS_APP2, "KEYS_APP2"},
+    {input::Keyboard::KEYS_AUDIOREWIND, "KEYS_AUDIOREWIND"},
+    {input::Keyboard::KEYS_AUDIOFASTFORWARD, "KEYS_AUDIOFASTFORWARD"},
+    {input::Keyboard::KEYS_SOFTLEFT, "KEYS_SOFTLEFT"},
+    {input::Keyboard::KEYS_SOFTRIGHT, "KEYS_SOFTRIGHT"},
+    {input::Keyboard::KEYS_CALL, "KEYS_CALL"},
+    {input::Keyboard::KEYS_ENDCALL, "KEYS_ENDCALL"}
+    };
+    
+    std::vector<MouseButtonsWrapper> mouseButtonsWrapper = {
+    {input::MouseButtons::MBS_LEFT, "MBS_LEFT"},
+    {input::MouseButtons::MBS_CENTER, "MBS_CENTER"},
+    {input::MouseButtons::MBS_RIGHT, "MBS_RIGHT"}
+    };
+
+    void input_load_library(lua_State* l) {
+        // Keyboards
+        for(int i = 0; i < keyboardWrapper.size(); i++) {
+            lua_pushinteger(l, keyboardWrapper[i].key);
+            lua_setglobal(l, keyboardWrapper[i].name.c_str());
+        }
+        // MouseButtons
+        for(int i = 0; i < mouseButtonsWrapper.size(); i++) {
+            lua_pushinteger(l, mouseButtonsWrapper[i].mouseButton);
+            lua_setglobal(l, mouseButtonsWrapper[i].name.c_str());
+        }
+        // Keyboard
+        // int input_isKeyReleased(lua_State* l);
+        lua_register(l, "input_isKeyReleased", input_isKeyReleased);
+
+        // int input_isKeyPressedOnce(lua_State* l);
+        lua_register(l, "input_isKeyPressedOnce", input_isKeyPressedOnce);
+
+        // int input_isKeyPressed(lua_State* l);
+        lua_register(l, "input_isKeyPressed", input_isKeyPressed);
+
+        // int input_isKeyReleasedOnce(lua_State* l);
+        lua_register(l, "input_isKeyReleasedOnce", input_isKeyReleasedOnce);
+
+        // int input_getKeyReleasedValue(lua_State* l);
+        lua_register(l, "input_getKeyReleasedValue", input_getKeyReleasedValue);
+
+        // int input_getKeyPressedOnceValue(lua_State* l);
+        lua_register(l, "input_getKeyPressedOnceValue", input_getKeyPressedOnceValue);
+
+        // int input_getKeyPressedValue(lua_State* l);
+        lua_register(l, "input_getKeyPressedValue", input_getKeyPressedValue);
+
+        // int input_getKeyReleasedOnceValue(lua_State* l);
+        lua_register(l, "input_getKeyReleasedOnceValue", input_getKeyReleasedOnceValue);
+        
+        // int input_getKeyReleasedAxis(lua_State* l);
+        lua_register(l, "input_getKeyReleasedAxis", input_getKeyReleasedAxis);
+
+        // int input_getKeyPressedOnceAxis(lua_State* l);
+        lua_register(l, "input_getKeyPressedOnceAxis", input_getKeyPressedOnceAxis);
+
+        // int input_getKeyPressedAxis(lua_State* l);
+        lua_register(l, "input_getKeyPressedAxis", input_getKeyPressedAxis);
+
+        // int input_getKeyReleasedOnceAxis(lua_State* l);
+        lua_register(l, "input_getKeyReleasedOnceAxis", input_getKeyReleasedOnceAxis);
+
+        // Mouse
+        // int input_toPosition(lua_State* l);
+        lua_register(l, "input_toPosition", input_toPosition);
+
+        // int input_toVelocity(lua_State* l);
+        lua_register(l, "input_toVelocity", input_toVelocity);
+
+        // int input_toMouseWheel(lua_State* l);
+        lua_register(l, "input_toMouseWheel", input_toMouseWheel);
+
+        // int input_isMouseButtonReleased(lua_State* l);
+        lua_register(l, "input_isMouseButtonReleased", input_isMouseButtonReleased);
+
+        // int input_isMouseButtonPressedOnce(lua_State* l);
+        lua_register(l, "input_isMouseButtonPressedOnce", input_isMouseButtonPressedOnce);
+
+        // int input_isMouseButtonPressed(lua_State* l);
+        lua_register(l, "input_isMouseButtonPressed", input_isMouseButtonPressed);
+
+        // int input_isMouseButtonReleasedOnce(lua_State* l);
+        lua_register(l, "input_isMouseButtonReleasedOnce", input_isMouseButtonReleasedOnce);
+
+        // int input_getMouseButtonReleasedValue(lua_State* l);
+        lua_register(l, "input_getMouseButtonReleasedValue", input_getMouseButtonReleasedValue);
+
+        // int input_getMouseButtonPressedOnceValue(lua_State* l);
+        lua_register(l, "input_getMouseButtonPressedOnceValue", input_getMouseButtonPressedOnceValue);
+
+        // int input_getMouseButtonPressedValue(lua_State* l);
+        lua_register(l, "input_getMouseButtonPressedValue", input_getMouseButtonPressedValue);
+
+        // int input_getMouseButtonReleasedOnceValue(lua_State* l);
+        lua_register(l, "input_getMouseButtonReleasedOnceValue", input_getMouseButtonReleasedOnceValue);
+
+        // int input_getMouseButtonReleasedAxis(lua_State* l);
+        lua_register(l, "input_getMouseButtonReleasedAxis", input_getMouseButtonReleasedAxis);
+
+        // int input_getMouseButtonPressedOnceAxis(lua_State* l);
+        lua_register(l, "input_getMouseButtonPressedOnceAxis", input_getMouseButtonPressedOnceAxis);
+
+        // int input_getMouseButtonPressedAxis(lua_State* l);
+        lua_register(l, "input_getMouseButtonPressedAxis", input_getMouseButtonPressedAxis);
+
+        // int input_getMouseButtonReleasedOnceAxis(lua_State* l);
+        lua_register(l, "input_getMouseButtonReleasedOnceAxis", input_getMouseButtonReleasedOnceAxis);
+
+        // Input Grab
+        // int input_isGrab(lua_State* l);
+        lua_register(l, "input_isGrab", input_isGrab);
+
+        // int input_setGrab(lua_State* l);
+        lua_register(l, "input_setGrab", input_setGrab);
+
+        // int input_toggleGrab(lua_State* l);
+        lua_register(l, "input_toggleGrab", input_toggleGrab);
+
+    }
+
+    // Keyboard
+    int input_isKeyReleased(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isKeyReleased(key));
+        return 1;
+    }
+
+    int input_isKeyPressedOnce(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isKeyPressedOnce(key));
+        return 1;
+    }
+
+    int input_isKeyPressed(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isKeyPressed(key));
+        return 1;
+    }
+
+    int input_isKeyReleasedOnce(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isKeyReleasedOnce(key));
+        return 1;
+    }
+
+    int input_getKeyReleasedValue(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getKeyReleasedValue(key));
+        return 1;
+    }
+
+    int input_getKeyPressedOnceValue(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getKeyPressedOnceValue(key));
+        return 1;
+    }
+
+    int input_getKeyPressedValue(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getKeyPressedValue(key));
+        return 1;
+    }
+
+    int input_getKeyReleasedOnceValue(lua_State* l) {
+        input::Keyboard key = (input::Keyboard)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getKeyReleasedOnceValue(key));
+        return 1;
+    }
+
+    int input_getKeyReleasedAxis(lua_State* l) {
+        input::Keyboard negative = (input::Keyboard)lua_tointeger(l, 1);
+        input::Keyboard positive = (input::Keyboard)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getKeyReleasedAxis(negative, positive));
+        return 1;
+    }
+
+    int input_getKeyPressedOnceAxis(lua_State* l) {
+        input::Keyboard negative = (input::Keyboard)lua_tointeger(l, 1);
+        input::Keyboard positive = (input::Keyboard)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getKeyPressedOnceAxis(negative, positive));
+        return 1;
+    }
+
+    int input_getKeyPressedAxis(lua_State* l) {
+        input::Keyboard negative = (input::Keyboard)lua_tointeger(l, 1);
+        input::Keyboard positive = (input::Keyboard)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getKeyPressedAxis(negative, positive));
+        return 1;
+    }
+
+    int input_getKeyReleasedOnceAxis(lua_State* l) {
+        input::Keyboard negative = (input::Keyboard)lua_tointeger(l, 1);
+        input::Keyboard positive = (input::Keyboard)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getKeyReleasedOnceAxis(negative, positive));
+        return 1;
+    }
+
+    // Mouse
+    int input_toPosition(lua_State* l) {
+        lua_pushnumber(l, input::toPosition().x);
+        lua_pushnumber(l, input::toPosition().y);
+        return 2;
+    }
+
+    int input_toVelocity(lua_State* l) {
+        lua_pushnumber(l, input::toVelocity().x);
+        lua_pushnumber(l, input::toVelocity().y);
+        return 2;
+    }
+
+    int input_toMouseWheel(lua_State* l) {
+        lua_pushnumber(l, input::toMouseWheel().x);
+        lua_pushnumber(l, input::toMouseWheel().y);
+        return 2;
+    }
+
+    int input_isMouseButtonReleased(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isMouseButtonReleased(mouseButton));
+        return 1;
+    }
+
+    int input_isMouseButtonPressedOnce(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isMouseButtonPressedOnce(mouseButton));
+        return 1;
+    }
+
+    int input_isMouseButtonPressed(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isMouseButtonPressed(mouseButton));
+        return 1;
+    }
+
+    int input_isMouseButtonReleasedOnce(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushboolean(l, input::isMouseButtonReleasedOnce(mouseButton));
+        return 1;
+    }
+
+    int input_getMouseButtonReleasedValue(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getMouseButtonReleasedValue(mouseButton));
+        return 1;
+    }
+
+    int input_getMouseButtonPressedOnceValue(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getMouseButtonPressedOnceValue(mouseButton));
+        return 1;
+    }
+
+    int input_getMouseButtonPressedValue(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getMouseButtonPressedValue(mouseButton));
+        return 1;
+    }
+
+    int input_getMouseButtonReleasedOnceValue(lua_State* l) {
+        input::MouseButtons mouseButton = (input::MouseButtons)lua_tointeger(l, 1);
+        lua_pushnumber(l, input::getMouseButtonReleasedOnceValue(mouseButton));
+        return 1;
+    }
+
+    int input_getMouseButtonReleasedAxis(lua_State* l) {
+        input::MouseButtons negative = (input::MouseButtons)lua_tointeger(l, 1);
+        input::MouseButtons positive = (input::MouseButtons)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getMouseButtonReleasedAxis(negative, positive));
+        return 1;
+    }
+
+    int input_getMouseButtonPressedOnceAxis(lua_State* l) {
+        input::MouseButtons negative = (input::MouseButtons)lua_tointeger(l, 1);
+        input::MouseButtons positive = (input::MouseButtons)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getMouseButtonPressedOnceAxis(negative, positive));
+        return 1;
+    }
+
+    int input_getMouseButtonPressedAxis(lua_State* l) {
+        input::MouseButtons negative = (input::MouseButtons)lua_tointeger(l, 1);
+        input::MouseButtons positive = (input::MouseButtons)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getMouseButtonPressedAxis(negative, positive));
+        return 1;
+    }
+
+    int input_getMouseButtonReleasedOnceAxis(lua_State* l) {
+        input::MouseButtons negative = (input::MouseButtons)lua_tointeger(l, 1);
+        input::MouseButtons positive = (input::MouseButtons)lua_tointeger(l, 2);
+        lua_pushnumber(l, input::getMouseButtonReleasedOnceAxis(negative, positive));
+        return 1;
+    }
+
+    // Input Grab
+    int input_isGrab(lua_State* l) {
+        lua_pushboolean(l, input::isGrab());
+        return 1;
+    }
+
+    int input_setGrab(lua_State* l) {
+        bool b = (bool)lua_toboolean(l, 1);
+        input::setGrab(b);
+        return 0;
+    }
+
+    int input_toggleGrab(lua_State* l) {
+        input::toggleGrab();
+        return 0;
+    }
+
+}

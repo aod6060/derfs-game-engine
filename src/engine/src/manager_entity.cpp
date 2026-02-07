@@ -1,0 +1,212 @@
+#include "lua/lauxlib.hpp"
+#include "lua/lua.hpp"
+#include "lua/lualib.hpp"
+#include "sys.hpp"
+
+#define PREFAB_VERSION 1
+
+namespace manager {
+    void Entity::init(Scene* scene) {
+        this->scene = scene;
+
+        for(int i = 0; i < this->childeren.size(); i++) {
+            this->childeren.at(i)->init(scene);
+        }
+
+        if(this->cameraComponent) {
+            this->cameraComponent->init(this);
+        }
+
+        if(this->meshComponent) {
+            this->meshComponent->init(this);
+        }
+
+        if(this->behavior) {
+            this->behavior->init(this->script, this);
+        }
+    }
+
+    void Entity::handleEvent(SDL_Event* e) {
+        if(this->childeren.size() > 0) {
+            for(int i = 0; i < childeren.size(); i++) {
+                this->childeren.at(i)->handleEvent(e);
+            }
+        }
+
+        if(this->cameraComponent) {
+            this->cameraComponent->handleEvent(e);
+        }
+
+        if(this->meshComponent) {
+            this->meshComponent->handleEvent(e);
+        }
+    }
+
+    void Entity::update(float delta) {
+
+        while(this->entityDels.size() > 0) {
+            this->childeren.erase(entityDels.front().it);
+            this->entityDels.front().entity->release();
+            delete this->entityDels.front().entity;
+            this->entityDels.front().entity = nullptr;
+            this->entityDels.pop();
+        }
+
+        if(this->childeren.size() > 0) {
+            for(int i = 0; i < this->childeren.size(); i++) {
+                this->childeren.at(i)->update(delta);
+            }
+        }
+        if(this->cameraComponent) {
+            this->cameraComponent->update(delta);
+        }
+
+        if(this->meshComponent) {
+            this->meshComponent->update(delta);
+        }
+
+        if(this->behavior) {
+            this->behavior->update(delta);
+        }
+    }
+
+    void Entity::preRender() {
+        if(this->childeren.size() > 0) {
+            for(int i = 0; i < childeren.size(); i++) {
+                this->childeren.at(i)->preRender();
+            }
+        }
+
+        if(this->cameraComponent) {
+            this->cameraComponent->preRender();
+        }
+
+        if(this->meshComponent) {
+            this->meshComponent->preRender();
+        }
+    }
+
+    void Entity::render() {
+        if(this->childeren.size() > 0) {
+            for(int i = 0; i < childeren.size(); i++) {
+                this->childeren.at(i)->render();
+            }
+        }
+
+        if(this->cameraComponent) {
+            this->cameraComponent->render();
+        }
+
+        if(this->meshComponent) {
+            this->meshComponent->render();
+        }
+    }
+
+    void Entity::release() {
+        if(this->childeren.size() > 0) {
+            for(int i = 0; i < childeren.size(); i++) {
+                this->childeren.at(i)->release();
+                delete this->childeren[i];
+                this->childeren[i] = nullptr;
+            }
+            this->childeren.clear();
+        }
+
+        if(this->cameraComponent) {
+            this->cameraComponent->release();
+            delete this->cameraComponent;
+        }
+
+        if(this->meshComponent) {
+            this->meshComponent->release();
+            delete this->meshComponent;
+        }
+
+        if(this->behavior) {
+            this->behavior->release();
+            delete behavior;
+        }
+
+        this->scene = nullptr;
+    }
+
+    void Entity::load(Json::Value value) {
+
+        std::string type = value["type"].asString();
+        this->name = value["name"].asString();
+
+        if(!value["behavior"].isNull()) {
+            this->script = value["behavior"].asString();
+            this->behavior = new Behavior();
+        }
+
+        // Transform
+        transform.load(value["transform"]);
+
+        Json::Value components = value["components"];
+
+        for(int i = 0; i < components.size(); i++) {
+            Json::Value comp = components[i];
+            std::string type = comp["type"].asString();
+
+            if(type == "mesh-component") {
+                this->meshComponent = new component::MeshComponent();
+                this->meshComponent->load(comp);
+            } else if(type == "camera-component") {
+                this->cameraComponent = new component::CameraComponent();
+                this->cameraComponent->load(comp);
+            }
+        }
+
+        Json::Value entities = value["entities"];
+
+        for(int i = 0; i < entities.size(); i++) {
+            Json::Value entity = entities[i];
+            Entity* temp = new Entity();
+            temp->load(entity);
+            temp->parent = this;
+            this->childeren.push_back(temp);
+        }
+    }
+
+    bool Entity::hasParent() {
+        return this->parent != nullptr;
+    }
+
+    glm::mat4 Entity::calculateParent() {
+        return calculateParentMatrix();
+    }
+
+    glm::mat4 Entity::calculateParentMatrix() {
+        glm::mat4 p = this->transform.toModel();
+        if(this->hasParent()) {
+            p = this->parent->calculateParentMatrix() * p;
+        }
+        return p;
+    }
+
+    glm::mat4 Entity::toParentMatrix(Entity* entity) {
+        glm::mat4 m = entity->transform.toModel();
+        if(entity->hasParent()) {
+            m = this->toParentMatrix(entity->parent) * m;
+        }
+        return m;
+    }
+
+    void Entity::removeEntity(Entity* entity) {
+        int position = -1;
+
+        for(int i = 0; i < childeren.size(); i++) {
+            if(entity == childeren[i]) {
+                position = i;
+                break;
+            }
+        }
+
+        if(position == -1) {
+            return;
+        }
+
+        entityDels.push({entity, childeren.begin() + position});
+    }
+}

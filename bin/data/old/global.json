@@ -1,0 +1,5 @@
+{
+    "name": "global",
+    "version": 1,
+    "behavior": "data/scripts/global/test_global.lua"
+}

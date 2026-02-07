@@ -1,0 +1,10 @@
+Import("env")
+
+
+def source(file):
+    return "#/src/game/src/" + file
+
+env["source_files"] += [
+    source("main.cpp"),
+    source("game.cpp")
+]
