@@ -2,6 +2,8 @@
 #include "lua/lua.hpp"
 #include "lua/lualib.hpp"
 #include "sys.hpp"
+#include "json/value.h"
+#include <fstream>
 
 #define PREFAB_VERSION 1
 
@@ -130,42 +132,83 @@ namespace manager {
         this->scene = nullptr;
     }
 
-    void Entity::load(Json::Value value) {
+    void Entity::handleEntity(Json::Value value) {
+        if(!value["name"].empty()) {
+            this->name = value["name"].asString();
+        }
 
-        std::string type = value["type"].asString();
-        this->name = value["name"].asString();
-
-        if(!value["behavior"].isNull()) {
+        if(!value["behavior"].empty() && !value["behavior"].isNull()) {
             this->script = value["behavior"].asString();
             this->behavior = new Behavior();
         }
 
         // Transform
-        transform.load(value["transform"]);
 
-        Json::Value components = value["components"];
+        if(!value["transform"].empty()) {
+            transform.load(value["transform"]);
+        }
 
-        for(int i = 0; i < components.size(); i++) {
-            Json::Value comp = components[i];
-            std::string type = comp["type"].asString();
 
-            if(type == "mesh-component") {
-                this->meshComponent = new component::MeshComponent();
-                this->meshComponent->load(comp);
-            } else if(type == "camera-component") {
-                this->cameraComponent = new component::CameraComponent();
-                this->cameraComponent->load(comp);
+        if(!value["components"].empty()) {
+            Json::Value components = value["components"];
+
+            for(int i = 0; i < components.size(); i++) {
+                Json::Value comp = components[i];
+                std::string type = comp["type"].asString();
+
+                if(type == "mesh-component") {
+                    this->meshComponent = new component::MeshComponent();
+                    this->meshComponent->load(comp);
+                } else if(type == "camera-component") {
+                    this->cameraComponent = new component::CameraComponent();
+                    this->cameraComponent->load(comp);
+                }
             }
         }
 
-        Json::Value entities = value["entities"];
+        if(!value["entities"].empty()) {
+            Json::Value entities = value["entities"];
 
-        for(int i = 0; i < entities.size(); i++) {
-            Json::Value entity = entities[i];
-            Entity* temp = new Entity();
-            temp->load(entity);
-            temp->parent = this;
-            this->childeren.push_back(temp);
+            for(int i = 0; i < entities.size(); i++) {
+                Json::Value entity = entities[i];
+                Entity* temp = new Entity();
+                temp->load(entity);
+                temp->parent = this;
+                this->childeren.push_back(temp);
+            }
+        }
+    }
+
+    void Entity::loadPrefab(std::string path) {
+        std::ifstream in = std::ifstream(path);
+        Json::Value root;
+        in >> root;
+        in.close();
+
+        std::string name = root["name"].asString();
+        int version = root["version"].asInt();
+
+        if(name != "prefab") {
+            std::cout << path << "> Name of the file isn't prefab. Will try to load\n";
+        }
+
+        if(version != PREFAB_VERSION) {
+            std::cout << path << "> The file is the wrong version will try to load\n";
+        }
+
+        this->handleEntity(root["entity"]);
+    }
+
+    void Entity::load(Json::Value value) {
+        this->type = value["type"].asString();
+
+        if(this->type == "instance") {
+            this->handleEntity(value);
+        } else if(this->type == "prefab") {
+            std::string path = value["path"].asString();
+            loadPrefab(path);
+            // This is for overides and additions
+            handleEntity(value);
         }
     }
 

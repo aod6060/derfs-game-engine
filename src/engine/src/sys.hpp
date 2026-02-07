@@ -737,7 +737,9 @@ namespace manager {
     };
 
     struct Entity {
+        std::string type;
         std::string name;
+        std::string prefabPath;
         Scene* scene = nullptr;
 
         Entity* parent = nullptr;
@@ -759,6 +761,8 @@ namespace manager {
         void render();
         void release();
 
+        void handleEntity(Json::Value value);
+        void loadPrefab(std::string path);
         void load(Json::Value value);
 
         bool hasParent();

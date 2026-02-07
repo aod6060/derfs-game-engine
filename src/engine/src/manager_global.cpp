@@ -70,11 +70,11 @@ namespace manager {
         int version = root["version"].asInt();
 
         if(name != "scene") {
-            std::cout << "Name of the file isn't scene. Will try to load\n";
+            std::cout << path << "> Name of the file isn't scene. Will try to load\n";
         }
 
         if(version != SCENE_VERSION) {
-            std::cout << "The file is the wrong version will try to load\n";
+            std::cout << path << "> The file is the wrong version will try to load\n";
         }
 
         return root;
