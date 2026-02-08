@@ -252,6 +252,15 @@ namespace manager {
         this->childeren.push_back(entity);
     }
 
+    Entity* Entity::getChildEntity(size_t index) {
+        return this->childeren.at(index);
+    }
+
+    size_t Entity::getChilderenAmount() {
+        return this->childeren.size();
+    }
+
+    
     void Entity::removeEntity(Entity* entity) {
         int position = -1;
 
