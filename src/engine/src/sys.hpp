@@ -780,7 +780,7 @@ namespace manager {
         glm::mat4 toParentMatrix(Entity* entity);
 
         glm::vec3 getGlobalPosition();
-        
+
         void addChildEntity(Entity* entity);
         void removeEntity(Entity* entity);
     };
@@ -917,7 +917,8 @@ namespace script {
     int manager_entity_getCameraComponent(lua_State* l);
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
-
+    int manager_entity_getGlobalPosition(lua_State* l);
+    
     // scene
     void manager_scene_load_library(lua_State* l);
     int manager_scene_getGlobal(lua_State* l);
