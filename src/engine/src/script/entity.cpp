@@ -78,7 +78,9 @@ namespace script {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
         if(entity->hasParent()) {
             entity->parent->removeEntity(entity);
+            std::cout << "Remove From Parent\n";
         } else {
+            std::cout << "Remove From Scene\n";
             entity->scene->removeEntity(entity);
         }
         return 0;

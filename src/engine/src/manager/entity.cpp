@@ -4,6 +4,7 @@
 #include "../sys.hpp"
 #include "json/value.h"
 #include <fstream>
+#include <vector>
 
 #define PREFAB_VERSION 1
 
@@ -42,23 +43,25 @@ namespace manager {
         if(this->meshComponent) {
             this->meshComponent->handleEvent(e);
         }
+
+
     }
 
     void Entity::update(float delta) {
+        std::vector<Entity*>::iterator it = this->childeren.begin();
 
-        while(this->entityDels.size() > 0) {
-            this->childeren.erase(entityDels.front().it);
-            this->entityDels.front().entity->release();
-            delete this->entityDels.front().entity;
-            this->entityDels.front().entity = nullptr;
-            this->entityDels.pop();
-        }
-
-        if(this->childeren.size() > 0) {
-            for(int i = 0; i < this->childeren.size(); i++) {
-                this->childeren.at(i)->update(delta);
+        while(it != this->childeren.end()) {
+            if((*it)->needRemoval) {
+                (*it)->release();
+                delete (*it);
+                childeren.erase(it);
+                continue;
+            } else {
+                (*it)->update(delta);
+                it++;
             }
         }
+        
         if(this->cameraComponent) {
             this->cameraComponent->update(delta);
         }
@@ -262,19 +265,6 @@ namespace manager {
 
     
     void Entity::removeEntity(Entity* entity) {
-        int position = -1;
-
-        for(int i = 0; i < childeren.size(); i++) {
-            if(entity == childeren[i]) {
-                position = i;
-                break;
-            }
-        }
-
-        if(position == -1) {
-            return;
-        }
-
-        entityDels.push({entity, childeren.begin() + position});
+        entity->needRemoval = true;
     }
 }

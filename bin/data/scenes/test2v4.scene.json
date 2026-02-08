@@ -52,6 +52,65 @@
                     "texture": "snow",
                     "uv-scale": 32.0
                 }
+            ],
+            "entities": [
+                {
+                    "name": "monkey2",
+                    "type": "instance",
+                    "behavior": "data/scripts/entity/tank_entity.lua",
+                    "transform": {
+                        "position": {
+                            "x": 10.0,
+                            "y": 2.0,
+                            "z": -10.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "components": [
+                        {
+                            "type": "mesh-component",
+                            "mesh": "monkey",
+                            "texture": "snow",
+                            "uv-scale": 1.0
+                        }
+                    ],
+                    "entities": [
+                        {
+                            "type": "instance",
+                            "name": "shoot",
+                            "behavior": null,
+                            "transform": {
+                                "position": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 3.0
+                                },
+                                "rotation": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "scale": {
+                                    "x": 1.0,
+                                    "y": 1.0,
+                                    "z": 1.0
+                                }
+                            },
+                            "components": [
+                            ],
+                            "entities": []
+                        }
+                    ]
+                }
             ]
         },
         {

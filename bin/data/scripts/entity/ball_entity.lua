@@ -23,6 +23,7 @@ function update(delta)
 
     if time >= maxTime then
         manager_entity_removeEntity(entity)
+        return
     else
         time = time + delta
     end

@@ -21,7 +21,7 @@ end
 
 
 function update(delta)
-    if input_isKeyPressedOnce(KEYS_U) then
+    if input_isKeyPressed(KEYS_U) then
         shoot()
     end
 
@@ -73,19 +73,12 @@ function shoot()
     temp = manager_createEntityFromPrefab("data/prefabs/ball.prefab.json")
     manager_entity_addChildEntity(projectile, temp)
 
-    print("Here 1")
     temp_transform = manager_entity_getTransform(temp)
-    print("Here 2")
     manager_transform_setPosition(temp_transform, sx, sy, sz)
-    print("Here 4")
     temp_behavior = manager_entity_getBehavior(temp)
-    print("Here 5")
     manager_behavior_setNumber(temp_behavior, "dirX", dx)
-    print("Here 6")
     manager_behavior_setNumber(temp_behavior, "dirY", dy)
-    print("Here 7")
     manager_behavior_setNumber(temp_behavior, "dirZ", dz)
-    print("Here 8")
 
     temp_behavior = nil
     temp_transform = nil

@@ -748,7 +748,7 @@ namespace manager {
 
         Entity* parent = nullptr;
         std::vector<Entity*> childeren;
-        std::queue<EntityDelelte> entityDels;
+        //std::queue<EntityDelelte> entityDels;
 
         Transform transform;
 
@@ -757,6 +757,8 @@ namespace manager {
 
         component::CameraComponent* cameraComponent = nullptr;
         component::MeshComponent* meshComponent = nullptr;
+
+        bool needRemoval = false;
 
         void init(Scene* scene);
         void handleEvent(SDL_Event* e);

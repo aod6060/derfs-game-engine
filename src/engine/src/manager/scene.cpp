@@ -26,7 +26,7 @@ namespace manager {
     }
 
     void Scene::update(float delta) {
-
+        /*
         while(this->entityDels.size() > 0) {
             this->entities.erase(entityDels.front().it);
             this->entityDels.front().entity->release();
@@ -38,6 +38,37 @@ namespace manager {
         for(int i = 0; i < this->entities.size(); i++) {
             this->entities[i]->update(delta);
         }
+
+        std::vector<Entity*>::iterator it = this->childeren.begin();
+
+        while(it != this->childeren.end()) {
+            if((*it)->needRemoval) {
+                (*it)->release();
+                delete (*it);
+                childeren.erase(it);
+                continue;
+            } else {
+                (*it)->update(delta);
+                it++;
+            }
+        }
+
+        */
+
+        std::vector<Entity*>::iterator it = this->entities.begin();
+
+        while(it != this->entities.end()) {
+            if((*it)->needRemoval) {
+                (*it)->release();
+                delete (*it);
+                entities.erase(it);
+                continue;
+            } else {
+                (*it)->update(delta);
+                it++;
+            }
+        }
+
         //camera.update(delta);
         if(this->behavior) {
             this->behavior->update(delta);
