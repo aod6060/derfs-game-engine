@@ -5,8 +5,8 @@
 rotSpeed = 128.0
 movementSpeed = 32.0
 
-
 transform = nil
+shootEntity = nil
 
 function init()
     -- This function is called once every
@@ -38,5 +38,6 @@ end
 
 function release()
     -- This is were you'll need to release user data
+    shootEntity = nil
     transform = nil
 end
