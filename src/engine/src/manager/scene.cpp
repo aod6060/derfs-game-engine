@@ -96,8 +96,11 @@ namespace manager {
         }
     }
 
+    void Scene::addEntity(Entity* entity) {
+        this->entities.push_back(entity);
+    }
+
     void Scene::removeEntity(Entity* entity) {
-        //this->entityDels.push(entity);
         int position = -1;
 
         for(int i = 0; i < entities.size(); i++) {

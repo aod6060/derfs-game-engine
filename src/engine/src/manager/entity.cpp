@@ -236,6 +236,10 @@ namespace manager {
         return m;
     }
 
+    void Entity::addChildEntity(Entity* entity) {
+        this->childeren.push_back(entity);
+    }
+
     void Entity::removeEntity(Entity* entity) {
         int position = -1;
 

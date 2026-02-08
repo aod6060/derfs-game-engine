@@ -774,6 +774,7 @@ namespace manager {
         glm::mat4 calculateParentMatrix();
         glm::mat4 toParentMatrix(Entity* entity);
 
+        void addChildEntity(Entity* entity);
         void removeEntity(Entity* entity);
     };
 
@@ -793,6 +794,7 @@ namespace manager {
 
         void load(Json::Value value);
 
+        void addEntity(Entity* entity);
         void removeEntity(Entity* entity);
     };
 
