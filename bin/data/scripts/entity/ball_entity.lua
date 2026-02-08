@@ -2,7 +2,7 @@
     This is an example lua script for the engine....
 ]]
 
-speed = 128.0
+speed = 32.0
 
 dirX = 0.0
 dirY = 0.0
