@@ -13,6 +13,8 @@ namespace script {
         lua_register(l, "manager_scene_getEntity", manager_scene_getEntity);
         // manager_scene_getBehavior
         lua_register(l, "manager_scene_getBehavior", manager_scene_getBehavior);
+        // int manager_scene_addEntity(lua_State* l);
+        lua_register(l, "manager_scene_addEntity", manager_scene_addEntity);
     }
 
     int manager_scene_getGlobal(lua_State* l) {
@@ -38,5 +40,12 @@ namespace script {
         manager::Scene* scene = (manager::Scene*)lua_touserdata(l, 1);
         lua_pushlightuserdata(l, scene->behavior);
         return 1;
+    }
+
+    int manager_scene_addEntity(lua_State* l) {
+        manager::Scene* scene = (manager::Scene*)lua_touserdata(l, 1);
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 2);
+        scene->addEntity(entity);
+        return 0;
     }
 }

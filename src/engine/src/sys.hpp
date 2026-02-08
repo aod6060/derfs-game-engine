@@ -886,7 +886,8 @@ namespace script {
 
     // manager
     void manager_load_library(lua_State* l);
-
+    int manager_createEntityFromPrefab(lua_State* l);
+    
     // behavior
     void manager_behavior_load_library(lua_State* l);
     int manager_behavior_getBoolean(lua_State* l);
@@ -908,13 +909,15 @@ namespace script {
     int manager_entity_hasCameraComponent(lua_State* l);
     int manager_entity_getCameraComponent(lua_State* l);
     int manager_entity_removeEntity(lua_State* l);
-    
+    int manager_entity_addChildEntity(lua_State* l);
+
     // scene
     void manager_scene_load_library(lua_State* l);
     int manager_scene_getGlobal(lua_State* l);
     int manager_scene_getNumEntity(lua_State* l);
     int manager_scene_getEntity(lua_State* l);
     int manager_scene_getBehavior(lua_State* l);
+    int manager_scene_addEntity(lua_State* l);
 
     // global
     void manager_global_load_library(lua_State* l);

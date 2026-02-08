@@ -237,6 +237,8 @@ namespace manager {
     }
 
     void Entity::addChildEntity(Entity* entity) {
+        entity->parent = this;
+        entity->init(this->scene);
         this->childeren.push_back(entity);
     }
 

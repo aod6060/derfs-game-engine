@@ -22,6 +22,8 @@ namespace script {
         lua_register(l, "manager_entity_getCameraComponent", manager_entity_getCameraComponent);
         // int manager_entity_removeEntity(lua_State* l);
         lua_register(l, "manager_entity_removeEntity", manager_entity_removeEntity);
+        // manager_entity_addChildEntity
+        lua_register(l, "manager_entity_addChildEntity", manager_entity_addChildEntity);
     }
 
     int manager_entity_getScene(lua_State* l) {
@@ -73,6 +75,13 @@ namespace script {
         } else {
             entity->scene->removeEntity(entity);
         }
+        return 0;
+    }
+
+    int manager_entity_addChildEntity(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        manager::Entity* child = (manager::Entity*)lua_touserdata(l, 2);
+        entity->addChildEntity(child);
         return 0;
     }
 }
