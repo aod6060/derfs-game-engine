@@ -770,10 +770,17 @@ namespace manager {
         void load(Json::Value value);
 
         bool hasParent();
+        
+        // @decrepracated
         glm::mat4 calculateParent();
+        
+        // @decrepracated
         glm::mat4 calculateParentMatrix();
+
         glm::mat4 toParentMatrix(Entity* entity);
 
+        glm::vec3 getGlobalPosition();
+        
         void addChildEntity(Entity* entity);
         void removeEntity(Entity* entity);
     };
@@ -887,7 +894,7 @@ namespace script {
     // manager
     void manager_load_library(lua_State* l);
     int manager_createEntityFromPrefab(lua_State* l);
-    
+
     // behavior
     void manager_behavior_load_library(lua_State* l);
     int manager_behavior_getBoolean(lua_State* l);
