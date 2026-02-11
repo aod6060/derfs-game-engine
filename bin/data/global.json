@@ -1,0 +1,11 @@
+{
+    "name": "global",
+    "version": 3,
+    "behavior": "data/scripts/global/test_global.lua",
+    "default-scene": "data/scenes/testv4.scene.json",
+    "physics": {
+        "max-bodies": 65536,
+        "max-body-pairs": 65536,
+        "max-contact-constraints": 10240
+    }
+}

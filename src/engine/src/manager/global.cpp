@@ -5,7 +5,7 @@
 #include "json/value.h"
 #include <fstream>
 
-#define GLOBAL_VERSION 2
+#define GLOBAL_VERSION 3
 #define SCENE_VERSION 4
 
 namespace manager {
@@ -107,7 +107,7 @@ namespace manager {
     }
 
     void Global::global_load() {
-        std::ifstream in("data/globalv2.json");
+        std::ifstream in("data/global.json");
         Json::Value root;
         in >> root;
         in.close();
@@ -122,6 +122,23 @@ namespace manager {
 
         if(!root["default-scene"].isNull()) {
             this->defaultScenePath = root["default-scene"].asString();
+        }
+
+        if(!root["physics"].empty() || !root["physics"].isNull()) {
+            Json::Value _physics = root["physics"];
+
+            if(!_physics["max-bodies"].empty() || !_physics["max-bodies"].isNull()) {
+                physics::setMaxBodies(_physics["max-bodies"].asInt());
+            }
+
+            if(!_physics["max-body-pairs"].empty() || !_physics["max-body-pairs"].isNull()) {
+                physics::setMaxBodyPairs(_physics["max-body-pairs"].asInt());
+            }
+
+            if(!_physics["max-contact-constraints"].empty() || !_physics["max-contact-constraints"].isNull()) {
+                physics::setMaxContactContraints(_physics["max-contact-constraints"].asInt());
+            }
+
         }
     }
 }

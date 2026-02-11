@@ -632,6 +632,17 @@ namespace physics {
 
     void init();
     void release();
+
+    uint32_t getMaxBodies();
+    void setMaxBodies(uint32_t num);
+
+    uint32_t getMaxBodyPairs();
+    void setMaxBodyPairs(uint32_t num);
+
+    uint32_t getMaxContactConstraints();
+    void setMaxContactContraints(uint32_t num);
+
+
 }
 
 namespace assets {

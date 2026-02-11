@@ -1,6 +1,0 @@
-{
-    "name": "global",
-    "version": 2,
-    "behavior": "data/scripts/global/test_global.lua",
-    "default-scene": "data/scenes/testv4.scene.json"
-}
