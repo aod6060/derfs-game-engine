@@ -27,6 +27,7 @@ env = Environment(
         'assimp-vc141-mt.lib',
         'jsoncpp.lib',
         'lua.lib',
+        'Jolt.lib',
         'engine.lib',
         'kernel32.lib',
         'user32.lib',
