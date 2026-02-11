@@ -24,11 +24,6 @@ namespace app {
         g_context = SDL_GL_CreateContext(g_window);
         glewInit();
 
-        input::init();
-        render::init();
-        assets::init();
-        util::init();
-
         if(g_config->app) {
             g_config->app->init();
         }
@@ -54,8 +49,6 @@ namespace app {
                     app::exit();
                 }
 
-                input::handleEvent(&event);
-
                 // Handle Calls to app interface
                 if(g_config->app) {
                     g_config->app->handleEvent(&event);
@@ -68,8 +61,6 @@ namespace app {
                 g_config->app->render();
             }
 
-            input::update();
-
             // Swap Widnow
             SDL_GL_SwapWindow(g_window);
         }
@@ -79,11 +70,6 @@ namespace app {
         if(g_config->app) {
             g_config->app->release();
         }
-
-        util::release();
-        assets::release();
-        render::release();
-        input::release();
 
         SDL_GL_DeleteContext(g_context);
         SDL_DestroyWindow(g_window);

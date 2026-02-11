@@ -9,17 +9,24 @@ namespace game {
     void GameApp::init() {
         // This one will chge
         global.global_load();
+        input::init();
+        render::init();
+        physics::init();
+        assets::init();
+        util::init();
         //global.load("data/scenes/testv2.scene.json");
         global.startGame();
         global.init();
     }
 
     void GameApp::handleEvent(SDL_Event* e) {
+        input::handleEvent(e);
         global.handleEvent(e);
     }
 
     void GameApp::update(float delta) {
         global.update(delta);
+        input::update();
     }
 
     void GameApp::render() {
@@ -28,6 +35,12 @@ namespace game {
 
     void GameApp::release() {
         global.release();
+        util::release();
+        assets::release();
+        physics::release();
+        render::release();
+        input::release();
+
     }
 
 

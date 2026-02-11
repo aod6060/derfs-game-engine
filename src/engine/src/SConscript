@@ -14,6 +14,8 @@ env["source_files"] += [
 SConscript("#/src/engine/src/input/SConscript", exports="env")
 # manager
 SConscript("#/src/engine/src/manager/SConscript", exports="env")
+# physics
+SConscript("#/src/engine/src/physics/SConscript", exports="env")
 # render
 SConscript("#/src/engine/src/render/SConscript", exports="env")
 # script

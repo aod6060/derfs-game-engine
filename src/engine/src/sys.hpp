@@ -627,6 +627,13 @@ namespace render {
 
 }
 
+namespace physics {
+
+
+    void init();
+    void release();
+}
+
 namespace assets {
     void init();
     void release();
