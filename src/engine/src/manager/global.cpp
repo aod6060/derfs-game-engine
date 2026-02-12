@@ -126,19 +126,6 @@ namespace manager {
 
         if(!root["physics"].empty() || !root["physics"].isNull()) {
             Json::Value _physics = root["physics"];
-
-            if(!_physics["max-bodies"].empty() || !_physics["max-bodies"].isNull()) {
-                physics::setMaxBodies(_physics["max-bodies"].asInt());
-            }
-
-            if(!_physics["max-body-pairs"].empty() || !_physics["max-body-pairs"].isNull()) {
-                physics::setMaxBodyPairs(_physics["max-body-pairs"].asInt());
-            }
-
-            if(!_physics["max-contact-constraints"].empty() || !_physics["max-contact-constraints"].isNull()) {
-                physics::setMaxContactContraints(_physics["max-contact-constraints"].asInt());
-            }
-
         }
     }
 }

@@ -27,6 +27,7 @@ namespace game {
     void GameApp::update(float delta) {
         global.update(delta);
         input::update();
+        physics::update();
     }
 
     void GameApp::render() {

@@ -1,11 +1,10 @@
 #ifndef SYS_HPP
 #define SYS_HPP
 
-
-
 // Once this file gets above 2000 to 3000 lines of code I'll refactor it.
-
-#include "json/value.h"
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -628,21 +627,9 @@ namespace render {
 }
 
 namespace physics {
-
-
     void init();
+    void update();
     void release();
-
-    uint32_t getMaxBodies();
-    void setMaxBodies(uint32_t num);
-
-    uint32_t getMaxBodyPairs();
-    void setMaxBodyPairs(uint32_t num);
-
-    uint32_t getMaxContactConstraints();
-    void setMaxContactContraints(uint32_t num);
-
-
 }
 
 namespace assets {

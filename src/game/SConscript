@@ -27,7 +27,9 @@ env = Environment(
         'assimp-vc141-mt.lib',
         'jsoncpp.lib',
         'lua.lib',
-        'Jolt.lib',
+        'LinearMath.lib',
+        'BulletCollision.lib',
+        'BulletDynamics.lib',
         'engine.lib',
         'kernel32.lib',
         'user32.lib',
@@ -48,7 +50,7 @@ env = Environment(
         '/EHsc',
         '/fp:precise',
         '/MD',
-        '/sdl'
+        '/sdl',
     ],
     LINKFLAGS=[
         '/SUBSYSTEM:CONSOLE',
