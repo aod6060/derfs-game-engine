@@ -32,6 +32,8 @@
 #include <lua/lualib.hpp>
 #include <lua/lauxlib.hpp>
 
+#include <btBulletDynamicsCommon.h>
+
 namespace app {
     struct IApp {
         virtual void init() = 0;
@@ -630,6 +632,9 @@ namespace physics {
     void init();
     void update();
     void release();
+
+    btVector3 getGravity();
+    void setGravity(const btVector3& gravity);
 }
 
 namespace assets {

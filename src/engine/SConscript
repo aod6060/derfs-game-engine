@@ -35,7 +35,7 @@ env = Environment(
         '/Gd',
         '/EHsc',
         '/fp:precise',
-        '/MD',
+        '/MT',
         '/sdl',
     ],
     LINKFLAGS=[

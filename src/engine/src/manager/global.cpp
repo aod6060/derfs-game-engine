@@ -1,6 +1,4 @@
-#include "lua/lauxlib.hpp"
-#include "lua/lua.hpp"
-#include "lua/lualib.hpp"
+#include "LinearMath/btVector3.h"
 #include "../sys.hpp"
 #include "json/value.h"
 #include <fstream>
@@ -126,6 +124,17 @@ namespace manager {
 
         if(!root["physics"].empty() || !root["physics"].isNull()) {
             Json::Value _physics = root["physics"];
+
+            // Gravity
+            Json::Value _gravity = _physics["gravity"];
+            physics::setGravity(
+                btVector3(
+                    _gravity["x"].asFloat(),
+                    _gravity["y"].asFloat(),
+                    _gravity["z"].asFloat()
+                )
+            );
+
         }
     }
 }
