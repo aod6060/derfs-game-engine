@@ -1,7 +1,7 @@
 {
     "name": "scene",
     "version": 4,
-    "behavior": null,
+    "behavior": "data/scripts/scene/test_delete_entity_scene.lua",
     "entities": [
         {
             "type": "prefab",
@@ -26,6 +26,7 @@
         },
         {
             "type": "instance",
+            "name": "floor",
             "behavior": null,
             "transform": {
                 "position": {
