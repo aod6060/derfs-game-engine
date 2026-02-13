@@ -762,6 +762,10 @@ namespace manager {
         glm::mat4 toParentMatrix(Entity* entity);
         glm::vec3 getGlobalPosition();
 
+        // This will convert to a btTransform
+        btTransform convertToBulletTransform();
+        void interpretBulletTransform(const btTransform& transform);
+
         glm::mat4 toModel();
 
         void load(Json::Value v);
@@ -1021,7 +1025,7 @@ namespace script {
     int manager_transform_getGlobalPositionX(lua_State* l);
     int manager_transform_getGlobalPositionY(lua_State* l);
     int manager_transform_getGlobalPositionZ(lua_State* l);
-    
+
     // CameraComponent
     void manager_component_CameraComponent_load_library(lua_State* l);
     int manager_component_CameraComponent_getEntity(lua_State* l);

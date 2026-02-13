@@ -1,3 +1,6 @@
+#include "LinearMath/btQuaternion.h"
+#include "LinearMath/btScalar.h"
+#include "LinearMath/btTransform.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/quaternion_transform.hpp"
 #include "glm/trigonometric.hpp"
@@ -31,6 +34,29 @@ namespace manager {
         position = this->toParentMatrix(this->entity->parent) * position;
         return glm::vec3(position.x, position.y, position.z);
     }
+
+
+    btTransform Transform::convertToBulletTransform() {
+        btVector3 position = btVector3(this->position.x, this->position.y, this->position.z);
+
+        btQuaternion rotation = 
+            btQuaternion(btVector3(1.0f, 0.0f, 0.0f), btRadians(this->rotation.x)) *
+            btQuaternion(btVector3(0.0f, 1.0f, 0.0f), btRadians(this->rotation.y)) *
+            btQuaternion(btVector3(0.0f, 0.0f, 1.0f), btRadians(this->rotation.z));
+
+        std::cout << rotation.x() << ", " << rotation.y() << ", " << rotation.z() << ", " << rotation.w() << "\n";
+
+        return btTransform(rotation, position);
+    }
+
+    void Transform::interpretBulletTransform(const btTransform& transform) {
+        this->position = glm::vec3(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+
+        this->rotation.x = btDegrees((transform.getBasis() * btVector3(1.0f, 0.0f, 0.0f)).x());
+        this->rotation.y = btDegrees((transform.getBasis() * btVector3(0.0f, 1.0f, 0.0f)).y());
+        this->rotation.z = btDegrees((transform.getBasis() * btVector3(0.0f, 0.0f, 1.0f)).z());
+    }
+
 
     glm::mat4 Transform::toModel() {
         return
