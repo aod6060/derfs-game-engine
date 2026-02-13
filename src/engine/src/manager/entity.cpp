@@ -12,6 +12,8 @@ namespace manager {
     void Entity::init(Scene* scene) {
         this->scene = scene;
 
+        this->transform.init(this);
+
         for(int i = 0; i < this->childeren.size(); i++) {
             this->childeren.at(i)->init(scene);
         }
@@ -132,6 +134,8 @@ namespace manager {
             delete behavior;
         }
 
+        this->transform.release();
+        
         this->scene = nullptr;
     }
 
