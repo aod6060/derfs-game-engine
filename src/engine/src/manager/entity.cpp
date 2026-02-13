@@ -223,24 +223,6 @@ namespace manager {
         return this->parent != nullptr;
     }
 
-    glm::mat4 Entity::toParentMatrix(Entity* entity) {
-        if(entity == nullptr) {
-            return glm::mat4(1.0f);
-        }
-
-        glm::mat4 m = entity->transform.toModel();
-        if(entity->hasParent()) {
-            m = this->toParentMatrix(entity->parent) * m;
-        }
-        return m;
-    }
-
-    glm::vec3 Entity::getGlobalPosition() {
-        glm::vec4 position = glm::vec4(this->transform.position, 1.0f);
-        position = this->toParentMatrix(this->parent) * position;
-        return glm::vec3(position.x, position.y, position.z);
-    }
-
     void Entity::addChildEntity(Entity* entity) {
         entity->parent = this;
         entity->init(this->scene);

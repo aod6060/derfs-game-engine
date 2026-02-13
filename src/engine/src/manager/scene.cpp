@@ -26,35 +26,6 @@ namespace manager {
     }
 
     void Scene::update(float delta) {
-        /*
-        while(this->entityDels.size() > 0) {
-            this->entities.erase(entityDels.front().it);
-            this->entityDels.front().entity->release();
-            delete this->entityDels.front().entity;
-            this->entityDels.front().entity = nullptr;
-            this->entityDels.pop();
-        }
-
-        for(int i = 0; i < this->entities.size(); i++) {
-            this->entities[i]->update(delta);
-        }
-
-        std::vector<Entity*>::iterator it = this->childeren.begin();
-
-        while(it != this->childeren.end()) {
-            if((*it)->needRemoval) {
-                (*it)->release();
-                delete (*it);
-                childeren.erase(it);
-                continue;
-            } else {
-                (*it)->update(delta);
-                it++;
-            }
-        }
-
-        */
-
         std::vector<Entity*>::iterator it = this->entities.begin();
 
         while(it != this->entities.end()) {
@@ -133,24 +104,6 @@ namespace manager {
     }
 
     void Scene::removeEntity(Entity* entity) {
-        //this->entityDels.push(entity);
-        /*
-        int position = -1;
-
-        for(int i = 0; i < entities.size(); i++) {
-            if(entity == entities[i]) {
-                position = i;
-                break;
-            }
-        }
-
-        if(position == -1) {
-            return;
-        }
-
-        entityDels.push({entity, entities.begin() + position});
-        */
-
         entity->needRemoval = true;
     }
 }

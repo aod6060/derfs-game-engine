@@ -25,7 +25,7 @@ namespace script {
         // manager_entity_addChildEntity
         lua_register(l, "manager_entity_addChildEntity", manager_entity_addChildEntity);
         // int manager_entity_getGlobalPosition(lua_State* l);
-        lua_register(l, "manager_entity_getGlobalPosition", manager_entity_getGlobalPosition);
+        //lua_register(l, "manager_entity_getGlobalPosition", manager_entity_getGlobalPosition);
         // int manager_entity_getChildEntity(lua_State* l);
         lua_register(l, "manager_entity_getChildEntity", manager_entity_getChildEntity);
         // int manager_entity_getChilderenAmount(lua_State* l);
@@ -93,6 +93,7 @@ namespace script {
         return 0;
     }
 
+    /*
     int manager_entity_getGlobalPosition(lua_State* l) {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
         glm::vec3 gp = entity->getGlobalPosition();
@@ -101,6 +102,7 @@ namespace script {
         lua_pushnumber(l, gp.z);
         return 3;
     }
+    */
 
     int manager_entity_getChildEntity(lua_State* l) {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);

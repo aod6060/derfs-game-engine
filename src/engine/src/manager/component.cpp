@@ -38,7 +38,7 @@ namespace manager {
         }
 
         glm::mat4 CameraComponent::toViewWithParent() {
-            return  toView() * glm::inverse(this->entity->toParentMatrix(this->entity->parent));
+            return  toView() * glm::inverse(this->entity->transform.toParentMatrix(this->entity->parent));
         }
 
 
@@ -86,7 +86,7 @@ namespace manager {
         void MeshComponent::render() {
 
             if(this->entity->hasParent()) {
-                render::getMainShader()->setModel(this->entity->toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
+                render::getMainShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
             } else {
                 render::getMainShader()->setModel(this->entity->transform.toModel());
             }

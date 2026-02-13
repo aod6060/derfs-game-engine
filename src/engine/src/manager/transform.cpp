@@ -14,6 +14,23 @@ namespace manager {
         this->entity = nullptr;
     }
 
+    glm::mat4 Transform::toParentMatrix(Entity* entity) {
+        if(entity == nullptr) {
+            return glm::mat4(1.0f);
+        }
+
+        glm::mat4 m = entity->transform.toModel();
+        if(entity->hasParent()) {
+            m = this->toParentMatrix(entity->parent) * m;
+        }
+        return m;
+    }
+
+    glm::vec3 Transform::getGlobalPosition() {
+        glm::vec4 position = glm::vec4(this->position, 1.0f);
+        position = this->toParentMatrix(this->entity->parent) * position;
+        return glm::vec3(position.x, position.y, position.z);
+    }
 
     glm::mat4 Transform::toModel() {
         return

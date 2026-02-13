@@ -826,9 +826,6 @@ namespace manager {
 
         bool hasParent();
 
-        glm::mat4 toParentMatrix(Entity* entity);
-        glm::vec3 getGlobalPosition();
-
         void addChildEntity(Entity* entity);
         Entity* getChildEntity(size_t index);
         size_t getChilderenAmount();
@@ -839,7 +836,7 @@ namespace manager {
         Global* global = nullptr;
         std::vector<Entity*> entities;
         //std::queue<EntityDelelte> entityDels;
-        
+
         //Camera camera;
         std::string script;
         Behavior* behavior = nullptr;
@@ -968,6 +965,7 @@ namespace script {
     int manager_entity_getCameraComponent(lua_State* l);
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
+    // @Deprecated ~ This will be moved the the manager_transform_* functions
     int manager_entity_getGlobalPosition(lua_State* l);
     int manager_entity_getChildEntity(lua_State* l);
     int manager_entity_getChilderenAmount(lua_State* l);
