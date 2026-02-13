@@ -2,7 +2,7 @@
     "name": "global",
     "version": 3,
     "behavior": "data/scripts/global/test_global.lua",
-    "default-scene": "data/scenes/test.scene.json",
+    "default-scene": "data/scenes/testv4.scene.json",
     "physics": {
         "gravity": {
             "x": 0.0,

@@ -60,12 +60,12 @@
                     "behavior": null,
                     "transform": {
                         "position": {
-                            "x": 0.0,
+                            "x": -10.0,
                             "y": 2.0,
                             "z": 10.0
                         },
                         "rotation": {
-                            "x": -25.0,
+                            "x": 0.0,
                             "y": 0.0,
                             "z": 0.0
                         },

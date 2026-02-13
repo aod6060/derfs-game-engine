@@ -29,6 +29,14 @@ namespace script {
         lua_register(l, "manager_transform_setScaleX", manager_transform_setScaleX);
         lua_register(l, "manager_transform_setScaleY", manager_transform_setScaleY);
         lua_register(l, "manager_transform_setScaleZ", manager_transform_setScaleZ);
+        // int manager_transform_getGlobalPosition(lua_State* l);
+        lua_register(l, "manager_transform_getGlobalPosition", manager_transform_getGlobalPosition);
+        // int manager_transform_getGlobalPositionX(lua_State* l);
+        lua_register(l, "manager_transform_getGlobalPositionX", manager_transform_getGlobalPositionX);
+        // int manager_transform_getGlobalPositionY(lua_State* l);
+        lua_register(l, "manager_transform_getGlobalPositionY", manager_transform_getGlobalPositionY);
+        // int manager_transform_getGlobalPositionZ(lua_State* l);
+        lua_register(l, "manager_transform_getGlobalPositionZ", manager_transform_getGlobalPositionZ);
     }
 
     int manager_transform_getPosition(lua_State* l) {
@@ -198,4 +206,35 @@ namespace script {
         transform->scale.z = value;
         return 0;
     }
+
+    int manager_transform_getGlobalPosition(lua_State* l) {
+        manager::Transform* transform = (manager::Transform*)lua_touserdata(l, 1);
+        glm::vec3 gp = transform->getGlobalPosition();
+        lua_pushnumber(l, gp.x);
+        lua_pushnumber(l, gp.y);
+        lua_pushnumber(l, gp.z);
+        return 3;
+    }
+
+    int manager_transform_getGlobalPositionX(lua_State* l) {
+        manager::Transform* transform = (manager::Transform*)lua_touserdata(l, 1);
+        glm::vec3 gp = transform->getGlobalPosition();
+        lua_pushnumber(l, gp.x);
+        return 1;
+    }
+
+    int manager_transform_getGlobalPositionY(lua_State* l) {
+        manager::Transform* transform = (manager::Transform*)lua_touserdata(l, 1);
+        glm::vec3 gp = transform->getGlobalPosition();
+        lua_pushnumber(l, gp.y);
+        return 1;
+    }
+
+    int manager_transform_getGlobalPositionZ(lua_State* l) {
+        manager::Transform* transform = (manager::Transform*)lua_touserdata(l, 1);
+        glm::vec3 gp = transform->getGlobalPosition();
+        lua_pushnumber(l, gp.z);
+        return 1;
+    }
+
 }

@@ -7,6 +7,7 @@ movementSpeed = 32.0
 
 transform = nil
 shootEntity = nil
+shootEntityTransform = nil
 
 scene = nil
 projectile = nil
@@ -15,6 +16,7 @@ function init()
     -- This function is called once every
     transform = manager_entity_getTransform(entity)
     shootEntity = manager_entity_getChildEntity(entity, 0)
+    shootEntityTransform = manager_entity_getTransform(shootEntity)
     scene = manager_entity_getScene(entity)
     projectile = manager_scene_getEntity(scene, 2)
 end
@@ -50,6 +52,7 @@ function release()
     -- This is were you'll need to release user data
     projectile = nil
     scene = nil
+    shootEntityTransform = nil
     shootEntity = nil
     transform = nil
 end
@@ -61,8 +64,8 @@ function normalize(x, y, z)
 end
 
 function shoot()
-    x, y, z = manager_entity_getGlobalPosition(entity)
-    sx, sy, sz = manager_entity_getGlobalPosition(shootEntity)
+    x, y, z = manager_transform_getGlobalPosition(transform)
+    sx, sy, sz = manager_transform_getGlobalPosition(shootEntityTransform)
 
     dx = sx - x
     dy = sy - y

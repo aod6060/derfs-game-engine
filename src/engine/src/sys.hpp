@@ -835,9 +835,7 @@ namespace manager {
     struct Scene {
         Global* global = nullptr;
         std::vector<Entity*> entities;
-        //std::queue<EntityDelelte> entityDels;
 
-        //Camera camera;
         std::string script;
         Behavior* behavior = nullptr;
 
@@ -966,7 +964,7 @@ namespace script {
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
     // @Deprecated ~ This will be moved the the manager_transform_* functions
-    int manager_entity_getGlobalPosition(lua_State* l);
+    //int manager_entity_getGlobalPosition(lua_State* l);
     int manager_entity_getChildEntity(lua_State* l);
     int manager_entity_getChilderenAmount(lua_State* l);
 
@@ -1019,6 +1017,11 @@ namespace script {
     int manager_transform_setScaleY(lua_State* l);
     int manager_transform_setScaleZ(lua_State* l);
 
+    int manager_transform_getGlobalPosition(lua_State* l);
+    int manager_transform_getGlobalPositionX(lua_State* l);
+    int manager_transform_getGlobalPositionY(lua_State* l);
+    int manager_transform_getGlobalPositionZ(lua_State* l);
+    
     // CameraComponent
     void manager_component_CameraComponent_load_library(lua_State* l);
     int manager_component_CameraComponent_getEntity(lua_State* l);
