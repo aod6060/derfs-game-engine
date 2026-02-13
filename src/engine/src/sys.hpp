@@ -759,6 +759,9 @@ namespace manager {
         void init(Entity* entity);
         void release();
 
+        glm::mat4 toParentMatrix(Entity* entity);
+        glm::vec3 getGlobalPosition();
+
         glm::mat4 toModel();
 
         void load(Json::Value v);
@@ -791,11 +794,6 @@ namespace manager {
         
     };
 
-    struct EntityDelelte {
-        Entity* entity;
-        std::vector<Entity*>::iterator it;
-    };
-
     struct Entity {
         std::string type;
         std::string name;
@@ -804,7 +802,6 @@ namespace manager {
 
         Entity* parent = nullptr;
         std::vector<Entity*> childeren;
-        //std::queue<EntityDelelte> entityDels;
 
         Transform transform;
 
@@ -830,7 +827,6 @@ namespace manager {
         bool hasParent();
 
         glm::mat4 toParentMatrix(Entity* entity);
-
         glm::vec3 getGlobalPosition();
 
         void addChildEntity(Entity* entity);
@@ -842,7 +838,8 @@ namespace manager {
     struct Scene {
         Global* global = nullptr;
         std::vector<Entity*> entities;
-        std::queue<EntityDelelte> entityDels;
+        //std::queue<EntityDelelte> entityDels;
+        
         //Camera camera;
         std::string script;
         Behavior* behavior = nullptr;
