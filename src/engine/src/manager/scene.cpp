@@ -134,6 +134,7 @@ namespace manager {
 
     void Scene::removeEntity(Entity* entity) {
         //this->entityDels.push(entity);
+        /*
         int position = -1;
 
         for(int i = 0; i < entities.size(); i++) {
@@ -148,5 +149,8 @@ namespace manager {
         }
 
         entityDels.push({entity, entities.begin() + position});
+        */
+
+        entity->needRemoval = true;
     }
 }
