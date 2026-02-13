@@ -2,6 +2,8 @@
 #define SYS_HPP
 
 // Once this file gets above 2000 to 3000 lines of code I'll refactor it.
+#include "BulletCollision/CollisionShapes/btCollisionShape.h"
+#include "LinearMath/btTransform.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
@@ -706,12 +708,56 @@ namespace manager {
             virtual void release();
             virtual void load(Json::Value value);
         };
+
+        namespace physics {
+
+            struct AbstractBodyComponent : public IComponent {
+                Entity* entity = nullptr;
+                btRigidBody* body = nullptr;
+                btCollisionShape* shape = nullptr;
+
+                float mass;
+                
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+
+                virtual void load(Json::Value value) = 0;
+
+                btCollisionShape* createSphereShape(float radius);
+                btCollisionShape* createCapsuleShape(float radius, float height);
+                btCollisionShape* createBoxShape(const btVector3& halfExtents);
+                btCollisionShape* createStaticPlaneShape(const btVector3& planeNormal, float planeConstant);
+
+                btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* collisionShape);
+
+                btRigidBody* createStaticRigidBody(const btTransform& startTransform, btCollisionShape* collisionShape);
+
+            };
+
+            struct StaticBodyComponent : public AbstractBodyComponent {
+                virtual void load(Json::Value value);
+            };
+
+            struct DynamicBodyComponent : public AbstractBodyComponent {
+                virtual void load(Json::Value value);
+            };
+
+        }
     }
 
     struct Transform {
+        Entity* entity = nullptr;
+
         glm::vec3 position;
         glm::vec3 rotation;
         glm::vec3 scale;
+
+        void init(Entity* entity);
+        void release();
 
         glm::mat4 toModel();
 

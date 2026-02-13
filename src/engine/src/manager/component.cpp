@@ -1,3 +1,10 @@
+#include "BulletCollision/CollisionShapes/btBoxShape.h"
+#include "BulletCollision/CollisionShapes/btCapsuleShape.h"
+#include "BulletCollision/CollisionShapes/btSphereShape.h"
+#include "BulletCollision/CollisionShapes/btStaticPlaneShape.h"
+#include "BulletDynamics/Dynamics/btRigidBody.h"
+#include "LinearMath/btDefaultMotionState.h"
+#include "LinearMath/btVector3.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -107,5 +114,71 @@ namespace manager {
             this->uvScale = value["uv-scale"].asFloat();
         }
 
+        namespace physics {
+
+            // AbstractBodyComponent
+            void AbstractBodyComponent::init(Entity* entity) {
+
+            }
+
+            void AbstractBodyComponent::handleEvent(SDL_Event* e) {
+
+            }
+
+            void AbstractBodyComponent::update(float delta) {
+
+            }
+
+            void AbstractBodyComponent::preRender() {
+
+            }
+
+            void AbstractBodyComponent::render() {
+
+            }
+
+            void AbstractBodyComponent::release() {
+
+            }
+
+            btCollisionShape* AbstractBodyComponent::createSphereShape(float radius) {
+                return new btSphereShape(radius);
+            }
+
+            btCollisionShape* AbstractBodyComponent::createCapsuleShape(float radius, float height) {
+                return new btCapsuleShape(radius, height);
+            }
+
+            btCollisionShape* AbstractBodyComponent::createBoxShape(const btVector3& halfExtents) {
+                return new btBoxShape(halfExtents);
+            }
+
+            btCollisionShape* AbstractBodyComponent::createStaticPlaneShape(const btVector3& planeNormal, float planeConstant) {
+                return new btStaticPlaneShape(planeNormal, planeConstant);
+            }
+
+            btRigidBody* AbstractBodyComponent::createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* collisionShape) {
+                btVector3 localInertial(0, 0, 0);
+                collisionShape->calculateLocalInertia(mass, localInertial);
+                btDefaultMotionState* ms = new btDefaultMotionState(startTransform);
+                btRigidBody::btRigidBodyConstructionInfo cinfo(mass, ms, collisionShape, localInertial);
+                btRigidBody* body = new btRigidBody(cinfo);
+                body->setUserIndex(-1);
+                return body;
+            }
+            
+            btRigidBody* AbstractBodyComponent::createStaticRigidBody(const btTransform& startTransform, btCollisionShape* collisionShape) {
+                btDefaultMotionState* ms = new btDefaultMotionState(startTransform);
+                btRigidBody::btRigidBodyConstructionInfo cinfo(0, ms, collisionShape);
+                btRigidBody* body = new btRigidBody(cinfo);
+                body->setUserIndex(-1);
+                return body;
+            }
+                
+            // StaticBodyComponent
+
+            // DynamicBodyComponent
+
+        }
     }
 }

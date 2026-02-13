@@ -5,6 +5,16 @@
 
 
 namespace manager {
+
+    void Transform::init(Entity* entity) {
+        this->entity = entity;
+    }
+
+    void Transform::release() {
+        this->entity = nullptr;
+    }
+
+
     glm::mat4 Transform::toModel() {
         return
             glm::translate(glm::mat4(1.0f), this->position) *
