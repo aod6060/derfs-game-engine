@@ -135,7 +135,7 @@ namespace manager {
         }
 
         this->transform.release();
-        
+
         this->scene = nullptr;
     }
 
@@ -221,18 +221,6 @@ namespace manager {
 
     bool Entity::hasParent() {
         return this->parent != nullptr;
-    }
-
-    glm::mat4 Entity::calculateParent() {
-        return calculateParentMatrix();
-    }
-
-    glm::mat4 Entity::calculateParentMatrix() {
-        glm::mat4 p = this->transform.toModel();
-        if(this->hasParent()) {
-            p = this->parent->calculateParentMatrix() * p;
-        }
-        return p;
     }
 
     glm::mat4 Entity::toParentMatrix(Entity* entity) {

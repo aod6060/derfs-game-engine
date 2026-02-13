@@ -828,12 +828,6 @@ namespace manager {
         void load(Json::Value value);
 
         bool hasParent();
-        
-        // @decrepracated
-        glm::mat4 calculateParent();
-        
-        // @decrepracated
-        glm::mat4 calculateParentMatrix();
 
         glm::mat4 toParentMatrix(Entity* entity);
 
