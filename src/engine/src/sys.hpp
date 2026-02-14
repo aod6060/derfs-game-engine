@@ -994,10 +994,19 @@ namespace script {
     int manager_entity_getScene(lua_State* l);
     int manager_entity_getTransform(lua_State* l);
     int manager_entity_getBehavior(lua_State* l);
+    
     int manager_entity_hasMeshComponent(lua_State* l);
     int manager_entity_getMeshComponent(lua_State* l);
+    
     int manager_entity_hasCameraComponent(lua_State* l);
     int manager_entity_getCameraComponent(lua_State* l);
+
+    int manager_entity_hasStaticBodyComponent(lua_State* l);
+    int manager_entity_getStaticBodyComponent(lua_State* l);
+
+    int manager_entity_hasDynamicBodyComponent(lua_State* l);
+    int manager_entity_getDynamicBodyComponent(lua_State* l);
+
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
     int manager_entity_getChildEntity(lua_State* l);

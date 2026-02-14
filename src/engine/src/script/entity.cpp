@@ -20,6 +20,14 @@ namespace script {
         lua_register(l, "manager_entity_hasCameraComponent", manager_entity_hasCameraComponent);
         // int manager_entity_getCameraComponent(lua_State* l);
         lua_register(l, "manager_entity_getCameraComponent", manager_entity_getCameraComponent);
+        // int manager_entity_hasStaticBodyComponent(lua_State* l);
+        lua_register(l, "manager_entity_hasStaticBodyComponent", manager_entity_hasStaticBodyComponent);
+        // int manager_entity_getStaticBodyComponent(lua_State* l);
+        lua_register(l, "manager_entity_getStaticBodyComponent", manager_entity_getStaticBodyComponent);
+        // int manager_entity_hasDynamicBodyComponent(lua_State* l);
+        lua_register(l, "manager_entity_hasDynamicBodyComponent", manager_entity_hasDynamicBodyComponent);
+        // int manager_entity_getDynamicBodyComponent(lua_State* l);
+        lua_register(l, "manager_entity_getDynamicBodyComponent", manager_entity_getDynamicBodyComponent);
         // int manager_entity_removeEntity(lua_State* l);
         lua_register(l, "manager_entity_removeEntity", manager_entity_removeEntity);
         // manager_entity_addChildEntity
@@ -71,6 +79,31 @@ namespace script {
         lua_pushlightuserdata(l, entity->components.at("camera-component"));
         return 1;
     }
+
+    int manager_entity_hasStaticBodyComponent(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushboolean(l, entity->components.find("static-body-component") != entity->components.end());
+        return 1;
+    }
+
+    int manager_entity_getStaticBodyComponent(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushlightuserdata(l, entity->components.at("static-body-component"));
+        return 1;
+    }
+    
+    int manager_entity_hasDynamicBodyComponent(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushboolean(l, entity->components.find("dynamic-body-component") != entity->components.end());
+        return 1;
+    }
+
+    int manager_entity_getDynamicBodyComponent(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushlightuserdata(l, entity->components.at("dynamic-body-component"));
+        return 1;
+    }
+
 
     int manager_entity_removeEntity(lua_State* l) {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);

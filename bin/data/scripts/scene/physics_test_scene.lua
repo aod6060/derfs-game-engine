@@ -13,14 +13,14 @@ amount = 20
 
 function init()
     -- This function is called once every
-    --[[
     for i = 0, amount do
         temp = manager_createEntityFromPrefab(prefab)
         manager_entity_addEntity(scene, temp)
+        temp_transform = manager_entity_getTransform(temp)
 
+        
         temp = nil
     end
-    ]]
 end
 
 
