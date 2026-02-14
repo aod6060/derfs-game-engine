@@ -79,7 +79,7 @@
                         {
                             "type": "mesh-component",
                             "mesh": "monkey",
-                            "texture": "snow",
+                            "texture": "grass",
                             "uv-scale": 1.0
                         }
                     ],

@@ -18,16 +18,6 @@ namespace manager {
             this->childeren.at(i)->init(scene);
         }
 
-        /*
-        if(this->cameraComponent) {
-            this->cameraComponent->init(this);
-        }
-
-        if(this->meshComponent) {
-            this->meshComponent->init(this);
-        }
-        */
-
         this->componentIterator([&](component::IComponent* comp) {
             comp->init(this);
         });
@@ -43,16 +33,6 @@ namespace manager {
                 this->childeren.at(i)->handleEvent(e);
             }
         }
-
-        /*
-        if(this->cameraComponent) {
-            this->cameraComponent->handleEvent(e);
-        }
-
-        if(this->meshComponent) {
-            this->meshComponent->handleEvent(e);
-        }
-        */
 
         this->componentIterator([&](component::IComponent* comp) {
             comp->handleEvent(e);
@@ -73,16 +53,6 @@ namespace manager {
                 it++;
             }
         }
-        
-        /*
-        if(this->cameraComponent) {
-            this->cameraComponent->update(delta);
-        }
-
-        if(this->meshComponent) {
-            this->meshComponent->update(delta);
-        }
-        */
 
         this->componentIterator([&](component::IComponent* comp) {
             comp->update(delta);
@@ -99,15 +69,6 @@ namespace manager {
                 this->childeren.at(i)->preRender();
             }
         }
-        /*
-        if(this->cameraComponent) {
-            this->cameraComponent->preRender();
-        }
-
-        if(this->meshComponent) {
-            this->meshComponent->preRender();
-        }
-        */
 
         this->componentIterator([&](component::IComponent* comp) {
             comp->preRender();
@@ -120,15 +81,6 @@ namespace manager {
                 this->childeren.at(i)->render();
             }
         }
-        /*
-        if(this->cameraComponent) {
-            this->cameraComponent->render();
-        }
-
-        if(this->meshComponent) {
-            this->meshComponent->render();
-        }
-        */
 
         this->componentIterator([&](component::IComponent* comp) {
             comp->render();
@@ -145,18 +97,6 @@ namespace manager {
             this->childeren.clear();
         }
 
-        /*
-        if(this->cameraComponent) {
-            this->cameraComponent->release();
-            delete this->cameraComponent;
-        }
-
-        if(this->meshComponent) {
-            this->meshComponent->release();
-            delete this->meshComponent;
-        }
-        */
-
         this->componentIterator([&](component::IComponent* comp) {
             comp->release();
             delete comp;
@@ -164,7 +104,7 @@ namespace manager {
         });
 
         this->components.clear();
-        
+
         if(this->behavior) {
             this->behavior->release();
             delete behavior;
@@ -198,17 +138,6 @@ namespace manager {
             for(int i = 0; i < components.size(); i++) {
                 Json::Value comp = components[i];
                 std::string type = comp["type"].asString();
-
-                /*
-                if(type == "mesh-component") {
-                    this->meshComponent = new component::MeshComponent();
-                    this->meshComponent->load(comp);
-                } else if(type == "camera-component") {
-                    this->cameraComponent = new component::CameraComponent();
-                    this->cameraComponent->load(comp);
-                }
-                */
-
                 component::componentFactory(this, type, comp);
             }
         }

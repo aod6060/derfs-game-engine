@@ -639,6 +639,8 @@ namespace physics {
     void update();
     void release();
 
+    btDiscreteDynamicsWorld* getWorld();
+    
     btVector3 getGravity();
     void setGravity(const btVector3& gravity);
 }
@@ -680,7 +682,7 @@ namespace manager {
             virtual void load(Json::Value value) = 0;
 
             virtual ~IComponent() {}
-            
+
         };
 
         void componentFactory(Entity* entity, std::string type, Json::Value value);
@@ -725,7 +727,7 @@ namespace manager {
                 btRigidBody* body = nullptr;
                 btCollisionShape* shape = nullptr;
 
-                float mass;
+                float mass = 0.0;
                 
                 virtual void init(Entity* entity);
                 virtual void handleEvent(SDL_Event* e);
@@ -748,10 +750,24 @@ namespace manager {
             };
 
             struct StaticBodyComponent : public AbstractBodyComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"static-plane", true},
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                };
+
                 virtual void load(Json::Value value);
             };
 
             struct DynamicBodyComponent : public AbstractBodyComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"static-plane", false},
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                };
+
                 virtual void load(Json::Value value);
             };
 

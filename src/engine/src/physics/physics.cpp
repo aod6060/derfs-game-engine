@@ -39,6 +39,10 @@ namespace physics {
         delete collisionConf;
     }
 
+    btDiscreteDynamicsWorld* getWorld() {
+        return world;
+    }
+
     btVector3 getGravity() {
         return gravity;
     }

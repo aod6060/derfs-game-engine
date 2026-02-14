@@ -21,6 +21,10 @@
         {
             "name": "tree",
             "path": "data/meshes/tree.glb"
+        },
+        {
+            "name": "crate",
+            "path": "data/meshes/crate.glb"
         }
     ],
     "textures": [
@@ -43,6 +47,10 @@
         {
             "name": "snow",
             "path": "data/textures/snow.png"
+        },
+        {
+            "name": "crate",
+            "path": "data/textures/crate.png"
         }
     ]
 }

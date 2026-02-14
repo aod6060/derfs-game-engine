@@ -160,6 +160,10 @@ namespace manager {
             // AbstractBodyComponent
             void AbstractBodyComponent::init(Entity* entity) {
                 this->entity = entity;
+
+                this->body = this->createRigidBody(this->mass, this->entity->transform.convertToBulletTransform(), this->shape);
+
+                ::physics::getWorld()->addRigidBody(this->body);
             }
 
             void AbstractBodyComponent::handleEvent(SDL_Event* e) {
@@ -167,7 +171,7 @@ namespace manager {
             }
 
             void AbstractBodyComponent::update(float delta) {
-
+                this->entity->transform.interpretBulletTransform(this->body->getCenterOfMassTransform());
             }
 
             void AbstractBodyComponent::preRender() {
@@ -179,6 +183,11 @@ namespace manager {
             }
 
             void AbstractBodyComponent::release() {
+                ::physics::getWorld()->removeRigidBody(this->body);
+                delete this->body;
+                this->body = nullptr;
+                delete this->shape;
+                this->shape = nullptr;
                 this->entity = nullptr;
             }
 
@@ -218,12 +227,71 @@ namespace manager {
                 
             // StaticBodyComponent
             void StaticBodyComponent::load(Json::Value value) {
+                // collision-shape
+                Json::Value collisionShape = value["collision-shape"];
+                if(this->collisionShapeTypes.find(collisionShape["type"].asString()) != collisionShapeTypes.end()) {
+                    std::string type = collisionShape["type"].asString();
 
+                    if(type == "static-plane") {
+                        Json::Value planeNormalValue = collisionShape["plane-normal"];
+                        btVector3 planeNormal = btVector3(
+                            planeNormalValue["x"].asFloat(),
+                            planeNormalValue["y"].asFloat(),
+                            planeNormalValue["z"].asFloat()
+                        );
+                        float planeConstant = collisionShape["plane-constant"].asFloat();
+
+                        this->shape = new btStaticPlaneShape(planeNormal, planeConstant);
+
+                    } else if(type == "box") {
+                        Json::Value halfExtentsValue = collisionShape["half-extends"];
+                        btVector3 halfExtents = btVector3(
+                            halfExtentsValue["x"].asFloat(),
+                            halfExtentsValue["y"].asFloat(),
+                            halfExtentsValue["z"].asFloat()
+                        );
+                        this->shape = new btBoxShape(halfExtents);
+                    } else if(type == "sphere") {
+                        float radius = collisionShape["radius"].asFloat();
+                        this->shape = new btSphereShape(radius);
+                    } else if(type == "capsule") {
+                        float radius = collisionShape["radius"].asFloat();
+                        float height = collisionShape["height"].asFloat();
+                        this->shape = new btCapsuleShape(radius, height);
+                    }
+                } else {
+                    std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
+                }
             }
 
             // DynamicBodyComponent
             void DynamicBodyComponent::load(Json::Value value) {
+                // Get Mass
+                this->mass = value["mass"].asFloat();
+                // collision-shape
+                Json::Value collisionShape = value["collision-shape"];
 
+                if(this->collisionShapeTypes.find(collisionShape["type"].asString()) != collisionShapeTypes.end()) {
+                    std::string type = collisionShape["type"].asString();
+                    if(type == "box") {
+                        Json::Value halfExtentsValue = collisionShape["half-extends"];
+                        btVector3 halfExtents = btVector3(
+                            halfExtentsValue["x"].asFloat(),
+                            halfExtentsValue["y"].asFloat(),
+                            halfExtentsValue["z"].asFloat()
+                        );
+                        this->shape = new btBoxShape(halfExtents);
+                    } else if(type == "sphere") {
+                        float radius = collisionShape["radius"].asFloat();
+                        this->shape = new btSphereShape(radius);
+                    } else if(type == "capsule") {
+                        float radius = collisionShape["radius"].asFloat();
+                        float height = collisionShape["height"].asFloat();
+                        this->shape = new btCapsuleShape(radius, height);
+                    }
+                } else {
+                    std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
+                }
             }
         }
     }

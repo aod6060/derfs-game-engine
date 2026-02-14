@@ -1,7 +1,7 @@
 {
     "name": "scene",
     "version": 4,
-    "behavior": "data/scripts/scene/test_delete_entity_scene.lua",
+    "behavior": "data/scripts/scene/physics_test_scene.lua",
     "entities": [
         {
             "type": "prefab",
@@ -61,57 +61,11 @@
                             "y": 1.0,
                             "z": 0.0
                         },
-                        "plane-constant": 0.0
+                        "plane-constant": 1.0
                     }
                 }
             ],
             "entities": []
-        },
-        {
-            "type": "instance",
-            "name": "cube",
-            "behavior": null,
-            "transform": {
-                "position": {
-                    "x": 0.0,
-                    "y": 20.0,
-                    "z": 0.0
-                },
-                "rotation": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }, 
-            "components": [
-                {
-                    "type": "mesh-component",
-                    "mesh": "cube",
-                    "texture": "angry",
-                    "uv-scale": 1.0
-                },
-                {
-                    "type": "dynamic-body-component",
-                    "mass": 1.0,
-                    "collision-shape": {
-                        "type": "box",
-                        "plane-normal": {
-                            "x": 0.0,
-                            "y": 1.0,
-                            "z": 0.0
-                        },
-                        "plane-constant": 0.0
-                    }
-                }
-            ],
-            "entities": [
-
-            ]
         }
     ]
 }
