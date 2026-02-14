@@ -11,10 +11,51 @@
 #include "glm/matrix.hpp"
 #include "glm/trigonometric.hpp"
 #include "../sys.hpp"
+#include "json/value.h"
+#include <functional>
 
 
 namespace manager {
     namespace component {
+        static std::map<std::string, std::function<IComponent*()>> _componentSetup = 
+        {
+            {
+                "mesh-component",
+                []() {
+                    return new MeshComponent();
+                }
+            },
+            {
+                "camera-component",
+                []() {
+                    return new CameraComponent();
+                }
+            },
+            {
+                "static-body-component",
+                []() {
+                    return new physics::StaticBodyComponent();
+                }
+            },
+            {
+                "dynamic-body-component",
+                []() {
+                    return new physics::DynamicBodyComponent();
+                }
+            }
+        };
+
+        void componentFactory(Entity* entity, std::string type, Json::Value value) {
+            if(_componentSetup.find(type) != _componentSetup.end()) {
+                //_componentSetup.at(type)(entity, type, value);
+                entity->components[type] = _componentSetup.at(type)();
+                entity->components.at(type)->load(value);
+                return;
+            } else {
+                std::cout << "\"" << type << "\" isn't a component type!\n";
+                return;
+            }
+        }
 
         // CameraComponent
         void CameraComponent::init(Entity* entity) {
@@ -118,7 +159,7 @@ namespace manager {
 
             // AbstractBodyComponent
             void AbstractBodyComponent::init(Entity* entity) {
-
+                this->entity = entity;
             }
 
             void AbstractBodyComponent::handleEvent(SDL_Event* e) {
@@ -138,7 +179,7 @@ namespace manager {
             }
 
             void AbstractBodyComponent::release() {
-
+                this->entity = nullptr;
             }
 
             btCollisionShape* AbstractBodyComponent::createSphereShape(float radius) {
@@ -176,9 +217,14 @@ namespace manager {
             }
                 
             // StaticBodyComponent
+            void StaticBodyComponent::load(Json::Value value) {
+
+            }
 
             // DynamicBodyComponent
+            void DynamicBodyComponent::load(Json::Value value) {
 
+            }
         }
     }
 }

@@ -1,0 +1,40 @@
+static-plane
+
+    "collision-shape": {
+        "type": "static-plane",
+        "plane-normal": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+        },
+        "plane-constant": 0.0
+    }
+
+
+box
+
+    "collision-shape": {
+        "type": "box",
+        "half-extends": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+        }
+    }
+
+
+sphere
+
+    "collision-shape": {
+        "type": "sphere",
+        "radius": 1.0
+    }
+
+
+capsule
+
+    "collision-shape": {
+        "type": "capsule",
+        "radius": 1.0,
+        "height": 2.0
+    }

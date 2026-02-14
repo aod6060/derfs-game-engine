@@ -18,6 +18,7 @@ namespace manager {
             this->childeren.at(i)->init(scene);
         }
 
+        /*
         if(this->cameraComponent) {
             this->cameraComponent->init(this);
         }
@@ -25,6 +26,11 @@ namespace manager {
         if(this->meshComponent) {
             this->meshComponent->init(this);
         }
+        */
+
+        this->componentIterator([&](component::IComponent* comp) {
+            comp->init(this);
+        });
 
         if(this->behavior) {
             this->behavior->init(this->script, this);
@@ -38,6 +44,7 @@ namespace manager {
             }
         }
 
+        /*
         if(this->cameraComponent) {
             this->cameraComponent->handleEvent(e);
         }
@@ -45,8 +52,11 @@ namespace manager {
         if(this->meshComponent) {
             this->meshComponent->handleEvent(e);
         }
+        */
 
-
+        this->componentIterator([&](component::IComponent* comp) {
+            comp->handleEvent(e);
+        });
     }
 
     void Entity::update(float delta) {
@@ -64,6 +74,7 @@ namespace manager {
             }
         }
         
+        /*
         if(this->cameraComponent) {
             this->cameraComponent->update(delta);
         }
@@ -71,6 +82,11 @@ namespace manager {
         if(this->meshComponent) {
             this->meshComponent->update(delta);
         }
+        */
+
+        this->componentIterator([&](component::IComponent* comp) {
+            comp->update(delta);
+        });
 
         if(this->behavior) {
             this->behavior->update(delta);
@@ -83,7 +99,7 @@ namespace manager {
                 this->childeren.at(i)->preRender();
             }
         }
-
+        /*
         if(this->cameraComponent) {
             this->cameraComponent->preRender();
         }
@@ -91,6 +107,11 @@ namespace manager {
         if(this->meshComponent) {
             this->meshComponent->preRender();
         }
+        */
+
+        this->componentIterator([&](component::IComponent* comp) {
+            comp->preRender();
+        });
     }
 
     void Entity::render() {
@@ -99,7 +120,7 @@ namespace manager {
                 this->childeren.at(i)->render();
             }
         }
-
+        /*
         if(this->cameraComponent) {
             this->cameraComponent->render();
         }
@@ -107,6 +128,11 @@ namespace manager {
         if(this->meshComponent) {
             this->meshComponent->render();
         }
+        */
+
+        this->componentIterator([&](component::IComponent* comp) {
+            comp->render();
+        });
     }
 
     void Entity::release() {
@@ -119,6 +145,7 @@ namespace manager {
             this->childeren.clear();
         }
 
+        /*
         if(this->cameraComponent) {
             this->cameraComponent->release();
             delete this->cameraComponent;
@@ -128,7 +155,16 @@ namespace manager {
             this->meshComponent->release();
             delete this->meshComponent;
         }
+        */
 
+        this->componentIterator([&](component::IComponent* comp) {
+            comp->release();
+            delete comp;
+            comp = nullptr;
+        });
+
+        this->components.clear();
+        
         if(this->behavior) {
             this->behavior->release();
             delete behavior;
@@ -163,6 +199,7 @@ namespace manager {
                 Json::Value comp = components[i];
                 std::string type = comp["type"].asString();
 
+                /*
                 if(type == "mesh-component") {
                     this->meshComponent = new component::MeshComponent();
                     this->meshComponent->load(comp);
@@ -170,6 +207,9 @@ namespace manager {
                     this->cameraComponent = new component::CameraComponent();
                     this->cameraComponent->load(comp);
                 }
+                */
+
+                component::componentFactory(this, type, comp);
             }
         }
 
@@ -240,5 +280,12 @@ namespace manager {
     
     void Entity::removeEntity(Entity* entity) {
         entity->needRemoval = true;
+    }
+
+
+    void Entity::componentIterator(std::function<void(component::IComponent* comp)> callback) {
+        for(std::map<std::string, component::IComponent*>::iterator it = this->components.begin(); it != this->components.end(); it++) {
+            callback(it->second);
+        }
     }
 }

@@ -22,12 +22,16 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+
 #include <GL/glew.h>
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
 #include <json/json.h>
 
 #include <lua/lua.hpp>
@@ -674,7 +678,12 @@ namespace manager {
             virtual void render() = 0;
             virtual void release() = 0;
             virtual void load(Json::Value value) = 0;
+
+            virtual ~IComponent() {}
+            
         };
+
+        void componentFactory(Entity* entity, std::string type, Json::Value value);
 
         struct CameraComponent : public IComponent {
             Entity* entity = nullptr;
@@ -812,8 +821,14 @@ namespace manager {
         std::string script;
         Behavior* behavior = nullptr;
 
+        /*
         component::CameraComponent* cameraComponent = nullptr;
         component::MeshComponent* meshComponent = nullptr;
+        component::physics::StaticBodyComponent* staticBodyComponent = nullptr;
+        component::physics::DynamicBodyComponent* dynamicBodyComponent = nullptr;
+        */
+
+        std::map<std::string, component::IComponent*> components;
 
         bool needRemoval = false;
 
@@ -834,6 +849,8 @@ namespace manager {
         Entity* getChildEntity(size_t index);
         size_t getChilderenAmount();
         void removeEntity(Entity* entity);
+
+        void componentIterator(std::function<void(component::IComponent* comp)>);
     };
 
     struct Scene {
