@@ -1091,7 +1091,8 @@ namespace script {
 
     // DynamicBodyComponent
     void manager_component_DynamicBodyComponent_load_library(lua_State* l);
-
+    int manager_component_DynamicBodyComponent_updateTransform(lua_State* l);
+    
     // util_random
     void util_random_load_library(lua_State* l);
     int util_random_randboolean(lua_State* l);
