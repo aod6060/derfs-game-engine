@@ -640,7 +640,7 @@ namespace physics {
     void release();
 
     btDiscreteDynamicsWorld* getWorld();
-    
+
     btVector3 getGravity();
     void setGravity(const btVector3& gravity);
 }
@@ -1000,8 +1000,6 @@ namespace script {
     int manager_entity_getCameraComponent(lua_State* l);
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
-    // @Deprecated ~ This will be moved the the manager_transform_* functions
-    //int manager_entity_getGlobalPosition(lua_State* l);
     int manager_entity_getChildEntity(lua_State* l);
     int manager_entity_getChilderenAmount(lua_State* l);
 
@@ -1078,6 +1076,12 @@ namespace script {
     int manager_component_MeshComponent_setTexture(lua_State* l);
     int manager_component_MeshComponent_getUVScale(lua_State* l);
     int manager_component_MeshComponent_setUVScale(lua_State* l);
+
+    // StaticBodyComponent
+    void manager_component_StaticBodyComponent_load_library(lua_State* l);
+
+    // DynamicBodyComponent
+    void manager_component_DynamicBodyComponent_load_library(lua_State* l);
 
     // util_random
     void util_random_load_library(lua_State* l);
