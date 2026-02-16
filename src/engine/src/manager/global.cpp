@@ -95,7 +95,6 @@ namespace manager {
             scene = nullptr;
         }
         Json::Value root = this->open_json(path);
-
         this->scene = new Scene();
         this->scene->load(root);
 

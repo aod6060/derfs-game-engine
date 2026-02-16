@@ -70,11 +70,39 @@ namespace manager {
 
         }
 
+    /*
+    // Arbutrary rotations in degress
+    glm::vec3 rot = glm::vec3(32.0f, 24.0f, 128.0f);
+
+    std::cout << "Original: " << rot.x << ", " << rot.y << ", " << rot.z << "\n";
+
+    // Arbutrary rotation in radians
+    glm::vec3 rrot = glm::radians(rot);
+
+    std::cout << "Radians: " << rrot.x << ", " << rrot.y << ", " << rrot.z << "\n";
+
+    float angle = glm::length(rrot);
+
+    std::cout << "Angle: Radian > " << angle << " Degrees > " << glm::degrees(angle) << "\n";
+
+    glm::vec3 nrrot = glm::normalize(rrot);
+
+    std::cout << "Normalize Radians: " << nrrot.x << ", " << nrrot.y << ", " << nrrot.z << "\n";
+
+    // Test: 32, 24, 128
+    glm::vec3 test = glm::degrees(nrrot * angle);
+
+    std::cout << "Test: " << test.x << ", " << test.y << ", " << test.z << "\n";
+    */
         glm::mat4 CameraComponent::toView() {
-            return 
-                glm::rotate(glm::mat4(1.0f), glm::radians(this->entity->transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)) *
-                glm::rotate(glm::mat4(1.0f), glm::radians(this->entity->transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)) *
-                glm::rotate(glm::mat4(1.0f), glm::radians(this->entity->transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)) *
+            glm::vec3 r = glm::radians(this->entity->transform.rotation);
+            float angle = glm::length(r);
+            glm::vec3 nr = glm::normalize(r);
+            if(angle < 0.001f) {
+                nr = glm::vec3(1.0f, 0.0f, 0.0f);
+            }
+            return
+                glm::rotate(glm::mat4(1.0f), angle, nr) *
                 glm::translate(glm::mat4(1.0f), -this->entity->transform.position);
         }
 
