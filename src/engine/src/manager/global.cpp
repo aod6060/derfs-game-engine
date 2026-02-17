@@ -3,7 +3,7 @@
 #include "json/value.h"
 #include <fstream>
 
-#define GLOBAL_VERSION 3
+#define GLOBAL_VERSION 4
 #define SCENE_VERSION 4
 
 namespace manager {
@@ -120,7 +120,9 @@ namespace manager {
         if(!root["default-scene"].isNull()) {
             this->defaultScenePath = root["default-scene"].asString();
         }
-
+        // Input Section
+        
+        // Physics Section
         if(!root["physics"].empty() || !root["physics"].isNull()) {
             Json::Value _physics = root["physics"];
 

@@ -1,8 +1,47 @@
 {
     "name": "global",
-    "version": 3,
+    "version": 4,
     "behavior": "data/scripts/global/test_global.lua",
     "default-scene": "data/scenes/test.scene.json",
+    "input": {
+        "mapping": [
+            {
+                "name": "move-forward",
+                "input": "KEYS_W",
+                "is-mouse": false
+            },
+            {
+                "name": "move-backward",
+                "input": "KEYS_S",
+                "is-moues": false
+            },
+            {
+                "name": "strafe-left",
+                "input": "KEYS_A",
+                "is-mouse": false
+            },
+            {
+                "name": "strafe-right",
+                "input": "KEYS_D",
+                "is-mouse": false
+            },
+            {
+                "name": "move-down",
+                "input": "KEYS_LSHIFT",
+                "is-mouse": false
+            },
+            {
+                "name": "move-up",
+                "input": "KEYS_SPACE",
+                "is-mouse": false
+            },
+            {
+                "name": "interact",
+                "input": "KEYS_TAB",
+                "is-mouse": false
+            }
+        ]
+    },
     "physics": {
         "gravity": {
             "x": 0.0,

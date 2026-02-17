@@ -1,0 +1,3 @@
+{"MBS_LEFT", input::MouseButtons::MBS_LEFT},
+{"MBS_CENTER", input::MouseButtons::MBS_CENTER},
+{"MBS_RIGHT", input::MouseButtons::MBS_RIGHT},
