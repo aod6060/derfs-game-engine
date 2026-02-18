@@ -19,7 +19,6 @@ function init()
 
     pivotEntity = manager_entity_getChildEntity(entity, 0)
     pivotEntityTransform = manager_entity_getTransform(pivotEntity)
-
 end
 
 
@@ -60,37 +59,40 @@ function update(delta)
 
         px, py, pz = manager_transform_getPosition(transform)
         
-        if input_isKeyPressed(KEYS_W) then
+        if input_mapping_isMappingPressed(global, "move-forward") then
             px = px - (math.sin(yrad) * delta * moveSpeed)
             pz = pz - (math.cos(yrad) * delta * moveSpeed)
         end
 
-        if input_isKeyPressed(KEYS_S) then
+        if input_mapping_isMappingPressed(global, "move-backward") then
             px = px + (math.sin(yrad) * delta * moveSpeed)
             pz = pz + (math.cos(yrad) * delta * moveSpeed)
         end
 
-        if input_isKeyPressed(KEYS_A) then
+        if input_mapping_isMappingPressed(global, "strafe-left") then
             px = px - (math.cos(yrad) * delta * moveSpeed)
             pz = pz + (math.sin(yrad) * delta * moveSpeed)
         end
 
-        if input_isKeyPressed(KEYS_D) then
+        if input_mapping_isMappingPressed(global, "strafe-right") then
             px = px + (math.cos(yrad) * delta * moveSpeed)
             pz = pz - (math.sin(yrad) * delta * moveSpeed)
         end
 
-        if input_isKeyPressed(KEYS_LSHIFT) then
+        if input_mapping_isMappingPressed(global, "move-down") then
             py = py - delta * moveSpeed
         end
 
-        if input_isKeyPressed(KEYS_SPACE) then
+        if input_mapping_isMappingPressed(global, "move-up") then
             py = py + delta * moveSpeed
         end
 
         manager_transform_setPosition(transform, px, py, pz)
 
     end
+
+
+
 end
 
 

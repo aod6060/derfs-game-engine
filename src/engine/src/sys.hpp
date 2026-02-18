@@ -1249,7 +1249,9 @@ namespace script {
 
     // Physics
     void physics_load_library(lua_State* l);
-
+    int physics_getGravity(lua_State* l);
+    int physics_setGravity(lua_State* l);
+    
     // manager
     void manager_load_library(lua_State* l);
     int manager_createEntityFromPrefab(lua_State* l);
