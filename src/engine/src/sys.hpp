@@ -1156,7 +1156,7 @@ namespace manager {
         };
 
         std::map<std::string, input::mapping::Mapping> mappings;
-        
+
         void init();
         void handleEvent(SDL_Event* e);
         void update(float delta);
@@ -1233,6 +1233,19 @@ namespace script {
     int input_toggleGrab(lua_State* l);
 
     // Input Mapping ( I forgot to added in wrappers for the input mapping system :( )
+    void input_mapping_load_library(lua_State* l);
+    int input_mapping_isMappingReleased(lua_State* l);
+    int input_mapping_isMappingPressedOnce(lua_State* l);
+    int input_mapping_isMappingPressed(lua_State* l);
+    int input_mapping_isMappingReleasedOnce(lua_State* l);
+    int input_mapping_getMappingReleasedValue(lua_State* l);
+    int input_mapping_getMappingPressedOnceValue(lua_State* l);
+    int input_mapping_getMappingPressedValue(lua_State* l);
+    int input_mapping_getMappingReleasedOnceValue(lua_State* l);
+    int input_mapping_getMappingReleasedAxis(lua_State* l);
+    int input_mapping_getMappingPressedOnceAxis(lua_State* l);
+    int input_mapping_getMappingPressedAxis(lua_State* l);
+    int input_mapping_getMappingReleasedOnceAxis(lua_State* l);
 
     // Physics
     void physics_load_library(lua_State* l);

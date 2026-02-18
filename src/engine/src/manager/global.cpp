@@ -121,7 +121,30 @@ namespace manager {
             this->defaultScenePath = root["default-scene"].asString();
         }
         // Input Section
-        
+        if(!root["input"].empty() || !root["input"].isNull()) {
+            Json::Value _input = root["input"];
+
+            Json::Value _mapping = _input["mapping"];
+
+            for(int i = 0; i < _mapping.size(); i++) {
+                Json::Value obj = _mapping[i];
+
+                std::string name = obj["name"].asString();
+                std::string input = obj["input"].asString();
+                bool isMouse = obj["is-mouse"].asBool();
+
+                input::mapping::Mapping mapping;
+
+                if(isMouse) {
+                    input::mapping::createMouseButtonMapping(mapping, this->mouseBouttons.at(input));
+                } else {
+                    input::mapping::createKeyboardMapping(mapping, this->keyboard.at(input));
+                }
+
+                this->mappings[name] = mapping;
+            }
+        }
+
         // Physics Section
         if(!root["physics"].empty() || !root["physics"].isNull()) {
             Json::Value _physics = root["physics"];

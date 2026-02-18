@@ -36,7 +36,7 @@
                 "is-mouse": false
             },
             {
-                "name": "interact",
+                "name": "toggle-mousegrab",
                 "input": "KEYS_TAB",
                 "is-mouse": false
             }

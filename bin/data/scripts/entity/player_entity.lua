@@ -25,7 +25,7 @@ end
 
 function update(delta)
     -- This function is
-    if input_isKeyPressedOnce(KEYS_TAB) then
+    if input_mapping_isMappingPressedOnce(global, "toggle-mousegrab") then
         input_toggleGrab()
     end
 

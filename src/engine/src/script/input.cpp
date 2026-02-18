@@ -375,6 +375,7 @@ namespace script {
         // int input_toggleGrab(lua_State* l);
         lua_register(l, "input_toggleGrab", input_toggleGrab);
 
+        input_mapping_load_library(l);
     }
 
     // Keyboard

@@ -8,7 +8,7 @@ namespace script {
 
         // input
         input_load_library(l);
-
+        
         // manager
         manager_load_library(l);
 

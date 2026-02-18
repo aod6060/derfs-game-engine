@@ -14,6 +14,8 @@ env["source_files"] += [
     source("entity.cpp"),
     source("global.cpp"),
     source("input.cpp"),
+    source("input_mapping.cpp"),
+    source("physics.cpp"),
     source("manager.cpp"),
     source("scene.cpp"),
     source("script.cpp"),
