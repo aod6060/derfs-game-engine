@@ -1251,7 +1251,7 @@ namespace script {
     void physics_load_library(lua_State* l);
     int physics_getGravity(lua_State* l);
     int physics_setGravity(lua_State* l);
-    
+
     // manager
     void manager_load_library(lua_State* l);
     int manager_createEntityFromPrefab(lua_State* l);
@@ -1364,13 +1364,61 @@ namespace script {
     int manager_component_MeshComponent_getUVScale(lua_State* l);
     int manager_component_MeshComponent_setUVScale(lua_State* l);
 
+    // BodyComponent
+    void manager_component_body_component_load_library(lua_State* l);
+    int manager_component_body_component_updateTransform(lua_State* l);
+    int manager_component_body_setDamping(lua_State* l);
+    int manager_component_body_getLinearDamping(lua_State* l);
+    int manager_component_body_getAngularDamping(lua_State* l);
+    int manager_component_body_getLinearSleepingThreshold(lua_State* l);
+    int manager_component_body_getAngularSleepingThreshold(lua_State* l);
+    int manager_component_body_applyDamping(lua_State* l);
+    int manager_component_body_getLinearFactor(lua_State* l);
+    int manager_component_body_setLinearFactor(lua_State* l);
+    int manager_component_body_getInvMass(lua_State* l);
+    int manager_component_body_getMass(lua_State* l);
+    int manager_component_body_applyCentralForce(lua_State* l);
+    int manager_component_body_getTotalForce(lua_State* l);
+    int manager_component_body_getTotalTorque(lua_State* l);
+    int manager_component_body_getInvInertiaDiagLocal(lua_State* l);
+    int manager_component_body_setInvInertiaDiagLocal(lua_State* l);
+    int manager_component_body_setSleepingThresholds(lua_State* l);
+    int manager_component_body_applyTorque(lua_State* l);
+    int manager_component_body_applyForce(lua_State* l);
+    int manager_component_body_applyCentralImpulse(lua_State* l);
+    int manager_component_body_applyTorqueImpulse(lua_State* l);
+    int manager_component_body_applyImpulse(lua_State* l);
+    int manager_component_body_applyPushImpulse(lua_State* l);
+    int manager_component_body_getPushVelocity(lua_State* l);
+    int manager_component_body_getTurnVelocity(lua_State* l);
+    int manager_component_body_setPushVelocity(lua_State* l);
+    int manager_component_body_setTurnVelocity(lua_State* l);
+    int manager_component_body_applyCentralPushImpulse(lua_State* l);
+    int manager_component_body_applyTorqueTurnImpulse(lua_State* l);
+    int manager_component_body_clearForces(lua_State* l);
+    int manager_component_body_getLinearVelocity(lua_State* l);
+    int manager_component_body_getAngularVelocity(lua_State* l);
+    int manager_component_body_setLinearVelocity(lua_State* l);
+    int manager_component_body_setAngularVelocity(lua_State* l);
+    int manager_component_body_getVelocityInLocalPoint(lua_State* l);
+    int manager_component_body_getPushVelocityInLocalPoint(lua_State* l);
+    int manager_component_body_setAngularFactorVector3(lua_State* l);
+    int manager_component_body_setAngularFactorScalar(lua_State* l);
+    // btCollisionObject.h
+    int manager_component_body_isActive(lua_State* l);
+    int manager_component_body_getActivationState(lua_State* l);
+    int manager_component_body_setActivateState(lua_State* l);
+    int manager_component_body_isStaticObject(lua_State* l);
+    int manager_component_body_isKinematicObject(lua_State* l);
+    /*
     // StaticBodyComponent
     void manager_component_StaticBodyComponent_load_library(lua_State* l);
 
     // DynamicBodyComponent
     void manager_component_DynamicBodyComponent_load_library(lua_State* l);
     int manager_component_DynamicBodyComponent_updateTransform(lua_State* l);
-    
+    */
+
     // util_random
     void util_random_load_library(lua_State* l);
     int util_random_randboolean(lua_State* l);

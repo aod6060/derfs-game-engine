@@ -3,7 +3,7 @@
     "version": 1,
     "entity": {
         "name": "crate",
-        "behavior": null,
+        "behavior": "data/scripts/entity/crate_test_entity.lua",
         "transform": {
             "position": {
                 "x": 0.0,

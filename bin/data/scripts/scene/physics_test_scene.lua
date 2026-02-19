@@ -34,7 +34,7 @@ function init()
             manager_transform_setPosition(temp_transform, px, py, pz)
             manager_transform_setRotation(temp_transform, rx, ry, rz)
 
-            manager_component_DynamicBodyComponent_updateTransform(comp, temp_transform)
+            manager_component_body_component_updateTransform(comp, temp_transform)
 
             comp = nil
             temp_transform = nil
