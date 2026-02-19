@@ -7,8 +7,6 @@ bodyComponent = nil
 time = 0.0
 maxTime = 1.0
 
-toggleForce = false
-
 function init()
     -- This function is called once every
     bodyComponent = manager_entity_getDynamicBodyComponent(entity)
@@ -40,18 +38,6 @@ function update(delta)
     else
         time = time + delta
     end
-    
-    --[[
-    if input_isKeyPressedOnce(KEYS_LEFT) then
-        if toggleForce then
-            --manager_component_body_clearForces(bodyComponent)
-        else
-            manager_component_body_setActivateState(bodyComponent, BODY_ACTIVE_TAG)
-            manager_component_body_applyTorque(bodyComponent, 0.0, 256.0, 0.0)
-        end
-        toggleForce = not toggleForce
-    end
-    ]]
 
     -- Force
     if input_isKeyPressedOnce(KEYS_LEFT) then
