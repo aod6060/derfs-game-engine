@@ -62,7 +62,14 @@
                             "z": 0.0
                         },
                         "plane-constant": 1.0
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []

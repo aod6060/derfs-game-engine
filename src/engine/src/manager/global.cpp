@@ -163,6 +163,7 @@ namespace manager {
             Json::Value _groups = _physics["groups"];
             if(!_groups.empty()) {
                 for(int i = 0; i < _groups.size(); i++) {
+                    std::cout << _groups[i].asString() << "\n";
                     this->groups[_groups[i].asString()] = groupIndex;
                     groupIndex += 1;
                 }

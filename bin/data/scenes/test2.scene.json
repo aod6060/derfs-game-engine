@@ -57,7 +57,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/island-extra-large"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -95,7 +102,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/tree-01"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -133,7 +147,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/tree-01"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -171,7 +192,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/tree-02"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -209,7 +237,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/tree-02"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -247,7 +282,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/square-pillar"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -285,7 +327,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/square-pillar"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -323,7 +372,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/square-pillar"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []
@@ -361,7 +417,14 @@
                     "collision-shape": {
                         "type": "triangle-mesh",
                         "mesh": "demo/square-pillar-broken"
-                    }
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate"
+                    ]
                 }
             ],
             "entities": []

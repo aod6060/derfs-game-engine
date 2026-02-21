@@ -38,7 +38,14 @@
                         "y": 1.0,
                         "z": 1.0
                     }
-                }
+                },
+                "groups": [
+                    "crate"
+                ],
+                "masks": [
+                    "static",
+                    "crate"
+                ]
             }
         ],
         "entities": [

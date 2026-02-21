@@ -739,6 +739,9 @@ namespace manager {
 
                 virtual void load(Json::Value value) = 0;
 
+                std::vector<std::string> groups;
+                std::vector<std::string> masks;
+
                 btCollisionShape* createSphereShape(float radius);
                 btCollisionShape* createCapsuleShape(float radius, float height);
                 btCollisionShape* createBoxShape(const btVector3& halfExtents);

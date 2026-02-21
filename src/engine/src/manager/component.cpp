@@ -16,6 +16,7 @@
 #include "../sys.hpp"
 #include "json/value.h"
 #include <functional>
+#include <iostream>
 
 
 namespace manager {
@@ -170,7 +171,27 @@ namespace manager {
 
                 this->body = this->createRigidBody(this->mass, this->entity->transform.convertToBulletTransform(), this->shape);
 
-                ::physics::getWorld()->addRigidBody(this->body);
+                // Handle Groups
+                int group = 0;
+
+                if(!groups.empty()) {
+                    for(int i = 0; i < this->groups.size() - 1; i++) {
+                        //group |= groups.at(i);
+                        group |= this->entity->scene->global->getPhysicsGroups(this->groups.at(i));
+                    }
+                    group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
+                }
+                // Handle Masks
+                int mask = 0;
+
+                if(!masks.empty()) {
+                    for(int i = 0; i < this->masks.size() - 1; i++) {
+                        mask |= this->entity->scene->global->getPhysicsGroups(masks.at(i));
+                    }
+                    mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
+                }
+
+                ::physics::getWorld()->addRigidBody(this->body, group, mask);
             }
 
             void AbstractBodyComponent::handleEvent(SDL_Event* e) {
@@ -308,6 +329,26 @@ namespace manager {
                 } else {
                     std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
                 }
+                // Groups
+                Json::Value _groups = value["groups"];
+                std::cout << "Groups: " << _groups.size() << "\n";
+                if(!_groups.empty()) {
+                    for(int i = 0; i < _groups.size(); i++) {
+                        std::string g = _groups[i].asString();
+                        std::cout << g << "\n";
+                        this->groups.push_back(g);
+                        std::cout << g << "\n";
+                    }
+                }
+                // Masks
+                Json::Value _masks = value["masks"];
+                std::cout << "Masks: " << _masks.size() << "\n";
+                if(!_masks.empty()) {
+                    for(int i = 0; i < _masks.size(); i++) {
+                        std::string m = _masks[i].asString();
+                        this->masks.push_back(m);
+                    }
+                }
             }
 
             // DynamicBodyComponent
@@ -337,6 +378,25 @@ namespace manager {
                     }
                 } else {
                     std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
+                }
+                // Groups
+                std::cout << "Here!\n";
+                Json::Value _groups = value["groups"];
+                std::cout << "Groups: " << _groups.size() << "\n";
+                if(!_groups.empty()) {
+                    for(int i = 0; i < _groups.size(); i++) {
+                        std::string g = _groups[i].asString();
+                        this->groups.push_back(g);
+                    }
+                }
+                // Masks
+                Json::Value _masks = value["masks"];
+                std::cout << "Masks: " << _masks.size() << "\n";
+                if(!_masks.empty()) {
+                    for(int i = 0; i < _masks.size(); i++) {
+                        std::string m = _masks[i].asString();
+                        this->masks.push_back(m);
+                    }
                 }
             }
         }
