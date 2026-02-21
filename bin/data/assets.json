@@ -25,6 +25,90 @@
         {
             "name": "crate",
             "path": "data/meshes/crate.glb"
+        },
+        {
+            "name": "demo/bridge-large",
+            "path": "data/meshes/demo/bridge_large.glb"
+        },
+        {
+            "name": "demo/bridge-medium",
+            "path": "data/meshes/demo/bridge_medium.glb"
+        },
+        {
+            "name": "demo/bridge-small",
+            "path": "data/meshes/demo/bridge_small.glb"
+        },
+        {
+            "name": "demo/bush-01",
+            "path": "data/meshes/demo/bush_01.glb"
+        },
+        {
+            "name": "demo/bush-02",
+            "path": "data/meshes/demo/bush_02.glb"
+        },
+        {
+            "name": "demo/bush-03",
+            "path": "data/meshes/demo/bush_03.glb"
+        },
+        {
+            "name": "demo/cicle-pillar-broken",
+            "path": "data/meshes/demo/cicle_pillar_broken.glb"
+        },
+        {
+            "name": "demo/cicle-pillar",
+            "path": "data/meshes/demo/cicle_pillar.glb"
+        },
+        {
+            "name": "demo/island-extra-large",
+            "path": "data/meshes/demo/island_extra_large.glb"
+        },
+        {
+            "name": "demo/island-large",
+            "path": "data/meshes/demo/island_large.glb"
+        },
+        {
+            "name": "demo/island-medium",
+            "path": "data/meshes/demo/island_medium.glb"
+        },
+        {
+            "name": "demo/island-small",
+            "path": "data/meshes/demo/island_small.glb"
+        },
+        {
+            "name": "demo/player",
+            "path": "data/meshes/demo/player.glb"
+        },
+        {
+            "name": "demo/square-pillar-broken",
+            "path": "data/meshes/demo/square_pillar_broken.glb"
+        },
+        {
+            "name": "demo/square-pillar",
+            "path": "data/meshes/demo/square_pillar.glb"
+        },
+        {
+            "name": "demo/tree-01",
+            "path": "data/meshes/demo/tree_01.glb"
+        },
+        {
+            "name": "demo/tree-02",
+            "path": "data/meshes/demo/tree_02.glb"
+        },
+        {
+            "name": "demo/tree-03",
+            "path": "data/meshes/demo/tree_03.glb"
+        },
+        {
+            "name": "demo/wall-piece-broken-inner",
+            "path": "data/meshes/demo/wall_piece_broken_inner.glb"
+        },
+        {
+            "name": "demo/wall-piece-broken",
+            "path": "data/meshes/demo/wall_piece_broken.glb"
+        },
+        {
+            "name": "demo/wall-piece",
+            "path": "data/meshes/demo/wall_piece.glb"
         }
     ],
     "textures": [
@@ -51,6 +135,10 @@
         {
             "name": "crate",
             "path": "data/textures/crate.png"
+        },
+        {
+            "name": "pallet/albedo",
+            "path": "data/textures/pallet/albedo_pallet.png"
         }
     ]
 }
