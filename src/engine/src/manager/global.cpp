@@ -159,6 +159,18 @@ namespace manager {
                 )
             );
 
+            // Groups
+            Json::Value _groups = _physics["groups"];
+            if(!_groups.empty()) {
+                for(int i = 0; i < _groups.size(); i++) {
+                    this->groups[_groups[i].asString()] = groupIndex;
+                    groupIndex += 1;
+                }
+            }
         }
+    }
+
+    int Global::getPhysicsGroups(std::string name) {
+        return this->groups.at(name);
     }
 }

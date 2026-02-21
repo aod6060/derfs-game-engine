@@ -903,6 +903,9 @@ namespace manager {
 
         std::string defaultScenePath;
 
+        std::map<std::string, int> groups;
+        int groupIndex = 1;
+
         std::map<std::string, input::Keyboard> keyboard = {
         {"KEYS_UNKNOWN", input::Keyboard::KEYS_UNKNOWN},
         {"KEYS_A", input::Keyboard::KEYS_A},
@@ -1175,6 +1178,8 @@ namespace manager {
         void global_load();
 
         void startGame();
+
+        int getPhysicsGroups(std::string name);
     };
 }
 
