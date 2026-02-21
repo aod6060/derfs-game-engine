@@ -47,6 +47,12 @@ namespace manager {
                 []() {
                     return new physics::DynamicBodyComponent();
                 }
+            },
+            {
+                "kinematic-body-component",
+                []() {
+                    return new physics::KinematicBodyComponent();
+                }
             }
         };
 
@@ -430,7 +436,7 @@ namespace manager {
 
                 this->body->setCollisionFlags( body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
                 this->body->setActivationState(DISABLE_DEACTIVATION);
-                
+
                 ::physics::getWorld()->addRigidBody(this->body, group, mask);
             }
 
