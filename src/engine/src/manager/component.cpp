@@ -1,3 +1,4 @@
+#include "BulletCollision/CollisionDispatch/btCollisionObject.h"
 #include "BulletCollision/CollisionShapes/btBoxShape.h"
 #include "BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
 #include "BulletCollision/CollisionShapes/btCapsuleShape.h"
@@ -398,6 +399,100 @@ namespace manager {
                         this->masks.push_back(m);
                     }
                 }
+            }
+
+
+            // Kinematic Body
+            void KinematicBodyComponent::init(Entity* entity) {
+                this->entity = entity;
+
+                this->body = this->createRigidBody(this->mass, this->entity->transform.convertToBulletTransform(), this->shape);
+
+                // Handle Groups
+                int group = 0;
+
+                if(!groups.empty()) {
+                    for(int i = 0; i < this->groups.size() - 1; i++) {
+                        //group |= groups.at(i);
+                        group |= this->entity->scene->global->getPhysicsGroups(this->groups.at(i));
+                    }
+                    group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
+                }
+                // Handle Masks
+                int mask = 0;
+
+                if(!masks.empty()) {
+                    for(int i = 0; i < this->masks.size() - 1; i++) {
+                        mask |= this->entity->scene->global->getPhysicsGroups(masks.at(i));
+                    }
+                    mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
+                }
+
+                this->body->setCollisionFlags( body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+                this->body->setActivationState(DISABLE_DEACTIVATION);
+                
+                ::physics::getWorld()->addRigidBody(this->body, group, mask);
+            }
+
+            void KinematicBodyComponent::load(Json::Value value) {
+                // collision-shape
+                Json::Value collisionShape = value["collision-shape"];
+                if(this->collisionShapeTypes.find(collisionShape["type"].asString()) != collisionShapeTypes.end()) {
+                    std::string type = collisionShape["type"].asString();
+
+                    if(type == "static-plane") {
+                        Json::Value planeNormalValue = collisionShape["plane-normal"];
+                        btVector3 planeNormal = btVector3(
+                            planeNormalValue["x"].asFloat(),
+                            planeNormalValue["y"].asFloat(),
+                            planeNormalValue["z"].asFloat()
+                        );
+                        float planeConstant = collisionShape["plane-constant"].asFloat();
+
+                        this->shape = new btStaticPlaneShape(planeNormal, planeConstant);
+
+                    } else if(type == "box") {
+                        Json::Value halfExtentsValue = collisionShape["half-extends"];
+                        btVector3 halfExtents = btVector3(
+                            halfExtentsValue["x"].asFloat(),
+                            halfExtentsValue["y"].asFloat(),
+                            halfExtentsValue["z"].asFloat()
+                        );
+                        this->shape = this->createBoxShape(halfExtents);
+                    } else if(type == "sphere") {
+                        float radius = collisionShape["radius"].asFloat();
+                        this->shape = this->createSphereShape(radius);
+                    } else if(type == "capsule") {
+                        float radius = collisionShape["radius"].asFloat();
+                        float height = collisionShape["height"].asFloat();
+                        this->shape = this->createCapsuleShape(radius, height);
+                    } else if(type == "triangle-mesh") {
+                        std::string mesh = collisionShape["mesh"].asString();
+                        this->shape = this->createTriangleShape(mesh);
+                    }
+                } else {
+                    std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
+                }
+                // Groups
+                Json::Value _groups = value["groups"];
+                std::cout << "Groups: " << _groups.size() << "\n";
+                if(!_groups.empty()) {
+                    for(int i = 0; i < _groups.size(); i++) {
+                        std::string g = _groups[i].asString();
+                        std::cout << g << "\n";
+                        this->groups.push_back(g);
+                        std::cout << g << "\n";
+                    }
+                }
+                // Masks
+                Json::Value _masks = value["masks"];
+                std::cout << "Masks: " << _masks.size() << "\n";
+                if(!_masks.empty()) {
+                    for(int i = 0; i < _masks.size(); i++) {
+                        std::string m = _masks[i].asString();
+                        this->masks.push_back(m);
+                    }
+                } 
             }
         }
     }

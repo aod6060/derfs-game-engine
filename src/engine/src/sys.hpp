@@ -778,6 +778,20 @@ namespace manager {
                 virtual void load(Json::Value value);
             };
 
+            struct KinematicBodyComponent : public AbstractBodyComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"static-plane", false},
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                    {"triangle-mesh", false}
+                };
+
+
+                virtual void init(Entity* entity);
+
+                virtual void load(Json::Value value);
+            };
         }
     }
 
