@@ -3,13 +3,18 @@
 ]]
 
 bodyComponent = nil
+transform = nil
 
 time = 0.0
 maxTime = 1.0
 
+minX, minY, minZ = -20, 20, -20
+maxX, maxY, maxZ = 20, 60, 20
+
 function init()
     -- This function is called once every
     bodyComponent = manager_entity_getDynamicBodyComponent(entity)
+    transform = manager_entity_getTransform(entity)
 end
 
 
@@ -68,10 +73,31 @@ function update(delta)
         manager_component_body_applyCentralImpulse(bodyComponent, x, y, z)
     end
 
+
+    if manager_transform_getPositionY(transform) < -32.0 then
+        reset()
+    end
 end
 
 
 function release()
     -- This is were you'll need to release user data
     bodyComponent = nil
+    transform = nil
+end
+
+function reset()
+    px = util_random_randrange(minX, maxX)
+    py = util_random_randrange(minY, maxY)
+    pz = util_random_randrange(minZ, maxZ)
+
+
+    rx = util_random_randrange(0, 360)
+    ry = util_random_randrange(0, 360)
+    rz = util_random_randrange(0, 360)
+
+    manager_transform_setPosition(transform, px, py, pz)
+    manager_transform_setRotation(transform, rx, ry, rz)
+
+    manager_component_body_component_updateTransform(bodyComponent, transform)
 end

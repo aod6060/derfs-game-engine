@@ -1,7 +1,10 @@
 #include "BulletCollision/CollisionShapes/btBoxShape.h"
+#include "BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
 #include "BulletCollision/CollisionShapes/btCapsuleShape.h"
 #include "BulletCollision/CollisionShapes/btSphereShape.h"
 #include "BulletCollision/CollisionShapes/btStaticPlaneShape.h"
+#include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
+#include "BulletCollision/CollisionShapes/btTriangleMesh.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "LinearMath/btDefaultMotionState.h"
 #include "LinearMath/btVector3.h"
@@ -207,6 +210,42 @@ namespace manager {
                 return new btBoxShape(halfExtents);
             }
 
+            btCollisionShape* AbstractBodyComponent::createTriangleShape(std::string meshName) {
+
+                btTriangleMesh* triangleMesh = new btTriangleMesh(true, false);
+
+                for(int i = 0; i < assets::getMesh(meshName)->data.triangles.size(); i++) {
+                    render::mesh::Triangle tris = assets::getMesh(meshName)->data.triangles.at(i);
+
+                    triangleMesh->addTriangleIndices(tris.v1, tris.v2, tris.v3);
+                    
+
+                    btVector3 v1 = btVector3(
+                        assets::getMesh(meshName)->data.vertices.at(tris.v1).position.x,
+                        assets::getMesh(meshName)->data.vertices.at(tris.v1).position.y,
+                        assets::getMesh(meshName)->data.vertices.at(tris.v1).position.z
+                    );
+
+                    btVector3 v2 = btVector3(
+                        assets::getMesh(meshName)->data.vertices.at(tris.v2).position.x,
+                        assets::getMesh(meshName)->data.vertices.at(tris.v2).position.y,
+                        assets::getMesh(meshName)->data.vertices.at(tris.v2).position.z
+                    );
+
+                    btVector3 v3 = btVector3(
+                        assets::getMesh(meshName)->data.vertices.at(tris.v3).position.x,
+                        assets::getMesh(meshName)->data.vertices.at(tris.v3).position.y,
+                        assets::getMesh(meshName)->data.vertices.at(tris.v3).position.z
+                    );
+
+                    triangleMesh->addTriangle(v1, v2, v3);
+                }
+
+                btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triangleMesh, true);
+
+                return shape;
+            }
+
             btCollisionShape* AbstractBodyComponent::createStaticPlaneShape(const btVector3& planeNormal, float planeConstant) {
                 return new btStaticPlaneShape(planeNormal, planeConstant);
             }
@@ -254,14 +293,17 @@ namespace manager {
                             halfExtentsValue["y"].asFloat(),
                             halfExtentsValue["z"].asFloat()
                         );
-                        this->shape = new btBoxShape(halfExtents);
+                        this->shape = this->createBoxShape(halfExtents);
                     } else if(type == "sphere") {
                         float radius = collisionShape["radius"].asFloat();
-                        this->shape = new btSphereShape(radius);
+                        this->shape = this->createSphereShape(radius);
                     } else if(type == "capsule") {
                         float radius = collisionShape["radius"].asFloat();
                         float height = collisionShape["height"].asFloat();
-                        this->shape = new btCapsuleShape(radius, height);
+                        this->shape = this->createCapsuleShape(radius, height);
+                    } else if(type == "triangle-mesh") {
+                        std::string mesh = collisionShape["mesh"].asString();
+                        this->shape = this->createTriangleShape(mesh);
                     }
                 } else {
                     std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
@@ -284,14 +326,14 @@ namespace manager {
                             halfExtentsValue["y"].asFloat(),
                             halfExtentsValue["z"].asFloat()
                         );
-                        this->shape = new btBoxShape(halfExtents);
+                        this->shape = this->createBoxShape(halfExtents);
                     } else if(type == "sphere") {
                         float radius = collisionShape["radius"].asFloat();
-                        this->shape = new btSphereShape(radius);
+                        this->shape = this->createSphereShape(radius);
                     } else if(type == "capsule") {
                         float radius = collisionShape["radius"].asFloat();
                         float height = collisionShape["height"].asFloat();
-                        this->shape = new btCapsuleShape(radius, height);
+                        this->shape = this->createCapsuleShape(radius, height);
                     }
                 } else {
                     std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";

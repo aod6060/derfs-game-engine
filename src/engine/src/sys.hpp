@@ -3,6 +3,7 @@
 
 // Once this file gets above 2000 to 3000 lines of code I'll refactor it.
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
+#include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
 #include "LinearMath/btTransform.h"
 #include <cstdio>
 #include <cstdlib>
@@ -742,6 +743,7 @@ namespace manager {
                 btCollisionShape* createCapsuleShape(float radius, float height);
                 btCollisionShape* createBoxShape(const btVector3& halfExtents);
                 btCollisionShape* createStaticPlaneShape(const btVector3& planeNormal, float planeConstant);
+                btCollisionShape* createTriangleShape(std::string meshName);
 
                 btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* collisionShape);
 
@@ -755,6 +757,7 @@ namespace manager {
                     {"box", true},
                     {"sphere", true},
                     {"capsule", true},
+                    {"triangle-mesh", true}
                 };
 
                 virtual void load(Json::Value value);
@@ -766,6 +769,7 @@ namespace manager {
                     {"box", true},
                     {"sphere", true},
                     {"capsule", true},
+                    {"triangle-mesh", false}
                 };
 
                 virtual void load(Json::Value value);
