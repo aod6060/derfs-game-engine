@@ -48,10 +48,10 @@ namespace game {
     // Setup GameApp
     void setup(app::Config* config, GameApp* app) {
         config->caption = "Derf's Game Engine";
-        config->width = 1280;
-        //config->width = 680;
-        config->height = 720;
-        //config->height = 1080;
+        //config->width = 1280;
+        config->width = 680;
+        //config->height = 720;
+        config->height = 1080;
         config->app = app;
     }
 }

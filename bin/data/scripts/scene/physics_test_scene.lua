@@ -53,6 +53,10 @@ end
 
 function update(delta)
     -- This function is 
+    if input_mapping_isMappingPressedOnce(global, "escape") then
+        app_exit()
+    end
+    
     if input_isKeyPressedOnce(KEYS_R) then
         manager_global_changeScene(global, "data/scenes/test3.scene.json")
     end
