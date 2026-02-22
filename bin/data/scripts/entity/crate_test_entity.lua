@@ -99,5 +99,5 @@ function reset()
     manager_transform_setPosition(transform, px, py, pz)
     manager_transform_setRotation(transform, rx, ry, rz)
 
-    manager_component_body_component_updateTransform(bodyComponent, transform)
+    manager_component_body_updateTransform(bodyComponent, transform)
 end

@@ -8,6 +8,7 @@
 #include "BulletCollision/CollisionShapes/btTriangleMesh.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "LinearMath/btDefaultMotionState.h"
+#include "LinearMath/btTransform.h"
 #include "LinearMath/btVector3.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
@@ -438,6 +439,15 @@ namespace manager {
                 this->body->setActivationState(DISABLE_DEACTIVATION);
 
                 ::physics::getWorld()->addRigidBody(this->body, group, mask);
+            }
+
+            void KinematicBodyComponent::update(float delta) {
+                btTransform tran;
+                body->getMotionState()->getWorldTransform(tran);
+                btVector3 position = tran.getOrigin();
+                entity->transform.position = glm::vec3(position.x(), position.y(), position.z());
+                //this->entity->transform.interpretBulletTransform(tran);
+
             }
 
             void KinematicBodyComponent::load(Json::Value value) {

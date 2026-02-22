@@ -1,5 +1,8 @@
 #include "../sys.hpp"
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+#include "LinearMath/btQuaternion.h"
+#include "LinearMath/btScalar.h"
+#include "LinearMath/btTransform.h"
 #include "lua/lua.hpp"
 
 namespace script {
@@ -24,7 +27,7 @@ namespace script {
         lua_setglobal(l, "BODY_FIXED_BASE_MULTI_BODY");
 
         // int manager_component_DynamicBodyComponent_updateTransform(lua_State* l);
-        lua_register(l, "manager_component_body_component_updateTransform", manager_component_body_component_updateTransform);
+        lua_register(l, "manager_component_body_updateTransform", manager_component_body_updateTransform);
         // BodyComponent
         // int manager_component_body_setDamping(lua_State* l);
         lua_register(l, "manager_component_body_setDamping", manager_component_body_setDamping);
@@ -113,7 +116,7 @@ namespace script {
         lua_register(l, "manager_component_body_isKinematicObject", manager_component_body_isKinematicObject);
     }
 
-    int manager_component_body_component_updateTransform(lua_State* l) {
+    int manager_component_body_updateTransform(lua_State* l) {
         manager::component::physics::AbstractBodyComponent* comp = (manager::component::physics::AbstractBodyComponent*)lua_touserdata(l, 1);
         manager::Transform* transform = (manager::Transform*)lua_touserdata(l, 2);
         comp->body->setCenterOfMassTransform(transform->convertToBulletTransform());

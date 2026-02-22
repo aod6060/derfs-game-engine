@@ -2,7 +2,7 @@
     "name": "global",
     "version": 4,
     "behavior": "data/scripts/global/test_global.lua",
-    "default-scene": "data/scenes/test2.scene.json",
+    "default-scene": "data/scenes/test3.scene.json",
     "input": {
         "mapping": [
             {
@@ -50,7 +50,8 @@
         },
         "groups": [
             "static",
-            "crate"
+            "crate",
+            "player"
         ]
     }
 }

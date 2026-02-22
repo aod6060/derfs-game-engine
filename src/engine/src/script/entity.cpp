@@ -28,6 +28,10 @@ namespace script {
         lua_register(l, "manager_entity_hasDynamicBodyComponent", manager_entity_hasDynamicBodyComponent);
         // int manager_entity_getDynamicBodyComponent(lua_State* l);
         lua_register(l, "manager_entity_getDynamicBodyComponent", manager_entity_getDynamicBodyComponent);
+        //int manager_entity_hasKinematicBodyComponent(lua_State* l);
+        lua_register(l, "manager_entity_hasKinematicBodyComponent", manager_entity_hasKinematicBodyComponent);
+        //int manager_entity_getKinematicBodyComponent(lua_State* l);
+        lua_register(l, "manager_entity_getKinematicBodyComponent", manager_entity_getKinematicBodyComponent);
         // int manager_entity_removeEntity(lua_State* l);
         lua_register(l, "manager_entity_removeEntity", manager_entity_removeEntity);
         // manager_entity_addChildEntity
@@ -104,6 +108,17 @@ namespace script {
         return 1;
     }
 
+    int manager_entity_hasKinematicBodyComponent(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushboolean(l, entity->components.find("kinematic-body-component") != entity->components.end());
+        return 1;
+    }
+
+    int manager_entity_getKinematicBodyComponent(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushlightuserdata(l, entity->components.at("kinematic-body-component"));
+        return 1;
+    }
 
     int manager_entity_removeEntity(lua_State* l) {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);

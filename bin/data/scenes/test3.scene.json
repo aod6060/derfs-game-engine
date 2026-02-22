@@ -5,11 +5,11 @@
     "entities": [
         {
             "type": "prefab",
-            "path": "data/prefabs/player.prefab.json",
+            "path": "data/prefabs/player_fps.prefab.json",
             "transform": {
                 "position": {
                     "x": 0.0,
-                    "y": 2.0,
+                    "y": 60.0,
                     "z": 0.0
                 },
                 "rotation": {
