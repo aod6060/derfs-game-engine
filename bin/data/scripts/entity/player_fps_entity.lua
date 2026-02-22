@@ -2,7 +2,7 @@
     This is an example lua script for the engine....
 ]]
 
-moveSpeed = 16.0
+moveSpeed = 8.0
 jumpSpeed = 10.0
 
 transform = nil
@@ -22,6 +22,9 @@ bodyComponent = nil
 minX, minY, minZ = -20, 20, -20
 maxX, maxY, maxZ = 20, 60, 20
 
+
+time = 0.0
+
 function init()
     -- This function is called once every
     --transform = manager_entity_getTransform(entity)
@@ -36,7 +39,11 @@ function init()
     pivotEntity = manager_entity_getChildEntity(yPivotEntity, 0)
     pivotEntityTransform = manager_entity_getTransform(pivotEntity)
 
-    bodyComponent = manager_entity_getKinematicBodyComponent(entity)
+    bodyComponent = manager_entity_getDynamicBodyComponent(entity)
+    
+    manager_component_body_setAngularFactorScalar(bodyComponent, 0.0)
+    manager_component_body_setSleepingThresholds(bodyComponent, 0.0, 0.0)
+    manager_component_body_setActivateState(bodyComponent, BODY_DISABLE_DEACTIVATION)
 end
 
 function update(delta)
@@ -74,21 +81,25 @@ function update(delta)
 
         yrad = math.rad(ry)
 
-        --vx, vy, vz = manager_component_body_getLinearVelocity(bodyComponent)
+        vx, vy, vz = manager_component_body_getLinearVelocity(bodyComponent)
+
+        time = time + delta
+
+        time = clamp(0.0, 1.0, time)
 
         vx = 0
-        vy = 0
         vz = 0
 
         if input_mapping_isMappingPressed(global, "move-forward") then
             vx = -(math.sin(yrad) * moveSpeed)
             vz = -(math.cos(yrad) * moveSpeed)
-
+            time = 0.0
         end
 
         if input_mapping_isMappingPressed(global, "move-backward") then
             vx = (math.sin(yrad) * moveSpeed)
             vz = (math.cos(yrad) * moveSpeed)
+            time = 0.0
         end
 
         if input_mapping_isMappingPressed(global, "strafe-left") then
@@ -99,6 +110,7 @@ function update(delta)
         if input_mapping_isMappingPressed(global, "strafe-right") then
             vx = vx + (math.cos(yrad) * moveSpeed)
             vz = vz - (math.sin(yrad) * moveSpeed)
+
         end
 
         if input_mapping_isMappingPressedOnce(global, "jump") then
@@ -106,7 +118,7 @@ function update(delta)
         end
 
         --manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
-        manager_component_body_applyCentralImpulse(bodyComponent, vx, vy, vz)
+        manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
 
         if manager_transform_getPositionY(transform) < -32.0 then
             reset()
@@ -135,4 +147,20 @@ function reset()
     manager_transform_setPosition(transform, px, py, pz)
 
     manager_component_body_updateTransform(bodyComponent, transform)
+end
+
+function lerp(v0, v1, t)
+    return v0 + t * (v1 - v0)
+end
+
+function clamp(min, max, value)
+    if(min > value) then
+        return min
+    end
+
+    if(max < value) then
+        return max
+    end
+
+    return value
 end

@@ -23,7 +23,8 @@
         },
         "components": [
             {
-                "type": "kinematic-body-component",
+                "type": "dynamic-body-component",
+                "mass": 1.0,
                 "collision-shape": {
                     "type": "capsule",
                     "radius": 0.5,
@@ -89,7 +90,7 @@
                             {
                                 "type": "camera-component",
                                 "fov": 45.0,
-                                "znear": 1.0,
+                                "znear": 0.1,
                                 "zfar": 1024.0
                             }
                         ],
