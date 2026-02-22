@@ -42,7 +42,7 @@
         "entities": [
             {
                 "type": "instance",
-                "name": "pivot",
+                "name": "y-pivot",
                 "behavior": null,
                 "transform": {
                     "position": {
@@ -62,14 +62,40 @@
                     }   
                 },
                 "components": [
-                    {
-                        "type": "camera-component",
-                        "fov": 45.0,
-                        "znear": 1.0,
-                        "zfar": 1024.0
-                    }
                 ],
-                "entities": []
+                "entities": [
+                    {
+                        "type": "instance",
+                        "name": "x-pivot",
+                        "behavior": null,
+                        "transform": {
+                            "position": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            },
+                            "rotation": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            },
+                            "scale": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            }   
+                        },
+                        "components": [
+                            {
+                                "type": "camera-component",
+                                "fov": 45.0,
+                                "znear": 1.0,
+                                "zfar": 1024.0
+                            }
+                        ],
+                        "entities": []
+                    }
+                ]
             }
         ]
     }

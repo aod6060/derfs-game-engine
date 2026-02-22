@@ -2,11 +2,16 @@
     This is an example lua script for the engine....
 ]]
 
-moveSpeed = 32.0
+moveSpeed = 16.0
+jumpSpeed = 10.0
 
 transform = nil
 scene = nil
 global = nil
+
+
+yPivotEntity = nil
+yPivotTransform = nil
 
 pivotEntity = nil
 pivotEntityTransform = nil
@@ -14,22 +19,24 @@ pivotEntityTransform = nil
 bodyComponent = nil
 
 
-vx, vy, vz = 0, 0, 0
-gx, gy, gz = 0, 0, 0
+minX, minY, minZ = -20, 20, -20
+maxX, maxY, maxZ = 20, 60, 20
 
 function init()
     -- This function is called once every
-    transform = manager_entity_getTransform(entity)
+    --transform = manager_entity_getTransform(entity)
     scene = manager_entity_getScene(entity)
     global = manager_scene_getGlobal(scene)
 
-    pivotEntity = manager_entity_getChildEntity(entity, 0)
+    transform = manager_entity_getTransform(entity)
+
+    yPivotEntity = manager_entity_getChildEntity(entity, 0)
+    yPivotTransform = manager_entity_getTransform(yPivotEntity)
+
+    pivotEntity = manager_entity_getChildEntity(yPivotEntity, 0)
     pivotEntityTransform = manager_entity_getTransform(pivotEntity)
 
     bodyComponent = manager_entity_getKinematicBodyComponent(entity)
-
-    gx, gy, gz = physics_getGravity()
-
 end
 
 function update(delta)
@@ -41,12 +48,10 @@ function update(delta)
     if input_isGrab() then
         mcx, mcy = input_toVelocity()
 
-        --rx, ry, rz = manager_transform_getRotation(transform)
         rx = manager_transform_getRotationX(pivotEntityTransform)
-        ry = manager_transform_getRotationY(transform)
-        --msx, ry, msz = manager_component_body_getMotionStateRotation(bodyComponent)
+        ry = manager_transform_getRotationY(yPivotTransform)
+        --ry = manager_component_body_getRotationY(bodyComponent)
 
-        --ry = 0.0
 
         rx = rx + (mcy * 0.5)
         ry = ry - (mcx * 0.5)
@@ -63,53 +68,47 @@ function update(delta)
         elseif ry > 360.0 then
             ry = ry - 360.0
         end
-
-        --manager_transform_setRotation(transform, rx, ry, rz)
-        manager_transform_setRotationY(transform, ry)
+        
+        manager_transform_setRotationY(yPivotTransform, ry)
         manager_transform_setRotationX(pivotEntityTransform, rx)
-        --manager_component_body_setMotionStateRotations(bodyComponent, msx, ry, msz)
-
-        --manager_component_body_applyCentralForce(bodyComponent, gx, gy, gz)
-
-        vx, vy, vz = vx + gx * delta, vy + gy * delta, vz + gz * delta
-
 
         yrad = math.rad(ry)
 
-        --px, py, pz = manager_transform_getPosition(transform)
-        
+        vx, vy, vz = manager_component_body_getLinearVelocity(bodyComponent)
+
+        vx = 0
+        vz = 0
+
         if input_mapping_isMappingPressed(global, "move-forward") then
-            --px = px - (math.sin(yrad) * delta * moveSpeed)
-            --pz = pz - (math.cos(yrad) * delta * moveSpeed)
+            vx = -(math.sin(yrad) * moveSpeed)
+            vz = -(math.cos(yrad) * moveSpeed)
+
         end
 
         if input_mapping_isMappingPressed(global, "move-backward") then
-            --px = px + (math.sin(yrad) * delta * moveSpeed)
-            --pz = pz + (math.cos(yrad) * delta * moveSpeed)
+            vx = (math.sin(yrad) * moveSpeed)
+            vz = (math.cos(yrad) * moveSpeed)
         end
 
         if input_mapping_isMappingPressed(global, "strafe-left") then
-            --px = px - (math.cos(yrad) * delta * moveSpeed)
-            --pz = pz + (math.sin(yrad) * delta * moveSpeed)
+            vx = vx - (math.cos(yrad) * moveSpeed)
+            vz = vz + math.sin(yrad) * moveSpeed
         end
 
         if input_mapping_isMappingPressed(global, "strafe-right") then
-            --px = px + (math.cos(yrad) * delta * moveSpeed)
-            --pz = pz - (math.sin(yrad) * delta * moveSpeed)
+            vx = vx + (math.cos(yrad) * moveSpeed)
+            vz = vz - (math.sin(yrad) * moveSpeed)
         end
 
-        --[[
-        if input_mapping_isMappingPressed(global, "move-down") then
-            py = py - delta * moveSpeed
+        if input_mapping_isMappingPressedOnce(global, "jump") then
+            vy = jumpSpeed
         end
 
-        if input_mapping_isMappingPressed(global, "move-up") then
-            py = py + delta * moveSpeed
-        end
-        ]]
+        manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
 
-        --manager_transform_setPosition(transform, px, py, pz)
-        --manager_component_body_component_updateWorldPosition(bodyComponent, transform)
+        if manager_transform_getPositionY(transform) < -32.0 then
+            reset()
+        end
     end
 end
 
@@ -119,7 +118,19 @@ function release()
     bodyComponent = nil
     pivotEntityTransform = nil
     pivotEntity = nil
+    yPivotTransform = nil
+    yPivotEntity = nil
     global = nil
     scene = nil
     transform = nil
+end
+
+function reset()
+    px = util_random_randrange(minX, maxX)
+    py = util_random_randrange(minY, maxY)
+    pz = util_random_randrange(minZ, maxZ)
+
+    manager_transform_setPosition(transform, px, py, pz)
+
+    manager_component_body_updateTransform(bodyComponent, transform)
 end

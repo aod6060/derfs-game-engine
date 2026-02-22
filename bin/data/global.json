@@ -26,12 +26,7 @@
                 "is-mouse": false
             },
             {
-                "name": "move-down",
-                "input": "KEYS_LSHIFT",
-                "is-mouse": false
-            },
-            {
-                "name": "move-up",
+                "name": "jump",
                 "input": "KEYS_SPACE",
                 "is-mouse": false
             },
