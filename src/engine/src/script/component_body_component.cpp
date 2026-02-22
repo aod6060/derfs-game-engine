@@ -28,6 +28,10 @@ namespace script {
 
         // int manager_component_DynamicBodyComponent_updateTransform(lua_State* l);
         lua_register(l, "manager_component_body_updateTransform", manager_component_body_updateTransform);
+        // int manager_component_body_getRotationY(lua_State* l);
+        lua_register(l, "manager_component_body_getRotationY", manager_component_body_getRotationY);
+        // int manager_component_body_setRotationY(lua_State* l);
+        lua_register(l, "manager_component_body_setRotationY", manager_component_body_setRotationY);
         // BodyComponent
         // int manager_component_body_setDamping(lua_State* l);
         lua_register(l, "manager_component_body_setDamping", manager_component_body_setDamping);
@@ -122,6 +126,27 @@ namespace script {
         comp->body->setCenterOfMassTransform(transform->convertToBulletTransform());
         return 0;
     }
+
+    int manager_component_body_getRotationY(lua_State* l) {
+        manager::component::physics::AbstractBodyComponent* bodyComp = (manager::component::physics::AbstractBodyComponent*)lua_touserdata(l, 1);
+        float y = btDegrees(bodyComp->body->getCenterOfMassTransform().getRotation().getAxis().getY() * bodyComp->body->getCenterOfMassTransform().getRotation().getAngle());
+        lua_pushnumber(l, y);
+        return 1;
+    }
+
+    int manager_component_body_setRotationY(lua_State* l) {
+        manager::component::physics::AbstractBodyComponent* bodyComp = (manager::component::physics::AbstractBodyComponent*)lua_touserdata(l, 1);
+        float y = btRadians(lua_tonumber(l, 2));
+        btVector3 axis = btVector3(0.0f, y, 0.0f);
+        float angle = axis.length();
+        btVector3 position = bodyComp->body->getCenterOfMassPosition();
+        bodyComp->body->setCenterOfMassTransform(btTransform(
+            btQuaternion(axis, angle),
+            position
+        ));
+        return 0;
+    }
+
 
     // btRigidBody.h
     int manager_component_body_setDamping(lua_State* l) {

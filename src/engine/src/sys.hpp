@@ -788,13 +788,10 @@ namespace manager {
                     {"triangle-mesh", false}
                 };
 
-                btVector3 velocity = btVector3(0.0, 0.0, 0.0);
-
                 virtual void init(Entity* entity);
 
-                virtual void update(float delta);
-
                 virtual void load(Json::Value value);
+
             };
         }
     }
@@ -1400,6 +1397,10 @@ namespace script {
     // BodyComponent
     void manager_component_body_component_load_library(lua_State* l);
     int manager_component_body_updateTransform(lua_State* l);
+
+    int manager_component_body_getRotationY(lua_State* l);
+    int manager_component_body_setRotationY(lua_State* l);
+    
     int manager_component_body_setDamping(lua_State* l);
     int manager_component_body_getLinearDamping(lua_State* l);
     int manager_component_body_getAngularDamping(lua_State* l);
@@ -1443,11 +1444,6 @@ namespace script {
     int manager_component_body_setActivateState(lua_State* l);
     int manager_component_body_isStaticObject(lua_State* l);
     int manager_component_body_isKinematicObject(lua_State* l);
-
-    // Kinematic Body
-    int manager_component_kinematic_body_getVelocity(lua_State* l);
-    int manager_component_kinematic_body_setVelocity(lua_State* l);
-    int manager_component_kinematic_body_updatePosition(lua_State* l);
 
     /*
     // StaticBodyComponent

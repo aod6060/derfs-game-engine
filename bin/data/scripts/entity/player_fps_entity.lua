@@ -68,15 +68,16 @@ function update(delta)
         elseif ry > 360.0 then
             ry = ry - 360.0
         end
-        
+
         manager_transform_setRotationY(yPivotTransform, ry)
         manager_transform_setRotationX(pivotEntityTransform, rx)
 
         yrad = math.rad(ry)
 
-        vx, vy, vz = manager_component_body_getLinearVelocity(bodyComponent)
+        --vx, vy, vz = manager_component_body_getLinearVelocity(bodyComponent)
 
         vx = 0
+        vy = 0
         vz = 0
 
         if input_mapping_isMappingPressed(global, "move-forward") then
@@ -104,7 +105,8 @@ function update(delta)
             vy = jumpSpeed
         end
 
-        manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
+        --manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
+        manager_component_body_applyCentralImpulse(bodyComponent, vx, vy, vz)
 
         if manager_transform_getPositionY(transform) < -32.0 then
             reset()

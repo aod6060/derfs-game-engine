@@ -8,6 +8,7 @@
 #include "BulletCollision/CollisionShapes/btTriangleMesh.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "LinearMath/btDefaultMotionState.h"
+#include "LinearMath/btQuaternion.h"
 #include "LinearMath/btTransform.h"
 #include "LinearMath/btVector3.h"
 #include "glm/ext/matrix_clip_space.hpp"
@@ -413,7 +414,8 @@ namespace manager {
             void KinematicBodyComponent::init(Entity* entity) {
                 this->entity = entity;
 
-                this->body = this->createRigidBody(this->mass, this->entity->transform.convertToBulletTransform(), this->shape);
+                //this->body = this->createRigidBody(1.0f, this->entity->transform.convertToBulletTransform(), this->shape);
+                this->body = this->createRigidBody(256.0f, this->entity->transform.convertToBulletTransform(), this->shape);
 
                 // Handle Groups
                 int group = 0;
@@ -435,19 +437,11 @@ namespace manager {
                     mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
                 }
 
-                this->body->setCollisionFlags( body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+                this->body->setAngularFactor(0.0f);
+                this->body->setSleepingThresholds(0.0f, 0.0f);
                 this->body->setActivationState(DISABLE_DEACTIVATION);
 
                 ::physics::getWorld()->addRigidBody(this->body, group, mask);
-            }
-
-            void KinematicBodyComponent::update(float delta) {
-                btTransform tran;
-                body->getMotionState()->getWorldTransform(tran);
-                btVector3 position = tran.getOrigin();
-                entity->transform.position = glm::vec3(position.x(), position.y(), position.z());
-                //this->entity->transform.interpretBulletTransform(tran);
-
             }
 
             void KinematicBodyComponent::load(Json::Value value) {
