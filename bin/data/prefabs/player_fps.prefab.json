@@ -48,7 +48,7 @@
                 "transform": {
                     "position": {
                         "x": 0.0,
-                        "y": 1.0,
+                        "y": 0.0,
                         "z": 0.0
                     },
                     "rotation": {
@@ -62,8 +62,7 @@
                         "z": 1.0
                     }   
                 },
-                "components": [
-                ],
+                "components": [],
                 "entities": [
                     {
                         "type": "instance",
@@ -86,17 +85,73 @@
                                 "z": 1.0
                             }   
                         },
-                        "components": [
+                        "components": [],
+                        "entities": [
                             {
-                                "type": "camera-component",
-                                "fov": 45.0,
-                                "znear": 0.1,
-                                "zfar": 1024.0
+                                "type": "instance",
+                                "name": "camera",
+                                "behavior": null,
+                                "transform": {
+                                    "position": {
+                                        "x": 0.0,
+                                        "y": 2.0,
+                                        "z": 20.0
+                                    },
+                                    "rotation": {
+                                        "x": 0.0,
+                                        "y": 0.0,
+                                        "z": 0.0
+                                    },
+                                    "scale": {
+                                        "x": 1.0,
+                                        "y": 1.0,
+                                        "z": 1.0
+                                    }   
+                                },
+                                "components": [
+                                    {
+                                        "type": "camera-component",
+                                        "fov": 45.0,
+                                        "znear": 0.1,
+                                        "zfar": 1024.0
+                                    }
+                                ],
+                                "entities": []
                             }
-                        ],
-                        "entities": []
+                        ]
                     }
                 ]
+            },
+            {
+                "type": "instance",
+                "name": "mesh",
+                "behavior": null,
+                "transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": -1.5,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }   
+                },
+                "components": [
+                    {
+                        "type": "mesh-component",
+                        "mesh": "demo/player",
+                        "texture": "demo/player",
+                        "uv-scale": 1.0
+                    }
+                ],
+                "entities": []
             }
         ]
     }

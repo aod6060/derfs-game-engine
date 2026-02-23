@@ -137,6 +137,10 @@
             "path": "data/textures/crate.png"
         },
         {
+            "name": "demo/player",
+            "path": "data/textures/PlayerTexture.png"
+        },
+        {
             "name": "pallet/albedo",
             "path": "data/textures/pallet/albedo_pallet.png"
         }

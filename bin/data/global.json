@@ -31,6 +31,16 @@
                 "is-mouse": false
             },
             {
+                "name": "run",
+                "input": "KEYS_E",
+                "is-moues": false
+            },
+            {
+                "name": "toggle-fps",
+                "input": "KEYS_Q",
+                "is-moues": false
+            },
+            {
                 "name": "escape",
                 "input": "KEYS_ESCAPE",
                 "is-moues": false

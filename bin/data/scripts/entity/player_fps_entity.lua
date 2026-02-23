@@ -16,6 +16,12 @@ yPivotTransform = nil
 pivotEntity = nil
 pivotEntityTransform = nil
 
+cameraEntity = nil
+cameraTransform = nil
+
+meshEntity = nil
+meshTransform = nil
+
 bodyComponent = nil
 
 
@@ -24,6 +30,19 @@ maxX, maxY, maxZ = 20, 60, 20
 
 
 time = 0.0
+
+
+tx, ty, tz = 0.0, 0.0, 20.0
+fx, fy, fz = 0.0, 1.0, 0.0
+
+cx = tx
+cy = ty
+cz = tz
+
+toggleFPS = false
+animatedCamera = false
+animateTime = 0.0
+maxAnimeTime = 1.0
 
 function init()
     -- This function is called once every
@@ -36,8 +55,14 @@ function init()
     yPivotEntity = manager_entity_getChildEntity(entity, 0)
     yPivotTransform = manager_entity_getTransform(yPivotEntity)
 
+    meshEntity = manager_entity_getChildEntity(entity, 1)
+    meshTransform = manager_entity_getTransform(meshEntity)
+
     pivotEntity = manager_entity_getChildEntity(yPivotEntity, 0)
     pivotEntityTransform = manager_entity_getTransform(pivotEntity)
+
+    cameraEntity = manager_entity_getChildEntity(pivotEntity, 0)
+    cameraTransform = manager_entity_getTransform(cameraEntity)
 
     bodyComponent = manager_entity_getDynamicBodyComponent(entity)
     
@@ -55,12 +80,15 @@ function update(delta)
     if input_isGrab() then
         mcx, mcy = input_toVelocity()
 
+        -- rx = manager_transform_getRotationX(pivotEntityTransform)
+        -- ry = manager_transform_getRotationY(yPivotTransform)
         rx = manager_transform_getRotationX(pivotEntityTransform)
         ry = manager_transform_getRotationY(yPivotTransform)
+        
         --ry = manager_component_body_getRotationY(bodyComponent)
 
 
-        rx = rx + (mcy * 0.5)
+        rx = rx - (mcy * 0.5)
         ry = ry - (mcx * 0.5)
 
 
@@ -90,31 +118,55 @@ function update(delta)
         vx = 0
         vz = 0
 
+        movePlayer = false
+
+        runSpeed = moveSpeed
+
+        if input_mapping_isMappingPressed(global, "run") then
+            runSpeed = runSpeed * 2.0
+        end
+
         if input_mapping_isMappingPressed(global, "move-forward") then
-            vx = -(math.sin(yrad) * moveSpeed)
-            vz = -(math.cos(yrad) * moveSpeed)
+            movePlayer = true
+            vx = -(math.sin(yrad) * runSpeed)
+            vz = -(math.cos(yrad) * runSpeed)
             time = 0.0
         end
 
         if input_mapping_isMappingPressed(global, "move-backward") then
-            vx = (math.sin(yrad) * moveSpeed)
-            vz = (math.cos(yrad) * moveSpeed)
+            movePlayer = true
+            vx = (math.sin(yrad) * runSpeed)
+            vz = (math.cos(yrad) * runSpeed)
             time = 0.0
         end
 
         if input_mapping_isMappingPressed(global, "strafe-left") then
-            vx = vx - (math.cos(yrad) * moveSpeed)
-            vz = vz + math.sin(yrad) * moveSpeed
+            movePlayer = true
+            vx = vx - (math.cos(yrad) * runSpeed)
+            vz = vz + math.sin(yrad) * runSpeed
         end
 
         if input_mapping_isMappingPressed(global, "strafe-right") then
-            vx = vx + (math.cos(yrad) * moveSpeed)
-            vz = vz - (math.sin(yrad) * moveSpeed)
+            movePlayer = true
+            vx = vx + (math.cos(yrad) * runSpeed)
+            vz = vz - (math.sin(yrad) * runSpeed)
 
         end
 
         if input_mapping_isMappingPressedOnce(global, "jump") then
+            movePlayer = true
             vy = jumpSpeed
+        end
+
+        
+        if movePlayer then
+            manager_transform_setRotationY(meshTransform, ry)
+        end
+
+        if input_mapping_isMappingPressedOnce(global, "toggle-fps") then
+            print(toggleFPS)
+            toggleFPS = not toggleFPS
+            animatedCamera = true
         end
 
         --manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
@@ -124,12 +176,56 @@ function update(delta)
             reset()
         end
     end
+
+    --[[
+    if toggleFPS then
+        manager_transform_setPosition(cameraTransform, fx, fy, fz)
+    else
+        manager_transform_setPosition(cameraTransform, tx, ty, tz)
+    end
+    ]]
+
+    if animatedCamera then
+        if toggleFPS then
+            if animateTime >= maxAnimeTime then
+                animatedCamera = false
+                cx = fx
+                cy = fy
+                cz = fz
+                animateTime = 0.0
+            else
+                animateTime = animateTime + (delta * 3.0)
+                cx = lerp(tx, fx, animateTime)
+                cy = lerp(ty, fy, animateTime)
+                cz = lerp(tz, fz, animateTime)
+            end
+        else
+            if animateTime >= maxAnimeTime then
+                animatedCamera = false
+                cx = tx
+                cy = ty
+                cz = tz
+                animateTime = 0.0
+            else
+                animateTime = animateTime + (delta * 3.0)
+                cx = lerp(fx, tx, animateTime)
+                cy = lerp(fy, ty, animateTime)
+                cz = lerp(fz, tz, animateTime)
+            end
+        end
+    end
+
+    manager_transform_setPosition(cameraTransform, cx, cy, cz)
 end
 
 
 function release()
     -- This is were you'll need to release user data
     bodyComponent = nil
+    cameraTransform = nil
+    cameraEntity = nil
+    meshTransform = nil
+    meshEntity = nil
     pivotEntityTransform = nil
     pivotEntity = nil
     yPivotTransform = nil
