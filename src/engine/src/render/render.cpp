@@ -12,7 +12,7 @@ namespace render {
         SDL_GL_SetSwapInterval(1);
         
         glEnable(GL_DEPTH_TEST);
-
+        glEnable(GL_CULL_FACE);
         mainShader.init();
     }
 

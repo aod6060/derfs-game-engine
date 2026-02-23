@@ -645,6 +645,8 @@ namespace physics {
 
     btVector3 getGravity();
     void setGravity(const btVector3& gravity);
+
+    
 }
 
 namespace assets {
