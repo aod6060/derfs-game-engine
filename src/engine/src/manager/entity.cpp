@@ -76,15 +76,17 @@ namespace manager {
     }
 
     void Entity::render() {
-        if(this->childeren.size() > 0) {
-            for(int i = 0; i < childeren.size(); i++) {
-                this->childeren.at(i)->render();
+        if(this->visible) {
+            if(this->childeren.size() > 0) {
+                for(int i = 0; i < childeren.size(); i++) {
+                    this->childeren.at(i)->render();
+                }
             }
-        }
 
-        this->componentIterator([&](component::IComponent* comp) {
-            comp->render();
-        });
+            this->componentIterator([&](component::IComponent* comp) {
+                comp->render();
+            });
+        }
     }
 
     void Entity::release() {

@@ -646,7 +646,7 @@ namespace physics {
     btVector3 getGravity();
     void setGravity(const btVector3& gravity);
 
-    
+
 }
 
 namespace assets {
@@ -871,6 +871,8 @@ namespace manager {
         std::map<std::string, component::IComponent*> components;
 
         bool needRemoval = false;
+
+        bool visible = true;
 
         void init(Scene* scene);
         void handleEvent(SDL_Event* e);
@@ -1322,6 +1324,9 @@ namespace script {
     int manager_entity_getChildEntity(lua_State* l);
     int manager_entity_getChilderenAmount(lua_State* l);
 
+    int manager_entity_isVisible(lua_State* l);
+    int manager_entity_setVisible(lua_State* l);
+    
     // scene
     void manager_scene_load_library(lua_State* l);
     int manager_scene_getGlobal(lua_State* l);

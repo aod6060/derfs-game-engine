@@ -40,6 +40,10 @@ namespace script {
         lua_register(l, "manager_entity_getChildEntity", manager_entity_getChildEntity);
         // int manager_entity_getChilderenAmount(lua_State* l);
         lua_register(l, "manager_entity_getChilderenAmount", manager_entity_getChilderenAmount);
+        // int manager_entity_isVisible(lua_State* l);
+        lua_register(l, "manager_entity_isVisible", manager_entity_isVisible);
+        // int manager_entity_setVisible(lua_State* l);
+        lua_register(l, "manager_entity_setVisible", manager_entity_setVisible);
     }
 
     int manager_entity_getScene(lua_State* l) {
@@ -150,6 +154,18 @@ namespace script {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
         lua_pushinteger(l, entity->getChilderenAmount());
         return 1;
+    }
+
+    int manager_entity_isVisible(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        lua_pushboolean(l, entity->visible);
+        return 1;
+    }
+
+    int manager_entity_setVisible(lua_State* l) {
+        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
+        entity->visible = lua_toboolean(l, 2);
+        return 0;
     }
 
 }
