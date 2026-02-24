@@ -158,9 +158,12 @@ function update(delta)
             vy = jumpSpeed
         end
 
-        
-        if movePlayer then
+        if(toggleFPS) then
             manager_transform_setRotationY(meshTransform, ry)
+        else
+            if movePlayer then
+                manager_transform_setRotationY(meshTransform, ry)
+            end
         end
 
         if input_mapping_isMappingPressedOnce(global, "toggle-fps") then
@@ -169,21 +172,12 @@ function update(delta)
             animatedCamera = true
         end
 
-        --manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
         manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
 
         if manager_transform_getPositionY(transform) < -32.0 then
             reset()
         end
     end
-
-    --[[
-    if toggleFPS then
-        manager_transform_setPosition(cameraTransform, fx, fy, fz)
-    else
-        manager_transform_setPosition(cameraTransform, tx, ty, tz)
-    end
-    ]]
 
     if animatedCamera then
         if toggleFPS then
@@ -200,6 +194,7 @@ function update(delta)
                 cz = lerp(tz, fz, animateTime)
             end
         else
+            manager_entity_setVisible(meshEntity, true)
             if animateTime >= maxAnimeTime then
                 animatedCamera = false
                 cx = tx
@@ -213,6 +208,9 @@ function update(delta)
                 cz = lerp(fz, tz, animateTime)
             end
         end
+
+    else
+        manager_entity_setVisible(meshEntity, not toggleFPS)
     end
 
     manager_transform_setPosition(cameraTransform, cx, cy, cz)
