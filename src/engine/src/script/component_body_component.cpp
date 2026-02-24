@@ -1,8 +1,10 @@
 #include "../sys.hpp"
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+#include "LinearMath/btMotionState.h"
 #include "LinearMath/btQuaternion.h"
 #include "LinearMath/btScalar.h"
 #include "LinearMath/btTransform.h"
+#include "LinearMath/btVector3.h"
 #include "lua/lua.hpp"
 
 namespace script {
@@ -118,6 +120,7 @@ namespace script {
         lua_register(l, "manager_component_body_isStaticObject", manager_component_body_isStaticObject);
         // int manager_component_body_isKinematicObject(lua_State* l);
         lua_register(l, "manager_component_body_isKinematicObject", manager_component_body_isKinematicObject);
+        manager_component_kinematic_body_load_library(l);
     }
 
     int manager_component_body_updateTransform(lua_State* l) {
@@ -544,4 +547,98 @@ namespace script {
         return 1;
     }
 
-}
+
+
+    // Kinematic Body Section
+    void manager_component_kinematic_body_load_library(lua_State* l) {
+        // int manager_component_kinematic_body_getWorldTransformOrigin(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_getWorldTransformOrigin", manager_component_kinematic_body_getWorldTransformOrigin);
+        // int manager_component_kinematic_body_setWorldTransformOrigin(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_setWorldTransformOrigin", manager_component_kinematic_body_setWorldTransformOrigin);
+        // int manager_component_kinematic_body_getWorldTransformRotation(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_getWorldTransformRotation", manager_component_kinematic_body_getWorldTransformRotation);
+        // int manager_component_kinematic_body_setWorldTransformRotation(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_setWorldTransformRotation", manager_component_kinematic_body_setWorldTransformRotation);
+    }
+
+    int manager_component_kinematic_body_getWorldTransformOrigin(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+
+        btTransform tran;
+        body->body->getMotionState()->getWorldTransform(tran);
+
+        lua_pushnumber(l, tran.getOrigin().x());
+        lua_pushnumber(l, tran.getOrigin().y());
+        lua_pushnumber(l, tran.getOrigin().z());
+        return 3;
+    }
+
+    int manager_component_kinematic_body_setWorldTransformOrigin(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        float x = lua_tonumber(l, 2);
+        float y = lua_tonumber(l, 3);
+        float z = lua_tonumber(l, 4);
+
+        btTransform tran;
+        body->body->getMotionState()->getWorldTransform(tran);
+
+        tran.setOrigin(btVector3(x, y, z));
+        body->body->getMotionState()->setWorldTransform(tran);
+        //body->body->getWorldTransform().setOrigin(btVector3(x, y, z));
+        return 0;
+    }
+
+    int manager_component_kinematic_body_getWorldTransformRotation(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+
+        btTransform tran;
+        body->body->getMotionState()->getWorldTransform(tran);
+
+        float angle = tran.getRotation().getAngle();
+        btVector3 axis = tran.getRotation().getAxis();
+
+        axis = axis * angle;
+
+        axis[0] = btDegrees(axis.x());
+        axis[1] = btDegrees(axis.y());
+        axis[2] = btDegrees(axis.z());
+
+        lua_pushnumber(l,axis[0]);
+        lua_pushnumber(l,axis[1]);
+        lua_pushnumber(l,axis[2]);
+
+        return 3;
+    }
+
+    int manager_component_kinematic_body_setWorldTransformRotation(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+
+        float x = lua_tonumber(l, 2);
+        float y = lua_tonumber(l, 3);
+        float z = lua_tonumber(l, 4);
+
+        btVector3 axis = btVector3(
+            btRadians(x),
+            btRadians(y),
+            btRadians(z)
+        );
+
+        float angle = axis.length();
+        axis = axis.normalize();
+
+        if(angle < 0.0001f) {
+            axis = btVector3(1.0f, 0.0f, 0.0f);
+        }
+
+        btQuaternion q = btQuaternion(axis, angle);
+
+        btTransform tran;
+        body->body->getMotionState()->getWorldTransform(tran);
+
+        tran.setRotation(q);
+
+        body->body->getMotionState()->setWorldTransform(tran);
+        return 0;
+    }
+
+ }

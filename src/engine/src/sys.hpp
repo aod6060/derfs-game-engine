@@ -861,13 +861,6 @@ namespace manager {
         std::string script;
         Behavior* behavior = nullptr;
 
-        /*
-        component::CameraComponent* cameraComponent = nullptr;
-        component::MeshComponent* meshComponent = nullptr;
-        component::physics::StaticBodyComponent* staticBodyComponent = nullptr;
-        component::physics::DynamicBodyComponent* dynamicBodyComponent = nullptr;
-        */
-
         std::map<std::string, component::IComponent*> components;
 
         bool needRemoval = false;
@@ -1452,6 +1445,16 @@ namespace script {
     int manager_component_body_isStaticObject(lua_State* l);
     int manager_component_body_isKinematicObject(lua_State* l);
 
+
+    // Kinematic Body
+    void manager_component_kinematic_body_load_library(lua_State* l);
+
+    int manager_component_kinematic_body_getWorldTransformOrigin(lua_State* l);
+    int manager_component_kinematic_body_setWorldTransformOrigin(lua_State* l);
+
+    int manager_component_kinematic_body_getWorldTransformRotation(lua_State* l);
+    int manager_component_kinematic_body_setWorldTransformRotation(lua_State* l);
+    
     /*
     // StaticBodyComponent
     void manager_component_StaticBodyComponent_load_library(lua_State* l);

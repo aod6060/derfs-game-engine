@@ -437,6 +437,56 @@
                 }
             ],
             "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "cube-kinematic-test",
+            "behavior": "data/scripts/entity/kinematic-test.lua",
+            "transform": {
+                "position": {
+                    "x": -20.0,
+                    "y": 1.0,
+                    "z": -20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "cube",
+                    "texture": "angry",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "kinematic-body-component",
+                    "collision-shape": {
+                        "type": "box",
+                        "half-extends": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "groups": [
+                        "player"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
         }
     ]
 }

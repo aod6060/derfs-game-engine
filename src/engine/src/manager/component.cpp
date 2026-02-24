@@ -415,7 +415,7 @@ namespace manager {
                 this->entity = entity;
 
                 //this->body = this->createRigidBody(1.0f, this->entity->transform.convertToBulletTransform(), this->shape);
-                this->body = this->createRigidBody(256.0f, this->entity->transform.convertToBulletTransform(), this->shape);
+                this->body = this->createRigidBody(0.0f, this->entity->transform.convertToBulletTransform(), this->shape);
 
                 // Handle Groups
                 int group = 0;
@@ -437,10 +437,9 @@ namespace manager {
                     mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
                 }
 
-                this->body->setAngularFactor(0.0f);
-                this->body->setSleepingThresholds(0.0f, 0.0f);
-                this->body->setActivationState(DISABLE_DEACTIVATION);
-
+                body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+                body->setActivationState(DISABLE_DEACTIVATION);
+                
                 ::physics::getWorld()->addRigidBody(this->body, group, mask);
             }
 
