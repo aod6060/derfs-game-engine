@@ -19,31 +19,6 @@ end
 
 
 function update(delta)
-    -- This function is
-
-    
-    if time >= maxTime then
-        time = 0.0
-
-        if manager_component_body_getActivationState(bodyComponent) == BODY_ACTIVE_TAG then
-            print("Body: is active")
-        elseif manager_component_body_getActivationState(bodyComponent) == BODY_ISLAND_SLEEPING then
-            print("Body: is sleeping")
-        elseif manager_component_body_getActivationState(bodyComponent) == BODY_WANTS_DEACTIVATION then
-            print("Body: is wants to deactivate")
-        elseif manager_component_body_getActivationState(bodyComponent) == BODY_DISABLE_DEACTIVATION then
-            print("Body: is body is continueous")
-        elseif manager_component_body_getActivationState(bodyComponent) == BODY_DISABLE_SIMULATION then
-            print("Body: is body isn't being simulated")
-        elseif manager_component_body_getActivationState(bodyComponent) == BODY_FIXED_BASE_MULTI_BODY then
-            print("Body: is a fixed based multi body")
-        else
-            print("Body: is in an unknown state :|")
-        end
-    else
-        time = time + delta
-    end
-
     -- Force
     if input_isKeyPressedOnce(KEYS_LEFT) then
         amount = 128.0

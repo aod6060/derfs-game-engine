@@ -2,6 +2,7 @@
 #define SYS_HPP
 
 // Once this file gets above 2000 to 3000 lines of code I'll refactor it.
+#include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
 #include "LinearMath/btTransform.h"
@@ -790,10 +791,30 @@ namespace manager {
                     {"triangle-mesh", false}
                 };
 
+                struct KinematicBodyContactResultCallback : public btCollisionWorld::ContactResultCallback {
+                    bool hit = false;
+                    float dist = 0.0f;
+                    btVector3 point;
+                    btVector3 normal;
+
+                    virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1);
+                };
+
+                // Basiclly you'll be using this as a movable object. If not then its a more static asset that
+                // requires updating the worldTransform directly.
+                bool isController = false;
+                btVector3 linearVelocity = btVector3(0.0f, 0.0f, 0.0f);
+
+                bool onFloor = false;
+
                 virtual void init(Entity* entity);
+                virtual void update(float delta);
 
                 virtual void load(Json::Value value);
 
+                void moveAndSlide();
+
+                bool isOnFloor();
             };
         }
     }
@@ -1455,6 +1476,12 @@ namespace script {
     int manager_component_kinematic_body_getWorldTransformRotation(lua_State* l);
     int manager_component_kinematic_body_setWorldTransformRotation(lua_State* l);
     
+    int manager_component_kinematic_body_isController(lua_State* l);
+    int manager_component_kinematic_body_setIsController(lua_State* l);
+    int manager_component_kinematic_body_getLinearVelocity(lua_State* l);
+    int manager_component_kinematic_body_setLinearVelocity(lua_State* l);
+    int manager_component_kinematic_body_moveAndSlide(lua_State* l);
+    int manager_component_kinematic_body_isOnFloor(lua_State* l);
     /*
     // StaticBodyComponent
     void manager_component_StaticBodyComponent_load_library(lua_State* l);

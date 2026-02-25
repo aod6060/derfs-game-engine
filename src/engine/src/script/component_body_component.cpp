@@ -559,6 +559,18 @@ namespace script {
         lua_register(l, "manager_component_kinematic_body_getWorldTransformRotation", manager_component_kinematic_body_getWorldTransformRotation);
         // int manager_component_kinematic_body_setWorldTransformRotation(lua_State* l);
         lua_register(l, "manager_component_kinematic_body_setWorldTransformRotation", manager_component_kinematic_body_setWorldTransformRotation);
+        // int manager_component_kinematic_body_isController(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_isController", manager_component_kinematic_body_isController);
+        // int manager_component_kinematic_body_setIsController(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_setIsController", manager_component_kinematic_body_setIsController);
+        // int manager_component_kinematic_body_getLinearVelocity(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_getLinearVelocity", manager_component_kinematic_body_getLinearVelocity);
+        // int manager_component_kinematic_body_setLinearVelocity(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_setLinearVelocity", manager_component_kinematic_body_setLinearVelocity);
+        // int manager_component_kinematic_body_moveAndSlide(lua_State* l);
+        lua_register(l, "manager_component_kinematic_body_moveAndSlide", manager_component_kinematic_body_moveAndSlide);
+        // manager_component_kinematic_body_isOnFloor
+        lua_register(l, "manager_component_kinematic_body_isOnFloor", manager_component_kinematic_body_isOnFloor);
     }
 
     int manager_component_kinematic_body_getWorldTransformOrigin(lua_State* l) {
@@ -641,4 +653,46 @@ namespace script {
         return 0;
     }
 
+
+    int manager_component_kinematic_body_isController(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        lua_pushboolean(l, body->isController);
+        return 1;
+    }
+
+    int manager_component_kinematic_body_setIsController(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        body->isController = lua_toboolean(l, 2);
+        return 0;
+    }
+
+    int manager_component_kinematic_body_getLinearVelocity(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        lua_pushnumber(l, body->linearVelocity.x());
+        lua_pushnumber(l, body->linearVelocity.y());
+        lua_pushnumber(l, body->linearVelocity.z());
+        return 3;
+    }
+
+    int manager_component_kinematic_body_setLinearVelocity(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        body->linearVelocity = btVector3(
+            lua_tonumber(l, 2),
+            lua_tonumber(l, 3),
+            lua_tonumber(l, 4)
+        );
+        return 0;
+    }
+
+    int manager_component_kinematic_body_moveAndSlide(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        body->moveAndSlide();
+        return 0;
+    }
+
+    int manager_component_kinematic_body_isOnFloor(lua_State* l) {
+        manager::component::physics::KinematicBodyComponent* body = (manager::component::physics::KinematicBodyComponent*)lua_touserdata(l, 1);
+        lua_pushboolean(l, body->isOnFloor());
+        return 1;
+    }
  }

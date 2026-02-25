@@ -1,4 +1,6 @@
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+#include "BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h"
+#include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
 #include "BulletCollision/CollisionShapes/btBoxShape.h"
 #include "BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
 #include "BulletCollision/CollisionShapes/btCapsuleShape.h"
@@ -441,6 +443,13 @@ namespace manager {
                 body->setActivationState(DISABLE_DEACTIVATION);
                 
                 ::physics::getWorld()->addRigidBody(this->body, group, mask);
+
+                //::physics::getWorld()->contactTest(this->body, ContactResultCallback &resultCallback)
+            }
+
+            void KinematicBodyComponent::update(float delta) {
+                this->entity->transform.interpretBulletTransform(this->body->getCenterOfMassTransform());
+                //btCollisionWorld::ContactResultCallback result;
             }
 
             void KinematicBodyComponent::load(Json::Value value) {
@@ -502,6 +511,40 @@ namespace manager {
                         this->masks.push_back(m);
                     }
                 } 
+            }
+
+            void KinematicBodyComponent::moveAndSlide() {
+                // Get Bodies Motion State Transform
+                btTransform tran;
+                this->body->getMotionState()->getWorldTransform(tran);
+                btVector3 pos = tran.getOrigin();
+                pos += linearVelocity;
+                tran.setOrigin(pos);
+                this->body->getMotionState()->setWorldTransform(tran);
+            }
+
+            bool KinematicBodyComponent::isOnFloor() {
+
+                KinematicBodyContactResultCallback callback;
+
+                ::physics::getWorld()->contactTest(this->body, callback);
+
+                if(callback.hit) {
+                    btVector3 ndir = (callback.point - btVector3(0.0, 0.0, 0.0)).normalize();
+                    return ndir.y() < 0.0f;
+                }
+                
+                return false;
+            }
+            
+            btScalar KinematicBodyComponent::KinematicBodyContactResultCallback::addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1) {
+                if(colObj1Wrap->getCollisionObject()->isStaticOrKinematicObject()) {
+                    this->hit = true;
+                    this->point = cp.m_localPointA;
+                    this->normal = cp.m_normalWorldOnB;
+                    this->dist = cp.getDistance();
+                }
+                return 0;
             }
         }
     }

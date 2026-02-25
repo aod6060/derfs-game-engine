@@ -8,14 +8,16 @@ bodyComponent = nil
 function init()
     -- This function is called once every
     bodyComponent = manager_entity_getKinematicBodyComponent(entity)
+
+    manager_component_kinematic_body_setISController(bodyComponent, true)
 end
 
 
 function update(delta)
     -- This function is
     x, y, z = manager_component_kinematic_body_getWorldTransformOrigin(bodyComponent)
+    vx, vy, vz = manager_component_kinematic_body_getLinearVelocity(bodyComponent)
     rx, ry, rz = manager_component_kinematic_body_getWorldTransformRotation(bodyComponent)
-
 
     speed = 8.0
     rotSpeed = 128.0
@@ -27,8 +29,19 @@ function update(delta)
 
     yrad = -math.rad(ry)
 
-    x = x + (math.sin(yrad) * speed * delta * m)
-    z = z - (math.cos(yrad) * speed * delta * m)
+
+    if manager_component_kinematic_body_isOnFloor(bodyComponent) then
+        vy = 0.0
+
+        if(input_isKeyPressedOnce(KEYS_U)) then
+            vy = 5
+        end
+    else
+        vy = (-10 * delta)
+    end
+
+    vx = (math.sin(yrad) * speed * delta * m)
+    vz = -(math.cos(yrad) * speed * delta * m)
 
     --[[
     if input_isKeyPressed(KEYS_J) then
@@ -48,8 +61,13 @@ function update(delta)
     end
     ]]
 
-    manager_component_kinematic_body_setWorldTransformOrigin(bodyComponent, x, y, z)
+    if y < -32.0 then
+        manager_component_kinematic_body_setWorldTransformOrigin(bodyComponent, -20, 32.0, -20)
+    end
+
+    manager_component_kinematic_body_setLinearVelocity(bodyComponent, vx, vy, vz)
     manager_component_kinematic_body_setWorldTransformRotation(bodyComponent, rx, ry, rz)
+    manager_component_kinematic_body_moveAndSlide(bodyComponent)
 end
 
 
