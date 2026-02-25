@@ -1,5 +1,6 @@
 #include "lua/lua.hpp"
 #include "../sys.hpp"
+#include <vector>
 
 
 namespace script {
@@ -20,6 +21,8 @@ namespace script {
         lua_register(l, "manager_behavior_setNumber", manager_behavior_setNumber);
         // int manager_behavior_setString(lua_State* l);
         lua_register(l, "manager_behavior_setString", manager_behavior_setString);
+        // manager_behavior_executeCallback
+        lua_register(l, "manager_behavior_executeCallback", manager_behavior_executeCallback);
     }
 
     int manager_behavior_getBoolean(lua_State* l) {
@@ -78,5 +81,44 @@ namespace script {
         return 0;
     }
 
+    int manager_behavior_executeCallback(lua_State* l) {
+        int number_args = lua_gettop(l);
+        //std::cout << "Number of Arguments. " << number_args << "\n";
 
+        manager::Behavior* behavior = (manager::Behavior*)lua_touserdata(l, 1);
+        std::string name = lua_tostring(l, 2);
+
+
+        std::vector<manager::Behavior::Argument> argumetns;
+
+        for(int i = 3; i <= number_args; i++) {
+
+            if(lua_isboolean(l, i)) {
+                manager::Behavior::Argument a;
+                a.type = manager::Behavior::Type::T_BOOL;
+                a.bValue = lua_toboolean(l, i);
+                argumetns.push_back(a);
+            } else if(lua_isinteger(l, i)) {
+               manager::Behavior::Argument a;
+                a.type = manager::Behavior::Type::T_INTEGER;
+                a.iValue = lua_tointeger(l, i);
+                argumetns.push_back(a);
+            } else if(lua_isnumber(l, i)) {
+               manager::Behavior::Argument a;
+                a.type = manager::Behavior::Type::T_NUMBER;
+                a.nValue = lua_tonumber(l, i);
+                argumetns.push_back(a);
+            } else if(lua_isstring(l, i)) {
+               manager::Behavior::Argument a;
+                a.type = manager::Behavior::Type::T_STRING;
+                a.sValue = lua_tostring(l, i);
+                argumetns.push_back(a);
+            } else {
+                std::cout << "Isn't a supported type.\n";
+            }
+        }
+
+        behavior->executeCallback(name, argumetns);
+        return 0;
+    }
 }

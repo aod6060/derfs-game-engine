@@ -7,6 +7,7 @@ jumpSpeed = 10.0
 
 transform = nil
 scene = nil
+sceneBehavior = nil
 global = nil
 
 
@@ -48,6 +49,8 @@ function init()
     -- This function is called once every
     --transform = manager_entity_getTransform(entity)
     scene = manager_entity_getScene(entity)
+    sceneBehavior = manager_scene_getBehavior(scene)
+
     global = manager_scene_getGlobal(scene)
 
     transform = manager_entity_getTransform(entity)
@@ -214,6 +217,13 @@ function update(delta)
     end
 
     manager_transform_setPosition(cameraTransform, cx, cy, cz)
+
+
+    if input_isKeyPressedOnce(KEYS_T) then
+        print("Hello 1")
+        manager_behavior_executeCallback(sceneBehavior, "test", math.floor(1), 3.14, true, "Hello, World")
+        print("Hello 2")
+    end
 end
 
 
@@ -229,6 +239,7 @@ function release()
     yPivotTransform = nil
     yPivotEntity = nil
     global = nil
+    sceneBehavior = nil
     scene = nil
     transform = nil
 end

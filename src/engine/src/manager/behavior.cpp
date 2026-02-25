@@ -125,4 +125,31 @@ namespace manager {
         lua_setglobal(this->state, name.c_str());
     }
 
+    void Behavior::executeCallback(std::string name, const std::vector<Argument>& args) {
+        std::cout << name << "\n";
+
+        lua_getglobal(this->state, name.c_str());
+        for(int i = 0; i < args.size(); i++) {
+            switch(args.at(i).type) {
+                case Type::T_BOOL:
+                    lua_pushboolean(this->state, args.at(i).bValue);
+                    break;
+                case Type::T_INTEGER:
+                    lua_pushinteger(this->state, args.at(i).iValue);
+                    break;
+                case Type::T_NUMBER:
+                    lua_pushnumber(this->state, args.at(i).nValue);
+                    break;
+                case Type::T_STRING:
+                    lua_pushstring(this->state, args.at(i).sValue.c_str());
+                    break;
+                default:
+                    break;
+            }
+        }
+        int result = lua_pcall(this->state, args.size(), 0, 0);
+        if(result != LUA_OK) {
+            std::cout << lua_tostring(this->state, -1) << "\n";
+        }
+    }
 }

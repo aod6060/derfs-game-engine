@@ -67,3 +67,8 @@ function release()
     -- This is were you'll need to release user data
     global = nil
 end
+
+
+function test(i, n, b, s)
+    print(i .. " " .. n .. " " .. tostring(b) .. " " .. s)
+end

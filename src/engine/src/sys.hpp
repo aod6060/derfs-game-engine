@@ -842,6 +842,21 @@ namespace manager {
     };
 
     struct Behavior {
+        enum Type {
+            T_BOOL = 0,
+            T_INTEGER,
+            T_NUMBER,
+            T_STRING
+        };
+
+        struct Argument {
+            Type type;
+            bool bValue;
+            int iValue;
+            float nValue;
+            std::string sValue;
+        };
+
         lua_State* state = nullptr;
         Entity* entity = nullptr;
         Scene* scene = nullptr;
@@ -865,7 +880,8 @@ namespace manager {
         void setNumber(std::string name, float value);
         void setString(std::string name, std::string value);
 
-        
+        void executeCallback(std::string name, const std::vector<Argument>& args);
+
     };
 
     struct Entity {
@@ -1311,6 +1327,8 @@ namespace script {
     int manager_behavior_setInteger(lua_State* l);
     int manager_behavior_setNumber(lua_State* l);
     int manager_behavior_setString(lua_State* l);
+    int manager_behavior_executeCallback(lua_State* l);
+    
 
     // entity
     void manager_entity_load_library(lua_State* l);
