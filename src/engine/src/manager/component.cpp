@@ -353,9 +353,7 @@ namespace manager {
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
-                        std::cout << g << "\n";
                         this->groups.push_back(g);
-                        std::cout << g << "\n";
                     }
                 }
                 // Masks
@@ -398,7 +396,6 @@ namespace manager {
                     std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
                 }
                 // Groups
-                std::cout << "Here!\n";
                 Json::Value _groups = value["groups"];
                 std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
@@ -504,9 +501,7 @@ namespace manager {
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
-                        std::cout << g << "\n";
                         this->groups.push_back(g);
-                        std::cout << g << "\n";
                     }
                 }
                 // Masks
@@ -564,7 +559,7 @@ namespace manager {
                 this->ghostObject->setCollisionShape(this->shape);
                 this->ghostObject->setWorldTransform(this->entity->transform.convertToBulletTransform());
                 this->ghostObject->setUserIndex(-1);
-                this->ghostObject->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+                this->ghostObject->setCollisionFlags(this->ghostObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
                 int group = 0;
                 if(!groups.empty()) {
@@ -575,6 +570,8 @@ namespace manager {
                     group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
                 }
 
+                std::cout << "Group: " << group << "\n";
+
                 int mask = 0;
                 if(!masks.empty()) {
                     for(int i = 0; i < this->masks.size() - 1; i++) {
@@ -582,6 +579,8 @@ namespace manager {
                     }
                     mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
                 }
+
+                std::cout << "Mask: " << mask << "\n";
 
                 ::physics::getWorld()->addCollisionObject(this->ghostObject, group, mask);
                 std::cout << "End of TriggerComponent::init\n";

@@ -126,7 +126,6 @@ namespace manager {
     }
 
     void Behavior::executeCallback(std::string name, const std::vector<Argument>& args) {
-        std::cout << name << "\n";
 
         lua_getglobal(this->state, name.c_str());
         for(int i = 0; i < args.size(); i++) {

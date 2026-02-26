@@ -120,7 +120,9 @@ namespace script {
         lua_register(l, "manager_component_body_isStaticObject", manager_component_body_isStaticObject);
         // int manager_component_body_isKinematicObject(lua_State* l);
         lua_register(l, "manager_component_body_isKinematicObject", manager_component_body_isKinematicObject);
+        
         manager_component_kinematic_body_load_library(l);
+        manager_component_trigger_load_library(l);
     }
 
     int manager_component_body_updateTransform(lua_State* l) {
@@ -695,4 +697,52 @@ namespace script {
         lua_pushboolean(l, body->isOnFloor());
         return 1;
     }
+
+
+
+    // Trigger
+    // Trigger
+    void manager_component_trigger_load_library(lua_State* l) {
+        // int manager_component_trigger_addEntityEnter(lua_State* l);
+        lua_register(l, "manager_component_trigger_addEntityEnter", manager_component_trigger_addEntityEnter);
+        // int manager_component_trigger_removeEntityEnter(lua_State* l);
+        lua_register(l, "manager_component_trigger_removeEntityEnter", manager_component_trigger_removeEntityEnter);
+        // int manager_component_trigger_addEntityExit(lua_State* l);
+        lua_register(l, "manager_component_trigger_addEntityExit", manager_component_trigger_addEntityExit);
+        // int manager_component_trigger_removeEntityExit(lua_State* l);
+        lua_register(l, "manager_component_trigger_removeEntityExit", manager_component_trigger_removeEntityExit);
+    }
+
+    int manager_component_trigger_addEntityEnter(lua_State* l) {
+        manager::component::physics::TriggerComponent* trigger = (manager::component::physics::TriggerComponent*)lua_touserdata(l, 1);
+        manager::Behavior* behavior = (manager::Behavior*)lua_touserdata(l, 2);
+        std::string name = lua_tostring(l, 3);
+        trigger->entityEnter.behavior = behavior;
+        trigger->entityEnter.name = name;
+        return 0;        
+    }
+
+    int manager_component_trigger_removeEntityEnter(lua_State* l) {
+        manager::component::physics::TriggerComponent* trigger = (manager::component::physics::TriggerComponent*)lua_touserdata(l, 1);
+        trigger->entityEnter.behavior = nullptr;
+        trigger->entityEnter.name = "";
+        return 0;
+    }
+    
+    int manager_component_trigger_addEntityExit(lua_State* l) {
+        manager::component::physics::TriggerComponent* trigger = (manager::component::physics::TriggerComponent*)lua_touserdata(l, 1);
+        manager::Behavior* behavior = (manager::Behavior*)lua_touserdata(l, 2);
+        std::string name = lua_tostring(l, 3);
+        trigger->entityExit.behavior = behavior;
+        trigger->entityExit.name = name;
+        return 0;
+    }
+
+    int manager_component_trigger_removeEntityExit(lua_State* l) {
+        manager::component::physics::TriggerComponent* trigger = (manager::component::physics::TriggerComponent*)lua_touserdata(l, 1);
+        trigger->entityExit.behavior = nullptr;
+        trigger->entityExit.name = "";
+        return 0;
+    }
+
  }

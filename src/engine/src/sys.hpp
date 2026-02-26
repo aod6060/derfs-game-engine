@@ -1262,7 +1262,7 @@ namespace manager {
                 Behavior::Callback entityExit;
 
                 bool isEntered = false;
-                
+
                 virtual void init(Entity* entity);
                 
                 virtual void handleEvent(SDL_Event* e);
@@ -1405,6 +1405,9 @@ namespace script {
     int manager_entity_hasKinematicBodyComponent(lua_State* l);
     int manager_entity_getKinematicBodyComponent(lua_State* l);
 
+    int manager_entity_hasTriggerComponent(lua_State* l);
+    int manager_entity_getTriggerComponent(lua_State* l);
+    
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
     int manager_entity_getChildEntity(lua_State* l);
@@ -1554,6 +1557,17 @@ namespace script {
     int manager_component_kinematic_body_setLinearVelocity(lua_State* l);
     int manager_component_kinematic_body_moveAndSlide(lua_State* l);
     int manager_component_kinematic_body_isOnFloor(lua_State* l);
+
+
+    // Trigger
+    void manager_component_trigger_load_library(lua_State* l);
+
+    int manager_component_trigger_addEntityEnter(lua_State* l);
+    int manager_component_trigger_removeEntityEnter(lua_State* l);
+
+    int manager_component_trigger_addEntityExit(lua_State* l);
+    int manager_component_trigger_removeEntityExit(lua_State* l);
+
     /*
     // StaticBodyComponent
     void manager_component_StaticBodyComponent_load_library(lua_State* l);
