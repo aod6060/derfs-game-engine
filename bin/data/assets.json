@@ -109,6 +109,66 @@
         {
             "name": "demo/wall-piece",
             "path": "data/meshes/demo/wall_piece.glb"
+        },
+        {
+            "name": "demo/doors/door-way",
+            "path": "data/meshes/demo/doors/door_way.glb"
+        },
+        {
+            "name": "demo/doors/door-regular",
+            "path": "data/meshes/demo/doors/door_regular.glb"
+        },
+        {
+            "name": "demo/doors/door-red",
+            "path": "data/meshes/demo/doors/door_red.glb"
+        },
+        {
+            "name": "demo/doors/door-green",
+            "path": "data/meshes/demo/doors/door_green.glb"
+        },
+        {
+            "name": "demo/doors/door-blue",
+            "path": "data/meshes/demo/doors/door_blue.glb"
+        },
+        {
+            "name": "demo/doors/door-yellow",
+            "path": "data/meshes/demo/doors/door_yellow.glb"
+        },
+        {
+            "name": "demo/doors/door-puzzle",
+            "path": "data/meshes/demo/doors/door_puzzle.glb"
+        },
+        {
+            "name": "demo/keys/key-red",
+            "path": "data/meshes/demo/keys/key_red.glb"
+        },
+        {
+            "name": "demo/keys/key-green",
+            "path": "data/meshes/demo/keys/key_green.glb"
+        },
+        {
+            "name": "demo/keys/key-blue",
+            "path": "data/meshes/demo/keys/key_blue.glb"
+        },
+        {
+            "name": "demo/keys/key-yellow",
+            "path": "data/meshes/demo/keys/key_yellow.glb"
+        },
+        {
+            "name": "demo/puzzle/pressure-plate-off",
+            "path": "data/meshes/demo/puzzle/pressure_plate_off.glb"
+        },
+        {
+            "name": "demo/puzzle/pressure-plate-on",
+            "path": "data/meshes/demo/puzzle/pressure_plate_on.glb"
+        },
+        {
+            "name": "demo/puzzle/switch-off",
+            "path": "data/meshes/demo/puzzle/switch_off.glb"
+        },
+        {
+            "name": "demo/puzzle/switch-on",
+            "path": "data/meshes/demo/puzzle/switch_on.glb"
         }
     ],
     "textures": [
