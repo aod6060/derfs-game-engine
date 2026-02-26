@@ -1,6 +1,7 @@
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
 #include "BulletCollision/CollisionDispatch/btCollisionObjectWrapper.h"
 #include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
 #include "BulletCollision/CollisionShapes/btBoxShape.h"
 #include "BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h"
 #include "BulletCollision/CollisionShapes/btCapsuleShape.h"
@@ -56,6 +57,12 @@ namespace manager {
                 "kinematic-body-component",
                 []() {
                     return new physics::KinematicBodyComponent();
+                }
+            },
+            {
+                "trigger-component",
+                []() {
+                    return new physics::TriggerComponent();
                 }
             }
         };
@@ -545,6 +552,146 @@ namespace manager {
                     this->dist = cp.getDistance();
                 }
                 return 0;
+            }
+
+
+            // Trigger
+            void TriggerComponent::init(Entity* entity) {
+                std::cout << "Start of TriggerComponent::init\n";
+                this->entity = entity;
+
+                this->ghostObject = new btGhostObject();
+                this->ghostObject->setCollisionShape(this->shape);
+                this->ghostObject->setWorldTransform(this->entity->transform.convertToBulletTransform());
+                this->ghostObject->setUserIndex(-1);
+                this->ghostObject->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
+                int group = 0;
+                if(!groups.empty()) {
+                    for(int i = 0; i < this->groups.size() - 1; i++) {
+                        //group |= groups.at(i);
+                        group |= this->entity->scene->global->getPhysicsGroups(this->groups.at(i));
+                    }
+                    group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
+                }
+
+                int mask = 0;
+                if(!masks.empty()) {
+                    for(int i = 0; i < this->masks.size() - 1; i++) {
+                        mask |= this->entity->scene->global->getPhysicsGroups(masks.at(i));
+                    }
+                    mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
+                }
+
+                ::physics::getWorld()->addCollisionObject(this->ghostObject, group, mask);
+                std::cout << "End of TriggerComponent::init\n";
+            }
+            
+            void TriggerComponent::handleEvent(SDL_Event* e) {
+
+            }
+            
+            void TriggerComponent::update(float delta) {
+
+                if(ghostObject->getNumOverlappingObjects() > 0) {
+                    for(int i = 0; i < ghostObject->getNumOverlappingObjects(); i++) {
+                        if(this->entityEnter.behavior != nullptr) {
+                            this->entityEnter.behavior->executeCallback(this->entityEnter.name, {});
+                        }
+                    }
+                } else {
+                    if(this->entityExit.behavior != nullptr) {
+                        // For now there won't be any arguments
+                        this->entityExit.behavior->executeCallback(this->entityExit.name, {});
+                    }
+                }
+            }
+            
+            void TriggerComponent::preRender() {
+
+            }
+            
+            void TriggerComponent::render() {
+
+            }
+            
+            void TriggerComponent::release() {
+                ::physics::getWorld()->removeCollisionObject(this->ghostObject);
+                if(this->entityEnter.behavior) {
+                    this->entityEnter.behavior = nullptr;
+                }
+                if(this->entityExit.behavior) {
+                    this->entityExit.behavior = nullptr;
+                }
+                ::physics::getWorld()->removeCollisionObject(this->ghostObject);
+                delete this->ghostObject;
+                this->ghostObject = nullptr;
+                delete this->shape;
+                this->shape = nullptr;
+                this->entity = nullptr;
+            }
+            
+            void TriggerComponent::load(Json::Value value) {
+                std::cout << "Start of TriggerComponent.\n";
+                // collision-shape
+                Json::Value collisionShape = value["collision-shape"];
+                if(this->collisionShapeTypes.find(collisionShape["type"].asString()) != collisionShapeTypes.end()) {
+                    std::string type = collisionShape["type"].asString();
+
+                    if(type == "box") {
+                        Json::Value halfExtentsValue = collisionShape["half-extends"];
+                        btVector3 halfExtents = btVector3(
+                            halfExtentsValue["x"].asFloat(),
+                            halfExtentsValue["y"].asFloat(),
+                            halfExtentsValue["z"].asFloat()
+                        );
+                        this->shape = this->createBoxShape(halfExtents);
+                    } else if(type == "sphere") {
+                        float radius = collisionShape["radius"].asFloat();
+                        this->shape = this->createSphereShape(radius);
+                    } else if(type == "capsule") {
+                        float radius = collisionShape["radius"].asFloat();
+                        float height = collisionShape["height"].asFloat();
+                        this->shape = this->createCapsuleShape(radius, height);
+                    }
+                } else {
+                    std::cout << "This " << collisionShape["type"].asString() << " isn't supported by static-body-component\n";
+                }
+
+                // Groups
+                Json::Value _groups = value["groups"];
+                std::cout << "Groups: " << _groups.size() << "\n";
+                if(!_groups.empty()) {
+                    for(int i = 0; i < _groups.size(); i++) {
+                        std::string g = _groups[i].asString();
+                        std::cout << g << "\n";
+                        this->groups.push_back(g);
+                        std::cout << g << "\n";
+                    }
+                }
+                // Masks
+                Json::Value _masks = value["masks"];
+                std::cout << "Masks: " << _masks.size() << "\n";
+                if(!_masks.empty()) {
+                    for(int i = 0; i < _masks.size(); i++) {
+                        std::string m = _masks[i].asString();
+                        this->masks.push_back(m);
+                    }
+                }
+
+                std::cout << "End of TriggerComponent.\n";
+            }
+
+            btCollisionShape* TriggerComponent::createSphereShape(float radius) {
+                return new btSphereShape(radius);
+            }
+
+            btCollisionShape* TriggerComponent::createCapsuleShape(float radius, float height) {
+                return new btCapsuleShape(radius, height);
+            }
+
+            btCollisionShape* TriggerComponent::createBoxShape(const btVector3& halfExtents) {
+                return new btBoxShape(halfExtents);
             }
         }
     }

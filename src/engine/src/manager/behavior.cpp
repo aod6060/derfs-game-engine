@@ -143,6 +143,8 @@ namespace manager {
                 case Type::T_STRING:
                     lua_pushstring(this->state, args.at(i).sValue.c_str());
                     break;
+                case Type::T_USERDATA:
+                    lua_pushlightuserdata(this->state, args.at(i).uValue);
                 default:
                     break;
             }

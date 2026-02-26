@@ -3,6 +3,7 @@
 #include "BulletCollision/BroadphaseCollision/btDbvtBroadphase.h"
 #include "BulletCollision/CollisionDispatch/btCollisionDispatcher.h"
 #include "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
 #include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
 #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
 
@@ -14,6 +15,8 @@ namespace physics {
     static btSequentialImpulseConstraintSolver* solver = nullptr;
     static btDiscreteDynamicsWorld* world = nullptr;
 
+    static btGhostPairCallback* ghostPairCB = nullptr;
+
     static float timeStep = 1.0f / 60.0f;
     static btVector3 gravity;
 
@@ -24,6 +27,10 @@ namespace physics {
         solver = new btSequentialImpulseConstraintSolver();
         world = new btDiscreteDynamicsWorld(disp, broadPhase, solver, collisionConf);
 
+        ghostPairCB = new btGhostPairCallback();
+
+        world->getPairCache()->setInternalGhostPairCallback(ghostPairCB);
+
         world->setGravity(gravity);
     }
 
@@ -32,6 +39,8 @@ namespace physics {
     }
 
     void release() {
+        world->getPairCache()->setInternalGhostPairCallback(nullptr);
+        delete ghostPairCB;
         delete world;
         delete solver;
         delete broadPhase;

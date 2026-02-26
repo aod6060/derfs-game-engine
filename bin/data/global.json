@@ -61,7 +61,8 @@
         "groups": [
             "static",
             "crate",
-            "player"
+            "player",
+            "triggers"
         ]
     }
 }

@@ -113,6 +113,11 @@ namespace script {
                 a.type = manager::Behavior::Type::T_STRING;
                 a.sValue = lua_tostring(l, i);
                 argumetns.push_back(a);
+            } else if(lua_isuserdata(l, i)) {
+                manager::Behavior::Argument a;
+                a.type = manager::Behavior::Type::T_USERDATA;
+                a.uValue = lua_touserdata(l, i);
+                argumetns.push_back(a);
             } else {
                 std::cout << "Isn't a supported type.\n";
             }

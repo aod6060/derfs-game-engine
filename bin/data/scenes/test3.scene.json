@@ -487,6 +487,54 @@
                 }
             ],
             "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "test-trigger",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 1.0,
+                    "z": -30
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "cube",
+                    "texture": "angry",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "trigger-component",
+                    "collision-shape": {
+                        "type": "box",
+                        "half-extends": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "groups": [
+                            "triggers"
+                        ],
+                        "masks": [
+                            "player"
+                        ]
+                    }
+                }
+            ],
+            "entities": []
         }
     ]
 }

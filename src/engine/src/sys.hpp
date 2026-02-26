@@ -3,6 +3,7 @@
 
 // Once this file gets above 2000 to 3000 lines of code I'll refactor it.
 #include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
+#include "BulletCollision/CollisionDispatch/btGhostObject.h"
 #include "BulletCollision/CollisionShapes/btCollisionShape.h"
 #include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
 #include "LinearMath/btTransform.h"
@@ -646,8 +647,6 @@ namespace physics {
 
     btVector3 getGravity();
     void setGravity(const btVector3& gravity);
-
-
 }
 
 namespace assets {
@@ -675,7 +674,8 @@ namespace manager {
     struct Entity;
     struct Scene;
     struct Global;
-    
+    struct Behavior;
+
     namespace component {
         struct IComponent {
             virtual void init(Entity* entity) = 0;
@@ -689,134 +689,6 @@ namespace manager {
             virtual ~IComponent() {}
 
         };
-
-        void componentFactory(Entity* entity, std::string type, Json::Value value);
-
-        struct CameraComponent : public IComponent {
-            Entity* entity = nullptr;
-            float fov;
-            float znear;
-            float zfar;
-
-            glm::mat4 toView();
-            glm::mat4 toViewWithParent();
-
-            virtual void init(Entity* entity);
-            virtual void handleEvent(SDL_Event* e);
-            virtual void update(float delta);
-            virtual void preRender();
-            virtual void render();
-            virtual void release();
-            virtual void load(Json::Value value);
-        };
-
-        struct MeshComponent : public IComponent {
-            Entity* entity = nullptr;
-            std::string mesh;
-            std::string texture;
-            float uvScale;
-
-            virtual void init(Entity* entity);
-            virtual void handleEvent(SDL_Event* e);
-            virtual void update(float delta);
-            virtual void preRender();
-            virtual void render();
-            virtual void release();
-            virtual void load(Json::Value value);
-        };
-
-        namespace physics {
-
-            struct AbstractBodyComponent : public IComponent {
-                Entity* entity = nullptr;
-                btRigidBody* body = nullptr;
-                btCollisionShape* shape = nullptr;
-
-                float mass = 0.0;
-                
-                virtual void init(Entity* entity);
-                virtual void handleEvent(SDL_Event* e);
-                virtual void update(float delta);
-                virtual void preRender();
-                virtual void render();
-                virtual void release();
-
-                virtual void load(Json::Value value) = 0;
-
-                std::vector<std::string> groups;
-                std::vector<std::string> masks;
-
-                btCollisionShape* createSphereShape(float radius);
-                btCollisionShape* createCapsuleShape(float radius, float height);
-                btCollisionShape* createBoxShape(const btVector3& halfExtents);
-                btCollisionShape* createStaticPlaneShape(const btVector3& planeNormal, float planeConstant);
-                btCollisionShape* createTriangleShape(std::string meshName);
-
-                btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* collisionShape);
-
-                btRigidBody* createStaticRigidBody(const btTransform& startTransform, btCollisionShape* collisionShape);
-
-            };
-
-            struct StaticBodyComponent : public AbstractBodyComponent {
-                std::map<std::string, bool> collisionShapeTypes = {
-                    {"static-plane", true},
-                    {"box", true},
-                    {"sphere", true},
-                    {"capsule", true},
-                    {"triangle-mesh", true}
-                };
-
-                virtual void load(Json::Value value);
-            };
-
-            struct DynamicBodyComponent : public AbstractBodyComponent {
-                std::map<std::string, bool> collisionShapeTypes = {
-                    {"static-plane", false},
-                    {"box", true},
-                    {"sphere", true},
-                    {"capsule", true},
-                    {"triangle-mesh", false}
-                };
-
-                virtual void load(Json::Value value);
-            };
-
-            struct KinematicBodyComponent : public AbstractBodyComponent {
-                std::map<std::string, bool> collisionShapeTypes = {
-                    {"static-plane", false},
-                    {"box", true},
-                    {"sphere", true},
-                    {"capsule", true},
-                    {"triangle-mesh", false}
-                };
-
-                struct KinematicBodyContactResultCallback : public btCollisionWorld::ContactResultCallback {
-                    bool hit = false;
-                    float dist = 0.0f;
-                    btVector3 point;
-                    btVector3 normal;
-
-                    virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1);
-                };
-
-                // Basiclly you'll be using this as a movable object. If not then its a more static asset that
-                // requires updating the worldTransform directly.
-                bool isController = false;
-                btVector3 linearVelocity = btVector3(0.0f, 0.0f, 0.0f);
-
-                bool onFloor = false;
-
-                virtual void init(Entity* entity);
-                virtual void update(float delta);
-
-                virtual void load(Json::Value value);
-
-                void moveAndSlide();
-
-                bool isOnFloor();
-            };
-        }
     }
 
     struct Transform {
@@ -846,7 +718,8 @@ namespace manager {
             T_BOOL = 0,
             T_INTEGER,
             T_NUMBER,
-            T_STRING
+            T_STRING,
+            T_USERDATA
         };
 
         struct Argument {
@@ -854,7 +727,13 @@ namespace manager {
             bool bValue;
             int iValue;
             float nValue;
+            void* uValue = nullptr;
             std::string sValue;
+        };
+
+        struct Callback {
+            Behavior* behavior = nullptr;
+            std::string name;
         };
 
         lua_State* state = nullptr;
@@ -1233,6 +1112,181 @@ namespace manager {
 
         int getPhysicsGroups(std::string name);
     };
+
+    namespace component {
+        void componentFactory(Entity* entity, std::string type, Json::Value value);
+
+        struct CameraComponent : public IComponent {
+            Entity* entity = nullptr;
+            float fov;
+            float znear;
+            float zfar;
+
+            glm::mat4 toView();
+            glm::mat4 toViewWithParent();
+
+            virtual void init(Entity* entity);
+            virtual void handleEvent(SDL_Event* e);
+            virtual void update(float delta);
+            virtual void preRender();
+            virtual void render();
+            virtual void release();
+            virtual void load(Json::Value value);
+        };
+
+        struct MeshComponent : public IComponent {
+            Entity* entity = nullptr;
+            std::string mesh;
+            std::string texture;
+            float uvScale;
+
+            virtual void init(Entity* entity);
+            virtual void handleEvent(SDL_Event* e);
+            virtual void update(float delta);
+            virtual void preRender();
+            virtual void render();
+            virtual void release();
+            virtual void load(Json::Value value);
+        };
+
+        namespace physics {
+
+            struct AbstractBodyComponent : public IComponent {
+                Entity* entity = nullptr;
+                btRigidBody* body = nullptr;
+                btCollisionShape* shape = nullptr;
+
+                float mass = 0.0;
+                
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+
+                virtual void load(Json::Value value) = 0;
+
+                std::vector<std::string> groups;
+                std::vector<std::string> masks;
+
+                btCollisionShape* createSphereShape(float radius);
+                btCollisionShape* createCapsuleShape(float radius, float height);
+                btCollisionShape* createBoxShape(const btVector3& halfExtents);
+                btCollisionShape* createStaticPlaneShape(const btVector3& planeNormal, float planeConstant);
+                btCollisionShape* createTriangleShape(std::string meshName);
+
+                btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* collisionShape);
+
+                btRigidBody* createStaticRigidBody(const btTransform& startTransform, btCollisionShape* collisionShape);
+
+            };
+
+            struct StaticBodyComponent : public AbstractBodyComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"static-plane", true},
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                    {"triangle-mesh", true}
+                };
+
+                virtual void load(Json::Value value);
+            };
+
+            struct DynamicBodyComponent : public AbstractBodyComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"static-plane", false},
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                    {"triangle-mesh", false}
+                };
+
+                virtual void load(Json::Value value);
+            };
+
+            struct KinematicBodyComponent : public AbstractBodyComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"static-plane", false},
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                    {"triangle-mesh", false}
+                };
+
+                struct KinematicBodyContactResultCallback : public btCollisionWorld::ContactResultCallback {
+                    bool hit = false;
+                    float dist = 0.0f;
+                    btVector3 point;
+                    btVector3 normal;
+
+                    virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1);
+                };
+
+                // Basiclly you'll be using this as a movable object. If not then its a more static asset that
+                // requires updating the worldTransform directly.
+                bool isController = false;
+                btVector3 linearVelocity = btVector3(0.0f, 0.0f, 0.0f);
+
+                bool onFloor = false;
+
+                virtual void init(Entity* entity);
+                virtual void update(float delta);
+
+                virtual void load(Json::Value value);
+
+                void moveAndSlide();
+
+                bool isOnFloor();
+            };
+
+            struct TriggerComponent : public IComponent {
+                std::map<std::string, bool> collisionShapeTypes = {
+                    {"box", true},
+                    {"sphere", true},
+                    {"capsule", true},
+                };
+
+                Entity* entity = nullptr;
+                btGhostObject* ghostObject = nullptr;
+                btCollisionShape* shape = nullptr;
+
+                std::vector<std::string> groups;
+                std::vector<std::string> masks;
+
+                // Behavior Entity Enter
+                Behavior::Callback entityEnter;
+
+                // Behavior Entity Exit
+                Behavior::Callback entityExit;
+
+                bool isEntered = false;
+                
+                virtual void init(Entity* entity);
+                
+                virtual void handleEvent(SDL_Event* e);
+                
+                virtual void update(float delta);
+                
+                virtual void preRender();
+                
+                virtual void render();
+                
+                virtual void release();
+                
+                virtual void load(Json::Value value);
+
+                btCollisionShape* createSphereShape(float radius);
+
+                btCollisionShape* createCapsuleShape(float radius, float height);
+
+                btCollisionShape* createBoxShape(const btVector3& halfExtents);
+
+            };
+        }
+    }
+
 }
 
 namespace script {
@@ -1328,7 +1382,7 @@ namespace script {
     int manager_behavior_setNumber(lua_State* l);
     int manager_behavior_setString(lua_State* l);
     int manager_behavior_executeCallback(lua_State* l);
-    
+
 
     // entity
     void manager_entity_load_library(lua_State* l);
