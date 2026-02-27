@@ -16,6 +16,7 @@ yPivotTransform = nil
 
 pivotEntity = nil
 pivotEntityTransform = nil
+pivotEntityPushArm = nil
 
 cameraEntity = nil
 cameraTransform = nil
@@ -32,13 +33,9 @@ maxX, maxY, maxZ = 20, 60, 20
 
 time = 0.0
 
-
-tx, ty, tz = 0.0, 0.0, 20.0
-fx, fy, fz = 0.0, 1.0, 0.0
-
-cx = tx
-cy = ty
-cz = tz
+tdistance = 20.0
+fdistance = 0.0
+cdistance = tdistance
 
 toggleFPS = false
 animatedCamera = false
@@ -63,6 +60,7 @@ function init()
 
     pivotEntity = manager_entity_getChildEntity(yPivotEntity, 0)
     pivotEntityTransform = manager_entity_getTransform(pivotEntity)
+    pivotEntityPushArm = manager_component_push_arm_getComponent(pivotEntity)
 
     cameraEntity = manager_entity_getChildEntity(pivotEntity, 0)
     cameraTransform = manager_entity_getTransform(cameraEntity)
@@ -83,12 +81,8 @@ function update(delta)
     if input_isGrab() then
         mcx, mcy = input_toVelocity()
 
-        -- rx = manager_transform_getRotationX(pivotEntityTransform)
-        -- ry = manager_transform_getRotationY(yPivotTransform)
         rx = manager_transform_getRotationX(pivotEntityTransform)
         ry = manager_transform_getRotationY(yPivotTransform)
-        
-        --ry = manager_component_body_getRotationY(bodyComponent)
 
 
         rx = rx - (mcy * 0.5)
@@ -165,7 +159,6 @@ function update(delta)
             manager_transform_setRotationY(meshTransform, ry)
         end
 
-        --[[
         if(toggleFPS) then
             manager_transform_setRotationY(meshTransform, ry)
         else
@@ -179,7 +172,6 @@ function update(delta)
             toggleFPS = not toggleFPS
             animatedCamera = true
         end
-        ]]
 
         manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
 
@@ -187,35 +179,32 @@ function update(delta)
             reset()
         end
     end
+    
+    td = tdistance
 
-    --[[
+    if manager_component_push_arm_getDistance(pivotEntityPushArm) < tdistance then
+        td = manager_component_push_arm_getDistance(pivotEntityPushArm)
+    end
+
     if animatedCamera then
         if toggleFPS then
             if animateTime >= maxAnimeTime then
                 animatedCamera = false
-                cx = fx
-                cy = fy
-                cz = fz
+                cdistance = fdistance
                 animateTime = 0.0
             else
                 animateTime = animateTime + (delta * 3.0)
-                cx = lerp(tx, fx, animateTime)
-                cy = lerp(ty, fy, animateTime)
-                cz = lerp(tz, fz, animateTime)
+                cdistance = lerp(td, fdistance, animateTime)
             end
         else
             manager_entity_setVisible(meshEntity, true)
             if animateTime >= maxAnimeTime then
                 animatedCamera = false
-                cx = tx
-                cy = ty
-                cz = tz
+                cdistance = tdistance
                 animateTime = 0.0
             else
                 animateTime = animateTime + (delta * 3.0)
-                cx = lerp(fx, tx, animateTime)
-                cy = lerp(fy, ty, animateTime)
-                cz = lerp(fz, tz, animateTime)
+                cdistance = lerp(fdistance, tdistance, animateTime)
             end
         end
 
@@ -223,8 +212,7 @@ function update(delta)
         manager_entity_setVisible(meshEntity, not toggleFPS)
     end
 
-    manager_transform_setPosition(cameraTransform, cx, cy, cz)
-    ]]
+    manager_component_push_arm_setDistance(pivotEntityPushArm, cdistance)
 
     if input_isKeyPressedOnce(KEYS_T) then
         print("Hello 1")
@@ -241,6 +229,7 @@ function release()
     cameraEntity = nil
     meshTransform = nil
     meshEntity = nil
+    pivotEntityPushArm = nil
     pivotEntityTransform = nil
     pivotEntity = nil
     yPivotTransform = nil

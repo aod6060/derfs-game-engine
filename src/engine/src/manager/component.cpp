@@ -765,10 +765,10 @@ namespace manager {
 
                         //std::cout << p4.x << ", " << p4.y << ", " << p4.z << "\n";
 
-                        child->transform.position = glm::vec3(0.0f, 0.0f, p4.z);
+                        child->transform.position = glm::vec3(0.0f, 0.5f, p4.z);
 
                     } else {
-                        child->transform.position = glm::vec3(0.0f, 0.0f, distance);   
+                        child->transform.position = glm::vec3(0.0f, 0.5f, distance);   
                     }
 
                     child = nullptr;
@@ -810,6 +810,35 @@ namespace manager {
                         this->masks.push_back(m);
                     }
                 }
+            }
+
+            // RayCastComponent
+            void RayCastComponent::init(Entity* entity) {
+                
+            }
+
+            void RayCastComponent::handleEvent(SDL_Event* e) {
+                
+            }
+
+            void RayCastComponent::update(float delta) {
+                
+            }
+
+            void RayCastComponent::preRender() {
+                
+            }
+
+            void RayCastComponent::render() {
+                
+            }
+
+            void RayCastComponent::release() {
+                
+            }
+
+            void RayCastComponent::load(Json::Value value) {
+                
             }
 
         }

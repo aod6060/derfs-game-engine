@@ -1325,6 +1325,29 @@ namespace manager {
                 virtual void release();
                 virtual void load(Json::Value value);
             };
+
+            struct RayCastComponent : public IComponent {
+                Entity* entity = nullptr;
+                glm::vec3 direction = glm::vec3(0.0f, 0.0f, 0.0f);
+                std::vector<std::string> groups;
+                std::vector<std::string> masks;
+
+                int filterGroup = 0;
+                int filterMask = 0;
+
+                // These values will be returned via lua api
+                bool isHit = false;
+                glm::vec3 worldPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+                glm::vec3 worldNormal = glm::vec3(0.0f, 0.0f, 0.0f);
+
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+            };
         }
     }
 
@@ -1431,6 +1454,9 @@ namespace script {
     int manager_entity_getTransform(lua_State* l);
     int manager_entity_getBehavior(lua_State* l);
     
+    // I'm going to move these to the indevidual components because 
+    // There is no point of polluting the manager entity section
+    // of the lua wrappers
     int manager_entity_hasMeshComponent(lua_State* l);
     int manager_entity_getMeshComponent(lua_State* l);
     
@@ -1609,6 +1635,14 @@ namespace script {
     int manager_component_trigger_addEntityExit(lua_State* l);
     int manager_component_trigger_removeEntityExit(lua_State* l);
 
+    // PushArm
+    void manager_component_push_arm_load_library(lua_State* l);
+    int manager_component_push_arm_hasComponent(lua_State* l);
+    int manager_component_push_arm_getComponent(lua_State* l);
+
+    int manager_component_push_arm_getDistance(lua_State* l);
+    int manager_component_push_arm_setDistance(lua_State* l);
+    
     /*
     // StaticBodyComponent
     void manager_component_StaticBodyComponent_load_library(lua_State* l);
