@@ -22,9 +22,9 @@ function init()
         --manager_scene_addEntity(scene, temp)
         manager_entity_addChildEntity(cratesEntity, temp)
         
-        if manager_entity_hasDynamicBodyComponent(temp) then
+        if manager_component_dynamic_body_hasComponent(temp) then
             temp_transform = manager_entity_getTransform(temp)
-            comp = manager_entity_getDynamicBodyComponent(temp)
+            comp = manager_component_dynamic_body_getComponent(temp)
 
             px = util_random_randrange(minX, maxX)
             py = util_random_randrange(minY, maxY)
@@ -62,7 +62,7 @@ function update(delta)
     end
     
     if input_isKeyPressedOnce(KEYS_R) then
-        manager_global_changeScene(global, "data/scenes/test3.scene.json")
+        manager_global_changeScene(global, "data/scenes/test.scene.json")
     end
 end
 

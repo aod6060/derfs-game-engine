@@ -12,30 +12,6 @@ namespace script {
         lua_register(l, "manager_entity_getTransform", manager_entity_getTransform);
         // int manager_entity_getBehavior(lua_State* l);
         lua_register(l, "manager_entity_getBehavior", manager_entity_getBehavior);
-        // int manager_entity_hasMeshComponent(lua_State* l);
-        lua_register(l, "manager_entity_hasMeshComponent", manager_entity_hasMeshComponent);
-        // int manager_entity_getMeshComponent(lua_State* l);
-        lua_register(l, "manager_entity_getMeshComponent", manager_entity_getMeshComponent);
-        // int manager_entity_hasCameraComponent(lua_State* l);
-        lua_register(l, "manager_entity_hasCameraComponent", manager_entity_hasCameraComponent);
-        // int manager_entity_getCameraComponent(lua_State* l);
-        lua_register(l, "manager_entity_getCameraComponent", manager_entity_getCameraComponent);
-        // int manager_entity_hasStaticBodyComponent(lua_State* l);
-        lua_register(l, "manager_entity_hasStaticBodyComponent", manager_entity_hasStaticBodyComponent);
-        // int manager_entity_getStaticBodyComponent(lua_State* l);
-        lua_register(l, "manager_entity_getStaticBodyComponent", manager_entity_getStaticBodyComponent);
-        // int manager_entity_hasDynamicBodyComponent(lua_State* l);
-        lua_register(l, "manager_entity_hasDynamicBodyComponent", manager_entity_hasDynamicBodyComponent);
-        // int manager_entity_getDynamicBodyComponent(lua_State* l);
-        lua_register(l, "manager_entity_getDynamicBodyComponent", manager_entity_getDynamicBodyComponent);
-        //int manager_entity_hasKinematicBodyComponent(lua_State* l);
-        lua_register(l, "manager_entity_hasKinematicBodyComponent", manager_entity_hasKinematicBodyComponent);
-        //int manager_entity_getKinematicBodyComponent(lua_State* l);
-        lua_register(l, "manager_entity_getKinematicBodyComponent", manager_entity_getKinematicBodyComponent);
-        // int manager_entity_hasTriggerComponent(lua_State* l);
-        lua_register(l, "manager_entity_hasTriggerComponent", manager_entity_hasTriggerComponent);
-        // int manager_entity_getTriggerComponent(lua_State* l);
-        lua_register(l, "manager_entity_getTriggerComponent", manager_entity_getTriggerComponent);
         // int manager_entity_removeEntity(lua_State* l);
         lua_register(l, "manager_entity_removeEntity", manager_entity_removeEntity);
         // manager_entity_addChildEntity
@@ -67,80 +43,7 @@ namespace script {
         lua_pushlightuserdata(l, entity->behavior);
         return 1;
     }
-
-    int manager_entity_hasMeshComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushboolean(l, entity->components.find("mesh-component") != entity->components.end());
-        return 1;
-    }
-
-    int manager_entity_getMeshComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushlightuserdata(l, entity->components.at("mesh-component"));
-        return 1;
-    }
-
-    int manager_entity_hasCameraComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushboolean(l, entity->components.find("camera-component") != entity->components.end());
-        return 1;
-    }
-
-    int manager_entity_getCameraComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushlightuserdata(l, entity->components.at("camera-component"));
-        return 1;
-    }
-
-    int manager_entity_hasStaticBodyComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushboolean(l, entity->components.find("static-body-component") != entity->components.end());
-        return 1;
-    }
-
-    int manager_entity_getStaticBodyComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushlightuserdata(l, entity->components.at("static-body-component"));
-        return 1;
-    }
     
-    int manager_entity_hasDynamicBodyComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushboolean(l, entity->components.find("dynamic-body-component") != entity->components.end());
-        return 1;
-    }
-
-    int manager_entity_getDynamicBodyComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushlightuserdata(l, entity->components.at("dynamic-body-component"));
-        return 1;
-    }
-
-    int manager_entity_hasKinematicBodyComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushboolean(l, entity->components.find("kinematic-body-component") != entity->components.end());
-        return 1;
-    }
-
-    int manager_entity_getKinematicBodyComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushlightuserdata(l, entity->components.at("kinematic-body-component"));
-        return 1;
-    }
-
-    int manager_entity_hasTriggerComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushboolean(l, entity->components.find("trigger-component") != entity->components.end());
-        return 1;  
-    }
-
-    int manager_entity_getTriggerComponent(lua_State* l) {
-        manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
-        lua_pushlightuserdata(l, entity->components.at("trigger-component"));
-        return 1;
-    }
-
-
     int manager_entity_removeEntity(lua_State* l) {
         manager::Entity* entity = (manager::Entity*)lua_touserdata(l, 1);
         if(entity->hasParent()) {

@@ -65,7 +65,7 @@ function init()
     cameraEntity = manager_entity_getChildEntity(pivotEntity, 0)
     cameraTransform = manager_entity_getTransform(cameraEntity)
 
-    bodyComponent = manager_entity_getDynamicBodyComponent(entity)
+    bodyComponent = manager_component_dynamic_body_getComponent(entity)
     
     manager_component_body_setAngularFactorScalar(bodyComponent, 0.0)
     manager_component_body_setSleepingThresholds(bodyComponent, 0.0, 0.0)

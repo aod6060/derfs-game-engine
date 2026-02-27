@@ -13,7 +13,7 @@ maxX, maxY, maxZ = 20, 60, 20
 
 function init()
     -- This function is called once every
-    bodyComponent = manager_entity_getDynamicBodyComponent(entity)
+    bodyComponent = manager_component_dynamic_body_getComponent(entity)
     transform = manager_entity_getTransform(entity)
 end
 

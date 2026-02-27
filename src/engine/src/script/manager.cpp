@@ -9,10 +9,8 @@ namespace script {
         manager_scene_load_library(l);
         manager_global_load_library(l);
         manager_transform_load_library(l);
-        manager_component_CameraComponent_load_library(l);
-        manager_component_MeshComponent_load_library(l);
-        manager_component_body_component_load_library(l);
-
+        manager_component_load_library(l);
+        
         // int manager_createEntityFromPrefab(lua_State* l);
         lua_register(l, "manager_createEntityFromPrefab", manager_createEntityFromPrefab);
     }

@@ -1454,27 +1454,6 @@ namespace script {
     int manager_entity_getTransform(lua_State* l);
     int manager_entity_getBehavior(lua_State* l);
     
-    // I'm going to move these to the indevidual components because 
-    // There is no point of polluting the manager entity section
-    // of the lua wrappers
-    int manager_entity_hasMeshComponent(lua_State* l);
-    int manager_entity_getMeshComponent(lua_State* l);
-    
-    int manager_entity_hasCameraComponent(lua_State* l);
-    int manager_entity_getCameraComponent(lua_State* l);
-
-    int manager_entity_hasStaticBodyComponent(lua_State* l);
-    int manager_entity_getStaticBodyComponent(lua_State* l);
-
-    int manager_entity_hasDynamicBodyComponent(lua_State* l);
-    int manager_entity_getDynamicBodyComponent(lua_State* l);
-
-    int manager_entity_hasKinematicBodyComponent(lua_State* l);
-    int manager_entity_getKinematicBodyComponent(lua_State* l);
-
-    int manager_entity_hasTriggerComponent(lua_State* l);
-    int manager_entity_getTriggerComponent(lua_State* l);
-    
     int manager_entity_removeEntity(lua_State* l);
     int manager_entity_addChildEntity(lua_State* l);
     int manager_entity_getChildEntity(lua_State* l);
@@ -1537,33 +1516,38 @@ namespace script {
     int manager_transform_getGlobalPositionY(lua_State* l);
     int manager_transform_getGlobalPositionZ(lua_State* l);
 
+    // Component
+    void manager_component_load_library(lua_State* l);
+
     // CameraComponent
-    void manager_component_CameraComponent_load_library(lua_State* l);
-    int manager_component_CameraComponent_getEntity(lua_State* l);
-    int manager_component_CameraComponent_getFOV(lua_State* l);
-    int manager_component_CameraComponent_setFOV(lua_State* l);
-    int manager_component_CameraComponent_getZNear(lua_State* l);
-    int manager_component_CameraComponent_setZNear(lua_State* l);
-    int manager_component_CameraComponent_getZFar(lua_State* l);
-    int manager_component_CameraComponent_setZFar(lua_State* l);
+    void manager_component_camera_load_library(lua_State* l);
+    int manager_component_camera_hasComponent(lua_State* l);
+    int manager_component_camera_getComponent(lua_State* l);
+    int manager_component_camera_getEntity(lua_State* l);
+    int manager_component_camera_getFOV(lua_State* l);
+    int manager_component_camera_setFOV(lua_State* l);
+    int manager_component_camera_getZNear(lua_State* l);
+    int manager_component_camera_setZNear(lua_State* l);
+    int manager_component_camera_getZFar(lua_State* l);
+    int manager_component_camera_setZFar(lua_State* l);
 
     // MeshComponent
-    void manager_component_MeshComponent_load_library(lua_State* l);
-    int manager_component_MeshComponent_getEntity(lua_State* l);
-    int manager_component_MeshComponent_getMesh(lua_State* l);
-    int manager_component_MeshComponent_setMesh(lua_State* l);
-    int manager_component_MeshComponent_getTexture(lua_State* l);
-    int manager_component_MeshComponent_setTexture(lua_State* l);
-    int manager_component_MeshComponent_getUVScale(lua_State* l);
-    int manager_component_MeshComponent_setUVScale(lua_State* l);
+    void manager_component_mesh_load_library(lua_State* l);
+    int manager_component_mesh_hasComponent(lua_State* l);
+    int manager_component_mesh_getComponent(lua_State* l);
+    int manager_component_mesh_getEntity(lua_State* l);
+    int manager_component_mesh_getMesh(lua_State* l);
+    int manager_component_mesh_setMesh(lua_State* l);
+    int manager_component_mesh_getTexture(lua_State* l);
+    int manager_component_mesh_setTexture(lua_State* l);
+    int manager_component_mesh_getUVScale(lua_State* l);
+    int manager_component_mesh_setUVScale(lua_State* l);
 
-    // BodyComponent
-    void manager_component_body_component_load_library(lua_State* l);
+    // body ~ This covers all body types (dynamic, static, kinematic)
+    void manager_component_body_load_library(lua_State* l);
     int manager_component_body_updateTransform(lua_State* l);
-
     int manager_component_body_getRotationY(lua_State* l);
     int manager_component_body_setRotationY(lua_State* l);
-    
     int manager_component_body_setDamping(lua_State* l);
     int manager_component_body_getLinearDamping(lua_State* l);
     int manager_component_body_getAngularDamping(lua_State* l);
@@ -1608,16 +1592,24 @@ namespace script {
     int manager_component_body_isStaticObject(lua_State* l);
     int manager_component_body_isKinematicObject(lua_State* l);
 
+    // Static Body
+    void manager_component_static_body_load_library(lua_State* l);
+    int manager_component_static_body_hasComponent(lua_State* l);
+    int manager_component_static_body_getComponent(lua_State* l);
+
+    // Dynamic Body
+    void manager_component_dynamic_body_load_library(lua_State* l);
+    int manager_component_dynamic_body_hasComponent(lua_State* l);
+    int manager_component_dynamic_body_getComponent(lua_State* l);
 
     // Kinematic Body
     void manager_component_kinematic_body_load_library(lua_State* l);
-
+    int manager_component_kinematic_body_hasComponent(lua_State* l);
+    int manager_component_kinematic_body_getComponent(lua_State* l);
     int manager_component_kinematic_body_getWorldTransformOrigin(lua_State* l);
     int manager_component_kinematic_body_setWorldTransformOrigin(lua_State* l);
-
     int manager_component_kinematic_body_getWorldTransformRotation(lua_State* l);
     int manager_component_kinematic_body_setWorldTransformRotation(lua_State* l);
-    
     int manager_component_kinematic_body_isController(lua_State* l);
     int manager_component_kinematic_body_setIsController(lua_State* l);
     int manager_component_kinematic_body_getLinearVelocity(lua_State* l);
@@ -1628,10 +1620,10 @@ namespace script {
 
     // Trigger
     void manager_component_trigger_load_library(lua_State* l);
-
+    int manager_component_trigger_hasComponent(lua_State* l);
+    int manager_component_trigger_getComponent(lua_State* l);
     int manager_component_trigger_addEntityEnter(lua_State* l);
     int manager_component_trigger_removeEntityEnter(lua_State* l);
-
     int manager_component_trigger_addEntityExit(lua_State* l);
     int manager_component_trigger_removeEntityExit(lua_State* l);
 
@@ -1639,18 +1631,8 @@ namespace script {
     void manager_component_push_arm_load_library(lua_State* l);
     int manager_component_push_arm_hasComponent(lua_State* l);
     int manager_component_push_arm_getComponent(lua_State* l);
-
     int manager_component_push_arm_getDistance(lua_State* l);
     int manager_component_push_arm_setDistance(lua_State* l);
-    
-    /*
-    // StaticBodyComponent
-    void manager_component_StaticBodyComponent_load_library(lua_State* l);
-
-    // DynamicBodyComponent
-    void manager_component_DynamicBodyComponent_load_library(lua_State* l);
-    int manager_component_DynamicBodyComponent_updateTransform(lua_State* l);
-    */
 
     // util_random
     void util_random_load_library(lua_State* l);

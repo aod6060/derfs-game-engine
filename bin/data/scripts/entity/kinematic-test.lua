@@ -7,7 +7,7 @@ bodyComponent = nil
 
 function init()
     -- This function is called once every
-    bodyComponent = manager_entity_getKinematicBodyComponent(entity)
+    bodyComponent = manager_component_kinematic_body_getComponent(entity)
 
     manager_component_kinematic_body_setISController(bodyComponent, true)
 end

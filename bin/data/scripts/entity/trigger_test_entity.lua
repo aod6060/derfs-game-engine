@@ -9,7 +9,7 @@ behavior = nil
 function init()
     -- This function is called once every
     behavior = manager_entity_getBehavior(entity)
-    trigger = manager_entity_getTriggerComponent(entity)
+    trigger = manager_component_trigger_getComponent(entity)
 
     manager_component_trigger_addEntityEnter(trigger, behavior, "player_enter")
     manager_component_trigger_addEntityExit(trigger, behavior, "player_exit")
