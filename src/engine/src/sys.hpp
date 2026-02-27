@@ -1329,6 +1329,8 @@ namespace manager {
             struct RayCastComponent : public IComponent {
                 Entity* entity = nullptr;
                 glm::vec3 direction = glm::vec3(0.0f, 0.0f, 0.0f);
+                float scale = 0.0f;
+                bool disabled = false;
                 std::vector<std::string> groups;
                 std::vector<std::string> masks;
 
@@ -1634,6 +1636,20 @@ namespace script {
     int manager_component_push_arm_getDistance(lua_State* l);
     int manager_component_push_arm_setDistance(lua_State* l);
 
+    // RayCast
+    void manager_component_raycast_load_library(lua_State* l);
+    int manager_component_raycast_hasComponent(lua_State* l);
+    int manager_component_raycast_getComponent(lua_State* l);
+    int manager_component_raycast_isHit(lua_State* l);
+    int manager_component_raycast_getWorldPoint(lua_State* l);
+    int manager_component_raycast_getWorldNormal(lua_State* l);
+    int manager_component_raycast_getDirection(lua_State* l);
+    int manager_component_raycast_setDirection(lua_State* l);
+    int manager_component_raycast_getScale(lua_State* l);
+    int manager_component_raycast_setScale(lua_State* l);
+    int manager_component_raycast_isDisabled(lua_State* l);
+    int manager_component_raycast_setDisabled(lua_State* l);
+    
     // util_random
     void util_random_load_library(lua_State* l);
     int util_random_randboolean(lua_State* l);

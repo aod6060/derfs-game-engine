@@ -38,6 +38,22 @@
                     "crate",
                     "triggers"
                 ]
+            },
+            {
+                "type": "ray-cast-component",
+                "direction": {
+                    "x": 0.0,
+                    "y": -1.0,
+                    "z": 0.0
+                },
+                "scale": 2.0,
+                "disabled": false,
+                "groups": [
+                    "player"
+                ],
+                "masks": [
+                    "static"
+                ]
             }
         ],
         "entities": [

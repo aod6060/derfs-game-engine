@@ -10,6 +10,7 @@ scene = nil
 sceneBehavior = nil
 global = nil
 
+rayCast = nil
 
 yPivotEntity = nil
 yPivotTransform = nil
@@ -51,6 +52,8 @@ function init()
     global = manager_scene_getGlobal(scene)
 
     transform = manager_entity_getTransform(entity)
+
+    rayCast = manager_component_raycast_getComponent(entity)
 
     yPivotEntity = manager_entity_getChildEntity(entity, 0)
     yPivotTransform = manager_entity_getTransform(yPivotEntity)
@@ -150,7 +153,7 @@ function update(delta)
 
         end
 
-        if input_mapping_isMappingPressedOnce(global, "jump") then
+        if manager_component_raycast_isHit(rayCast) and input_mapping_isMappingPressedOnce(global, "jump") then
             movePlayer = true
             vy = jumpSpeed
         end
@@ -178,6 +181,9 @@ function update(delta)
         if manager_transform_getPositionY(transform) < -64.0 then
             reset()
         end
+
+        --print(tostring(manager_component_raycast_isHit(rayCast)))
+
     end
     
     td = tdistance
@@ -235,6 +241,7 @@ function release()
     yPivotTransform = nil
     yPivotEntity = nil
     global = nil
+    rayCast = nil
     sceneBehavior = nil
     scene = nil
     transform = nil

@@ -70,6 +70,12 @@ namespace manager {
                 []() {
                     return new physics::PushArmComponent();
                 }
+            },
+            {
+                "ray-cast-component",
+                []() {
+                    return new physics::RayCastComponent();
+                }
             }
         };
 
@@ -814,7 +820,32 @@ namespace manager {
 
             // RayCastComponent
             void RayCastComponent::init(Entity* entity) {
-                
+                std::cout << "RayCastComponent Init: \n";
+                this->entity = entity;
+                int group = 0;
+                if(!groups.empty()) {
+                    for(int i = 0; i < this->groups.size() - 1; i++) {
+                        //group |= groups.at(i);
+                        group |= this->entity->scene->global->getPhysicsGroups(this->groups.at(i));
+                    }
+                    group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
+                }
+
+                std::cout << "Group: " << group << "\n";
+
+                this->filterGroup = group;
+
+                int mask = 0;
+                if(!masks.empty()) {
+                    for(int i = 0; i < this->masks.size() - 1; i++) {
+                        mask |= this->entity->scene->global->getPhysicsGroups(masks.at(i));
+                    }
+                    mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
+                }
+
+                std::cout << "Mask: " << mask << "\n";
+
+                this->filterMask = mask;
             }
 
             void RayCastComponent::handleEvent(SDL_Event* e) {
@@ -822,7 +853,36 @@ namespace manager {
             }
 
             void RayCastComponent::update(float delta) {
-                
+
+                if(!this->disabled) {
+                    btVector3 from = this->entity->transform.toBulletVector3(this->entity->transform.getTransformedPosition());
+                    //std::cout << "From: " << from.x() << ", " << from.y() << ", " << from.z() << "\n";
+
+                    glm::mat4 m = this->entity->transform.toGlobalRotaionMatrix();
+
+                    glm::vec4 to_vec4 = m * glm::vec4(direction.x, direction.y, direction.z, 0.0f);
+
+                    btVector3 to = this->entity->transform.toBulletVector3(glm::vec3(to_vec4.x, to_vec4.y, to_vec4.z) * scale) + from;
+                    //std::cout << "To: " << to.x() << ", " << to.y() << ", " << to.z() << "\n";
+
+                    btCollisionWorld::ClosestRayResultCallback rayResult = btCollisionWorld::ClosestRayResultCallback(from, to);
+                    rayResult.m_collisionFilterGroup = filterGroup;
+                    rayResult.m_collisionFilterMask = filterMask;
+
+                    ::physics::getWorld()->rayTest(from, to, rayResult);
+
+                    if(rayResult.hasHit()) {
+                        this->isHit = true;
+                        this->worldPoint = this->entity->transform.toGLMVector3(rayResult.m_hitPointWorld);
+                        this->worldNormal = this->entity->transform.toGLMVector3(rayResult.m_hitNormalWorld);
+                    } else {
+                        this->isHit = false;
+                        this->worldNormal = glm::vec3(0.0f);
+                        this->worldPoint = glm::vec3(0.0f);
+                    }
+                } else {
+                    this->isHit = false;
+                }
             }
 
             void RayCastComponent::preRender() {
@@ -834,11 +894,38 @@ namespace manager {
             }
 
             void RayCastComponent::release() {
-                
+                this->entity = nullptr;
             }
 
             void RayCastComponent::load(Json::Value value) {
-                
+                Json::Value _direction = value["direction"];
+                this->direction = glm::vec3(
+                    _direction["x"].asFloat(),
+                    _direction["y"].asFloat(),
+                    _direction["z"].asFloat()
+                );
+                this->scale = value["scale"].asFloat();
+                // Groups
+                this->disabled = value["disabled"].asBool();
+                Json::Value _groups = value["groups"];
+                std::cout << "Groups: " << _groups.size() << "\n";
+                if(!_groups.empty()) {
+                    for(int i = 0; i < _groups.size(); i++) {
+                        std::string g = _groups[i].asString();
+                        std::cout << g << "\n";
+                        this->groups.push_back(g);
+                        std::cout << g << "\n";
+                    }
+                }
+                // Masks
+                Json::Value _masks = value["masks"];
+                std::cout << "Masks: " << _masks.size() << "\n";
+                if(!_masks.empty()) {
+                    for(int i = 0; i < _masks.size(); i++) {
+                        std::string m = _masks[i].asString();
+                        this->masks.push_back(m);
+                    }
+                }
             }
 
         }
