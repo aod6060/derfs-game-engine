@@ -177,7 +177,7 @@ function update(delta)
 
         manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
 
-        if manager_transform_getPositionY(transform) < -32.0 then
+        if manager_transform_getPositionY(transform) < -64.0 then
             reset()
         end
     end

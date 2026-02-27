@@ -251,12 +251,12 @@ namespace manager {
 
             btCollisionShape* AbstractBodyComponent::createTriangleShape(std::string meshName) {
 
-                btTriangleMesh* triangleMesh = new btTriangleMesh(true, false);
+                btTriangleMesh* triangleMesh = new btTriangleMesh(false, false);
 
                 for(int i = 0; i < assets::getMesh(meshName)->data.triangles.size(); i++) {
                     render::mesh::Triangle tris = assets::getMesh(meshName)->data.triangles.at(i);
 
-                    triangleMesh->addTriangleIndices(tris.v1, tris.v2, tris.v3);
+                    //triangleMesh->addTriangleIndices(tris.v1, tris.v2, tris.v3);
                     
 
                     btVector3 v1 = btVector3(
@@ -280,7 +280,7 @@ namespace manager {
                     triangleMesh->addTriangle(v1, v2, v3);
                 }
 
-                btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triangleMesh, true);
+                btBvhTriangleMeshShape* shape = new btBvhTriangleMeshShape(triangleMesh, false);
 
                 return shape;
             }

@@ -35,6 +35,10 @@
             "path": "data/meshes/demo/bridge_medium.glb"
         },
         {
+            "name": "demo/bridge-medium-physics",
+            "path": "data/meshes/demo/bridge_medium_physics.glb"
+        },
+        {
             "name": "demo/bridge-small",
             "path": "data/meshes/demo/bridge_small.glb"
         },

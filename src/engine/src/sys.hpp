@@ -698,6 +698,14 @@ namespace manager {
         glm::vec3 rotation;
         glm::vec3 scale;
 
+        struct Axis {
+            glm::vec3 axis;
+            float angle;
+
+            void setup(glm::vec3 rotations);
+            glm::vec3 convert();
+        };
+
         void init(Entity* entity);
         void release();
 
@@ -707,6 +715,19 @@ namespace manager {
         // This will convert to a btTransform
         btTransform convertToBulletTransform();
         void interpretBulletTransform(const btTransform& transform);
+
+        glm::vec3 getTransformedPosition();
+        glm::vec3 getTransformedRotation();
+        void setTransformedPosition(glm::vec3 position);
+        void setTransformedRotation(glm::vec3 rotation);
+
+        btVector3 toBulletVector3(glm::vec3 v);
+        glm::vec3 toGLMVector3(const btVector3& v);
+
+        glm::mat4 toParentTranslateMatrix(Entity* entity);
+        glm::mat4 toParentRotationMatrix(Entity* entity);
+
+        Axis toAxis(glm::vec3 rotation);
 
         glm::mat4 toModel();
 

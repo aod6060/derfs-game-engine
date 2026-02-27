@@ -11,12 +11,16 @@ maxX, maxY, maxZ = 20, 60, 20
 amount = 100
 
 global = nil
+cratesEntity = nil
 
 function init()
     -- This function is called once every
+    cratesEntity = manager_scene_getEntity(scene, 1)
+
     for i = 0, amount - 1 do
         temp = manager_createEntityFromPrefab(prefab)
-        manager_scene_addEntity(scene, temp)
+        --manager_scene_addEntity(scene, temp)
+        manager_entity_addChildEntity(cratesEntity, temp)
         
         if manager_entity_hasDynamicBodyComponent(temp) then
             temp_transform = manager_entity_getTransform(temp)
@@ -65,6 +69,7 @@ end
 
 function release()
     -- This is were you'll need to release user data
+    cratesEntity = nil
     global = nil
 end
 

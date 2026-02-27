@@ -26,6 +26,28 @@
         },
         {
             "type": "instance",
+            "name": "crates",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 109.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "instance",
             "name": "island",
             "behavior": null,
             "transform": {
@@ -530,6 +552,98 @@
                         "triggers"
                     ],
                     "masks": [
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "bridge-01",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 54.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/bridge-medium",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/bridge-medium-physics"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 109.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/island-extra-large",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/island-extra-large"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
                         "player"
                     ]
                 }
