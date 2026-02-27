@@ -111,6 +111,12 @@ namespace manager {
         return m;
     }
 
+    glm::mat4 Transform::toGlobalRotaionMatrix() {
+        Axis axis;
+        axis.setup(glm::radians(this->rotation));
+        return this->toParentRotationMatrix(entity->parent) * glm::rotate(glm::mat4(1.0f), axis.angle, axis.axis);
+
+    }
 
     btVector3 Transform::toBulletVector3(glm::vec3 v) {
         return btVector3(v.x, v.y, v.z);

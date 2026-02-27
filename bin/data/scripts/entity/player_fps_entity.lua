@@ -161,6 +161,11 @@ function update(delta)
             vy = jumpSpeed
         end
 
+        if movePlayer then
+            manager_transform_setRotationY(meshTransform, ry)
+        end
+
+        --[[
         if(toggleFPS) then
             manager_transform_setRotationY(meshTransform, ry)
         else
@@ -174,6 +179,7 @@ function update(delta)
             toggleFPS = not toggleFPS
             animatedCamera = true
         end
+        ]]
 
         manager_component_body_setLinearVelocity(bodyComponent, vx, vy, vz)
 
@@ -182,6 +188,7 @@ function update(delta)
         end
     end
 
+    --[[
     if animatedCamera then
         if toggleFPS then
             if animateTime >= maxAnimeTime then
@@ -217,7 +224,7 @@ function update(delta)
     end
 
     manager_transform_setPosition(cameraTransform, cx, cy, cz)
-
+    ]]
 
     if input_isKeyPressedOnce(KEYS_T) then
         print("Hello 1")

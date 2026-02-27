@@ -64,6 +64,12 @@ namespace manager {
                 []() {
                     return new physics::TriggerComponent();
                 }
+            },
+            {
+                "push-arm-component",
+                []() {
+                    return new physics::PushArmComponent();
+                }
             }
         };
 
@@ -692,6 +698,120 @@ namespace manager {
             btCollisionShape* TriggerComponent::createBoxShape(const btVector3& halfExtents) {
                 return new btBoxShape(halfExtents);
             }
+
+
+            // PushArmComponent
+            void PushArmComponent::init(Entity* entity) {
+                this->entity = entity;
+
+                int group = 0;
+                if(!groups.empty()) {
+                    for(int i = 0; i < this->groups.size() - 1; i++) {
+                        //group |= groups.at(i);
+                        group |= this->entity->scene->global->getPhysicsGroups(this->groups.at(i));
+                    }
+                    group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
+                }
+
+                std::cout << "Group: " << group << "\n";
+
+                this->filterGroup = group;
+
+                int mask = 0;
+                if(!masks.empty()) {
+                    for(int i = 0; i < this->masks.size() - 1; i++) {
+                        mask |= this->entity->scene->global->getPhysicsGroups(masks.at(i));
+                    }
+                    mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
+                }
+
+                std::cout << "Mask: " << mask << "\n";
+
+                this->filterMask = mask;
+            }
+
+            void PushArmComponent::handleEvent(SDL_Event* e) {
+
+            }
+
+            void PushArmComponent::update(float delta) {
+                if(this->entity->getChilderenAmount() > 0) {
+                    manager::Entity* child = this->entity->getChildEntity(0);
+
+                    btVector3 from = this->entity->transform.toBulletVector3(this->entity->transform.getTransformedPosition());
+
+                    glm::mat4 m = this->entity->transform.toGlobalRotaionMatrix();
+                    btVector3 dir = btVector3(
+                        m[2][0],
+                        m[2][1],
+                        m[2][2]
+                    );
+
+                    btVector3 to = from + (this->entity->transform.toBulletVector3(glm::vec3(dir.x(), dir.y(), dir.z())) * this->distance);
+
+                    btCollisionWorld::ClosestRayResultCallback rayResult = btCollisionWorld::ClosestRayResultCallback(from, to);
+                    rayResult.m_collisionFilterGroup = filterGroup;
+                    rayResult.m_collisionFilterMask = filterMask;
+
+                    ::physics::getWorld()->rayTest(from, to, rayResult);
+
+                    if(rayResult.hasHit()) {
+
+                        glm::vec3 p = child->transform.toGLMVector3(rayResult.m_hitPointWorld);
+
+                        glm::mat4 m = glm::inverse(child->transform.toParentTranslateMatrix(child->parent) * child->transform.toParentRotationMatrix(child->parent));
+
+                        glm::vec4 p4 = m * glm::vec4(p.x, p.y, p.z, 1.0f);
+
+                        //std::cout << p4.x << ", " << p4.y << ", " << p4.z << "\n";
+
+                        child->transform.position = glm::vec3(0.0f, 0.0f, p4.z);
+
+                    } else {
+                        child->transform.position = glm::vec3(0.0f, 0.0f, distance);   
+                    }
+
+                    child = nullptr;
+                }
+            }
+
+            void PushArmComponent::preRender() {
+
+            }
+
+            void PushArmComponent::render() {
+
+            }
+
+            void PushArmComponent::release() {
+                this->entity = nullptr;
+            }
+
+            void PushArmComponent::load(Json::Value value) {
+                // Distance
+                this->distance = value["distance"].asFloat();
+                // Groups
+                Json::Value _groups = value["groups"];
+                std::cout << "Groups: " << _groups.size() << "\n";
+                if(!_groups.empty()) {
+                    for(int i = 0; i < _groups.size(); i++) {
+                        std::string g = _groups[i].asString();
+                        std::cout << g << "\n";
+                        this->groups.push_back(g);
+                        std::cout << g << "\n";
+                    }
+                }
+                // Masks
+                Json::Value _masks = value["masks"];
+                std::cout << "Masks: " << _masks.size() << "\n";
+                if(!_masks.empty()) {
+                    for(int i = 0; i < _masks.size(); i++) {
+                        std::string m = _masks[i].asString();
+                        this->masks.push_back(m);
+                    }
+                }
+            }
+
         }
     }
 }

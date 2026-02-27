@@ -727,6 +727,8 @@ namespace manager {
         glm::mat4 toParentTranslateMatrix(Entity* entity);
         glm::mat4 toParentRotationMatrix(Entity* entity);
 
+        glm::mat4 toGlobalRotaionMatrix();
+
         Axis toAxis(glm::vec3 rotation);
 
         glm::mat4 toModel();
@@ -1304,6 +1306,24 @@ namespace manager {
 
                 btCollisionShape* createBoxShape(const btVector3& halfExtents);
 
+            };
+
+            struct PushArmComponent : public IComponent {
+                Entity* entity = nullptr;
+                float distance = 0.0f;
+                std::vector<std::string> groups;
+                std::vector<std::string> masks;
+
+                int filterGroup = 0;
+                int filterMask = 0;
+                
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
             };
         }
     }

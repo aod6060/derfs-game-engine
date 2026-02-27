@@ -85,7 +85,18 @@
                                 "z": 1.0
                             }   
                         },
-                        "components": [],
+                        "components": [
+                            {
+                                "type": "push-arm-component",
+                                "distance": 20.0,
+                                "groups": [
+                                    "player"
+                                ],
+                                "masks": [
+                                    "static"
+                                ]
+                            }
+                        ],
                         "entities": [
                             {
                                 "type": "instance",
@@ -94,8 +105,8 @@
                                 "transform": {
                                     "position": {
                                         "x": 0.0,
-                                        "y": 2.0,
-                                        "z": 20.0
+                                        "y": 0.0,
+                                        "z": 0.0
                                     },
                                     "rotation": {
                                         "x": 0.0,
