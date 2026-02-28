@@ -1,0 +1,9 @@
+This is an example scene currently.
+
+{
+    "name": "scene",
+    "version": 4,
+    "behavior": null,
+    "entities": [
+    ]
+}

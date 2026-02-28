@@ -1,0 +1,182 @@
+Here are all of the component that are currently supported
+in the game engine currently
+
+mesh-component
+
+{
+    "type": "mesh-component",
+    "mesh": "[mesh-name]",
+    "texture": "[texture-name]",
+    "uv-scale": [uv-scale]
+}
+
+camera-component
+
+{
+    "type": "camera-component",
+    "fov": 45.0,
+    "znear": 0.1,
+    "zfar": 1024.0
+}
+
+static-body-component
+
+{
+    "type": "static-body-component",
+    "collision-shape": {
+        [see below for more detail]
+    },
+    "groups": [
+        [see below for more details]
+    ],
+    "masks": [
+        [see below for more details]
+    ]
+}
+
+dynamic-body-component
+{
+    "type": "dynamic-body-component",
+    "mass": 1.0,
+    "collision-shape": {
+        [see below for more detail]
+    },
+    "groups": [
+        [see below for more detail]
+    ],
+    "masks": [
+        [see below for more detail]
+    ]
+}
+
+kinematic-body-component
+
+{
+    "type": "kinematic-body-component",
+    "collision-shape": {
+        [see below for more detail]
+    },
+    "groups": [
+        [see below for more detail]
+    ],
+    "masks": [
+        [see below for more detail]
+    ]
+}
+
+trigger-component
+
+{
+    "type": "trigger-component",
+    "collision-shape": {
+        [see below for more detail]
+    },
+    "groups": [
+        [see below for more detail]
+    ],
+    "masks": [
+        [see below for more detail]
+    ]
+}
+
+push-arm-component
+
+{
+    "type": "push-arm-component",
+    "distance": 1.0,
+    "groups": [
+        [see below for more detail]
+    ],
+    "masks": [
+        [see below for more detail]
+    ]
+}
+
+ray-cast-component
+{
+    "type": "ray-cast-component",
+    "direction": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "scale": 1.0,
+    "disabled": false,
+    "groups": [
+        [see below for more detail]
+    ],
+    "masks": [
+        [see below for more detail]
+    ]
+}
+
+
+collision-shape [for static/dynamic/kinematic/trigger]
+
+static-plane [static]
+
+"collision-shape": {
+    "type": "static-plane",
+    "plane-normal": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "plane-constant": 0.0
+}
+
+box [static/dynamic/kinematic/trigger]
+
+"collision-shape": {
+    "type": "box",
+    "half-extends": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    }
+}
+
+sphere [static/dynamic/kinematic/trigger]
+
+"collision-shape": {
+    "type": "sphere",
+    "radius": 0.0
+}
+
+capsule [static/dynamic/kinematic/trigger]
+
+"collision-shape": {
+    "type": "capsule",
+    "radius": 0.0,
+    "height": 0.0
+}
+
+triangle-mesh [static]
+
+"collision-shape": {
+    "type": "triangle-mesh",
+    "mesh": "[mesh-name]
+}
+
+groups ~ These and names for the collision filter system they are located in
+the "global.json" under the "physics" section of the json file. Here are a list
+all the current groups
+
+groups: [
+    "static",
+    "crate",
+    "player",
+    "triggers"
+]
+
+masks ~ This is used for mask purposes and names for the collision filter system they are located in
+the "global.json" under the "physics" section of the json file. Here are a list
+all the current groups
+
+
+masks: [
+    "static",
+    "crate",
+    "player",
+    "triggers"
+]
