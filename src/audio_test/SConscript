@@ -18,8 +18,11 @@ env = Environment(
         "#/bin"
     ],
     LIBS=[
-        'OpenAL32.lib',
+        'SDL2main.lib',
+        'SDL2.lib',
         'vorbis.lib',
+        'vorbisenc.lib',
+        'vorbisfile.lib',
         'ogg.lib',
         'kernel32.lib',
         'user32.lib',
@@ -41,6 +44,7 @@ env = Environment(
         '/fp:precise',
         '/MT',
         '/sdl',
+        "-D_CRT_SECURE_NO_WARNINGS",
     ],
     LINKFLAGS=[
         '/SUBSYSTEM:CONSOLE',

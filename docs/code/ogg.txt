@@ -1,0 +1,66 @@
+struct OggAudioData {
+    FILE* fp = nullptr;
+    OggVorbis_File file;
+    vorbis_info* info;
+
+    bool init(std::string path);
+    long read(std::vector<char>& buffer, int* bitstream);
+    int64_t maxSize();
+    int64_t tell();
+    void seek(int64_t position);
+    void release();
+
+    long getRate();
+    long getChannelCount();
+};
+
+
+
+bool OggAudioData::init(std::string path) {
+    this->fp = fopen(path.c_str(), "rb");
+
+    if(!this->fp) {
+        std::cout << path << " doesn't exist\n";
+        return true;
+    }
+
+    if(ov_open_callbacks(fp, &this->file, nullptr, 0, OV_CALLBACKS_NOCLOSE)) {
+        std::cout << "Input doesn't not appear to be an Ogg Bitstream\n";
+        return true;
+    }
+
+    this->info = ov_info(&this->file, -1);
+
+
+    return false;
+}
+
+long OggAudioData::read(std::vector<char>& buffer, int* bitstream) {
+    return ov_read(&this->file, buffer.data(), buffer.size(), SDL_BYTEORDER == SDL_BIG_ENDIAN, int(sizeof(int16_t)), 1, bitstream);
+}
+
+int64_t OggAudioData::tell() {
+    return ov_pcm_tell(&this->file);
+}
+
+void OggAudioData::seek(int64_t position) {
+    ov_pcm_seek(&this->file, position);
+}
+
+int64_t OggAudioData::maxSize() {
+    return ov_pcm_total(&this->file, -1);
+}
+
+void OggAudioData::release() {
+    this->info = nullptr;
+    ov_clear(&this->file);
+    fclose(this->fp);
+}
+
+long OggAudioData::getRate() {
+    return this->info->rate;
+}
+
+long OggAudioData::getChannelCount() {
+    return this->info->channels;
+}
