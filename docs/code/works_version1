@@ -1,0 +1,61 @@
+        /*
+        for(int i = 0; i < bufferIDs.size(); i++) {
+            lengths[i] = data.read(buffers[i], &bitstream);
+            if(lengths[i] == 0) {
+                eof =true;
+                continue;
+            } else if(lengths[i] < 0) {
+                std::cout << "There was an error\n";
+                continue;
+            } else {
+
+                int format = 0;
+
+                if(data.getChannelCount() == 1 && data.getBitPerSample() == 16) {
+                    format = AL_FORMAT_MONO16;
+                } else if(data.getChannelCount() == 2 && data.getBitPerSample() == 16) {
+                    format = AL_FORMAT_STEREO16;
+                }
+
+                //std::cout <<  len << "\n";
+                //alSourceUnqueueBuffers(sourceID, , ALuint *buffers)
+                //alBufferData(bufferIDs[i], format, buffer.data(), len, data.getFrequence());
+            }
+
+            //SDL_memset(buffer.data(), 0, buffer.size());
+        }
+        
+        std::vector<std::thread> threads;
+        threads.resize(BUFFER_COUNT);
+
+        for(int i = 0; i < threads.size(); i++) {
+            threads[i] = std::thread([&](int index) {
+                int format = 0;
+
+                if(data.getChannelCount() == 1 && data.getBitPerSample() == 16) {
+                    format = AL_FORMAT_MONO16;
+                } else if(data.getChannelCount() == 2 && data.getBitPerSample() == 16) {
+                    format = AL_FORMAT_STEREO16;
+                }
+
+                alBufferData(bufferIDs.at(index), format, buffers.at(index).data(), lengths.at(index), data.getFrequence());
+
+            }, i);
+        }
+
+        for(int i = 0; i < threads.size(); i++) {
+            if(threads.at(i).joinable()) {
+                threads.at(i).join();
+            }
+        }
+
+        alSourceQueueBuffers(sourceID, bufferIDs.size(), bufferIDs.data());
+        alSourcePlay(sourceID);
+
+        ALint state = AL_PLAYING;
+        while(state == AL_PLAYING) {
+            alGetSourcei(sourceID, AL_SOURCE_STATE, &state);
+        }
+        alSourceStop(sourceID);
+        alSourceUnqueueBuffers(sourceID, bufferIDs.size(), bufferIDs.data());
+        */

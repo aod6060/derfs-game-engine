@@ -24,6 +24,7 @@ env = Environment(
         'vorbisenc.lib',
         'vorbisfile.lib',
         'ogg.lib',
+        'OpenAL32.lib',
         'kernel32.lib',
         'user32.lib',
         'gdi32.lib',
