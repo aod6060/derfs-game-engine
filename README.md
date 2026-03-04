@@ -22,5 +22,5 @@ Dependentcies
 7. BulletPhysics
 8. jsoncpp
 9. solar (solar is a fork of lua that I'm customizing for my purposes. Note need to add repo to github)
-
-I'll also be adding FMOD for sound later on. 
+10. OpenAL
+11. Ogg/Vorbis
