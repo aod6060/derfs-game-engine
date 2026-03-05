@@ -1,0 +1,11 @@
+Import("env")
+
+
+def source(file):
+    return "#/src/engine/src/sound/" + file
+
+env["source_files"] += [
+    source("sound.cpp"),
+    source("wav_audio_data.cpp"),
+    source("ogg_audio_data.cpp")
+]

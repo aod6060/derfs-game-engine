@@ -18,6 +18,8 @@ SConscript("#/src/engine/src/manager/SConscript", exports="env")
 SConscript("#/src/engine/src/physics/SConscript", exports="env")
 # render
 SConscript("#/src/engine/src/render/SConscript", exports="env")
+# sound
+SConscript("#/src/engine/src/sound/SConscript", exports="env")
 # script
 SConscript("#/src/engine/src/script/SConscript", exports="env")
 # util

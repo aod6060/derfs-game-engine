@@ -44,6 +44,9 @@
 
 #include <btBulletDynamicsCommon.h>
 
+#include <AL/al.h>
+#include <AL/alc.h>
+
 namespace app {
     struct IApp {
         virtual void init() = 0;
@@ -647,6 +650,129 @@ namespace physics {
 
     btVector3 getGravity();
     void setGravity(const btVector3& gravity);
+}
+
+namespace manager {
+    struct Transform;
+}
+
+namespace sound {
+
+    enum AudioDataMetaData {
+        ADMD_BUFFER_COUNT = 2,
+        ADMD_CHUNK_SIZE = 4096,
+        ADMD_BUFFER_SIZE = 4096 * 32
+    };
+
+    enum AudioDataSeek {
+        ADS_BEGIN = 0,
+        ADS_END,
+        ADS_MAX_SIZE
+    };
+
+    struct IAudioData {
+        virtual bool init(std::string path) = 0;
+        virtual void release() = 0;
+        virtual long read(std::vector<char>& buffer) = 0;
+        virtual int64_t maxSize() = 0;
+        virtual int64_t tell() = 0;
+        virtual void seek(int64_t position) = 0;
+        virtual long getFrequence() = 0;
+        virtual long getChannelCount() = 0;
+        virtual long getBitPerSample() = 0;
+    };
+
+    void init();
+    void release();
+
+    IAudioData* loadAudioData(std::string path);
+
+    // Listener Section
+    void setListenerPosition(const glm::vec3& position);
+    void setListenerVelocity(const glm::vec3& velocity);
+    void setListenerOrientation(const glm::mat4& rotationMatrix);
+
+    void transformListener(manager::Transform& tran);
+
+    namespace codec {
+
+        struct WavAudioData : public IAudioData {
+            struct WAVHeader {
+                uint32_t type;
+                uint32_t fileSize;
+                uint32_t format;
+            };
+
+            struct WAVChunkDescription {
+                uint32_t formatBlockID;
+                uint32_t blockSize;
+                uint16_t audioFormat;
+                uint16_t channels;
+                uint32_t frequency;
+                uint32_t bytePerSecond;
+                uint16_t bytePerBlock;
+                uint16_t bitsPerSample;
+            };
+
+            struct WAVSampledData {
+                uint32_t dataBlockID;
+                uint32_t dataSize;
+            };
+
+            struct WAVString {
+                unsigned char v1;
+                unsigned char v2;
+                unsigned char v3;
+                unsigned char v4;
+
+                std::string toString() {
+                    std::stringstream ss;
+                    ss << v1 << v2 << v3 << v4;
+                    return ss.str();
+                }
+            };
+
+            struct WAVFile {
+                WAVHeader header;
+                WAVChunkDescription chunkDescription;
+                WAVSampledData sampleData;
+            };
+
+
+            WAVFile waveFile;
+
+            size_t start = 0;
+            size_t end = 0;
+
+            //std::ifstream stream;
+            FILE* stream;
+
+            virtual bool init(std::string path);
+            virtual void release();
+            virtual long read(std::vector<char>& buffer);
+            virtual int64_t maxSize();
+            virtual int64_t tell();
+            virtual void seek(int64_t position);
+            virtual long getFrequence();
+            virtual long getChannelCount();
+            virtual long getBitPerSample();
+        };
+
+
+        struct OggAudioData : public IAudioData {
+            virtual bool init(std::string path);
+            virtual void release();
+            virtual long read(std::vector<char>& buffer);
+            virtual int64_t maxSize();
+            virtual int64_t tell();
+            virtual void seek(int64_t position);
+            virtual long getFrequence();
+            virtual long getChannelCount();
+            virtual long getBitPerSample();
+        };
+
+
+    }
 }
 
 namespace assets {
