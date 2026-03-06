@@ -1,0 +1,23 @@
+Title: Derf Simple Compressed Audio Format (*.dscaf)
+Author: Frederick R. Cook (derf6060/aod6060)
+Version: 1
+Synopis
+
+This document contains the specification for my engines audio format
+or aka *.dsaf files. This format is a simpified version of the *.wav
+format with the addition of zlib compression to keep the files small.
+My game engine doesn't need every single thing a *.wav, *.ogg, or * mp3
+requires because I simply need to play for so only the required field 
+will be recorded per file.
+
+struct DSAFHeader {
+    std::string type;           // dsfa
+    int version;                // 1 for now
+    long frequency;         // the frequency of the audio
+    long channel;           // channel either mono 1 or sterio 2
+    long bitPerSample;      // either 8 or 16 given the quality of the audio
+    uint32_t start;             // Start of the audio data start=sizeof(DSAFHeader);
+    uint32_t end;               // End of the audio data end=eof-start
+};
+
+This will be my compressed format. 

@@ -47,7 +47,7 @@ env = Environment(
 if not (env is None):
     env["source_files"] = []
 
-    target="#/bin/engine"
+    target="#/lib/engine"
 
     # Add in SConscripts
     SConscript("#/src/engine/src/SConscript", exports="env")
