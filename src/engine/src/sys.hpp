@@ -681,6 +681,8 @@ namespace sound {
         virtual long getFrequence() = 0;
         virtual long getChannelCount() = 0;
         virtual long getBitPerSample() = 0;
+
+        virtual ~IAudioData() {}
     };
 
     void init();
@@ -786,6 +788,7 @@ namespace assets {
 
     render::mesh::Mesh* getMesh(std::string name);
     render::glw::Texture2D* getTexture2D(std::string name);
+    sound::IAudioData* getSound(std::string name);
 }
 
 namespace util {

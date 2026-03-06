@@ -1,6 +1,6 @@
 {
     "name": "assets",
-    "version": 1,
+    "version": 2,
     "meshes": [
         {
             "name": "cube",
@@ -207,6 +207,60 @@
         {
             "name": "pallet/albedo",
             "path": "data/textures/pallet/albedo_pallet.png"
+        }
+    ],
+    "sounds": [
+        {
+            "name": "fx/explosion_ogg",
+            "path": "data/sound/fx/explosion.ogg"
+        },
+        {
+            "name": "fx/explosion_wav",
+            "path": "data/sound/fx/explosion.wav"
+        },
+        {
+            "name": "fx/fart-with-reverb",
+            "path": "data/sound/fx/fart-with-reverb.ogg"
+        },
+        {
+            "name": "fx/jump",
+            "path": "data/sound/fx/jump.ogg"
+        },
+        {
+            "name": "fx/lazer",
+            "path": "data/sound/fx/lazer.ogg"
+        },
+        {
+            "name": "fx/pickup",
+            "path": "data/sound/fx/pickup.ogg"
+        },
+        {
+            "name": "fx/powerup",
+            "path": "data/sound/fx/powerup.ogg"
+        },
+        {
+            "name": "fx/random",
+            "path": "data/sound/fx/random.ogg"
+        },
+        {
+            "name": "fx/select",
+            "path": "data/sound/fx/select.ogg"
+        },
+        {
+            "name": "music/happy-heaven-trance",
+            "path": "data/sound/music/happyHeavenTrance.ogg"
+        },
+        {
+            "name": "music/jungle-example-song",
+            "path": "data/sound/music/jungle_example_song.ogg"
+        },
+                {
+            "name": "music/level",
+            "path": "data/sound/music/level.ogg"
+        },
+                {
+            "name": "music/menu",
+            "path": "data/sound/music/menu.ogg"
         }
     ]
 }

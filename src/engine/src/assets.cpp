@@ -6,6 +6,7 @@
 namespace assets {
     std::map<std::string, render::mesh::Mesh> meshes;
     std::map<std::string, render::glw::Texture2D> texture2Ds;
+    std::map<std::string, sound::IAudioData*> sounds;
 
     void init() {
         std::ifstream in("data/assets.json");
@@ -23,7 +24,7 @@ namespace assets {
             std::cout << name << " isn't an assets file. Will try to load.\n";
         }
 
-        if(version != 1) {
+        if(version != 2) {
             std::cout << version << " isn't the current version which is 1. Will try to load.\n";
         }
 
@@ -53,6 +54,17 @@ namespace assets {
             render::glw::Texture2D::createTextureFromFile(&assets::texture2Ds[name], path);
         }
 
+        // Sounds
+        Json::Value sounds = root["sounds"];
+
+        for(int i = 0; i < sounds.size(); i++) {
+            Json::Value obj = sounds[i];
+
+            std::string name = obj["name"].asString();
+            std::string path = obj["path"].asString();
+
+            assets::sounds[name] = ::sound::initAudioData(path);
+        }
     }
 
     void release() {
@@ -67,6 +79,14 @@ namespace assets {
         }
 
         texture2Ds.clear();
+
+        for(std::map<std::string, sound::IAudioData*>::iterator it = sounds.begin(); it != sounds.end(); it++) {
+            it->second->release();
+            delete it->second;
+            it->second = nullptr;
+        }
+
+        sounds.clear();
     }
 
     render::mesh::Mesh* getMesh(std::string name) {
@@ -77,4 +97,7 @@ namespace assets {
         return &texture2Ds.at(name);
     }
 
+    sound::IAudioData* getSound(std::string name) {
+        return sounds.at(name);
+    }
 }
