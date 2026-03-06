@@ -415,7 +415,6 @@ void OggStreamPlayer::check_current_buffer_state() {
     }
 }
 
-
 void OggStreamPlayer::update() {
     //printQueue();
     stream_from_ogg();

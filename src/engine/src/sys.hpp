@@ -8,6 +8,7 @@
 #include "BulletCollision/CollisionShapes/btStridingMeshInterface.h"
 #include "LinearMath/btTransform.h"
 #include "LinearMath/btVector3.h"
+#include "vorbis/vorbisfile.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
@@ -760,6 +761,10 @@ namespace sound {
 
 
         struct OggAudioData : public IAudioData {
+            FILE* fp = nullptr;
+            OggVorbis_File file;
+            vorbis_info* info;
+            
             virtual bool init(std::string path);
             virtual void release();
             virtual long read(std::vector<char>& buffer);
