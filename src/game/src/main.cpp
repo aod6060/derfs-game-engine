@@ -9,5 +9,4 @@ int main(int argc, char** argv) {
     app::update();
     app::release();
     return 0;
-    return 0;
 }

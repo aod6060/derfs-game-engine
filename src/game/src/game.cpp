@@ -9,6 +9,7 @@ namespace game {
         input::init();
         render::init();
         physics::init();
+        sound::init();
         assets::init();
         util::init();
         //global.load("data/scenes/testv2.scene.json");
@@ -35,6 +36,7 @@ namespace game {
         global.release();
         util::release();
         assets::release();
+        sound::release();
         physics::release();
         render::release();
         input::release();

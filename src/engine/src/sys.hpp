@@ -686,7 +686,7 @@ namespace sound {
     void init();
     void release();
 
-    IAudioData* loadAudioData(std::string path);
+    IAudioData* initAudioData(std::string path);
 
     // Listener Section
     void setListenerPosition(const glm::vec3& position);
@@ -764,7 +764,7 @@ namespace sound {
             FILE* fp = nullptr;
             OggVorbis_File file;
             vorbis_info* info;
-            
+
             virtual bool init(std::string path);
             virtual void release();
             virtual long read(std::vector<char>& buffer);

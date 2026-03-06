@@ -1,12 +1,31 @@
 #include "../sys.hpp"
 #include "AL/al.h"
 #include "AL/alc.h"
+#include <filesystem>
+#include <functional>
 
 
 namespace sound {
+    std::map<std::string, std::function<IAudioData*()>> audioDataFactory = {
+        {
+            ".wav",
+            []() {
+                return new codec::WavAudioData();
+            }
+        },
+        {
+            ".ogg",
+            []() {
+                return new codec::OggAudioData();
+            }
+        }
+    };
+
     static ALCdevice* device = nullptr;
     static ALCcontext* context = nullptr;
     
+
+
     void init() {
         ALCdevice* device = alcOpenDevice(nullptr);
 
@@ -32,8 +51,18 @@ namespace sound {
         alcCloseDevice(device);
     }
 
-    IAudioData* loadAudioData(std::string path) {
-        return nullptr;
+    IAudioData* initAudioData(std::string path) {
+        std::filesystem::path p(path);
+        std::string ext = p.extension().string();
+
+        if(audioDataFactory.find(ext) != audioDataFactory.end()) {
+            IAudioData* audioData = audioDataFactory.at(ext)();
+            audioData->init(path);
+            return audioData;
+        } else {
+            std::cout << path << " isn't a supported format. The engine only uses .wav and .ogg files.\n";
+            return nullptr;
+        }
     }
 
     void setListenerPosition(const glm::vec3& pos) {
