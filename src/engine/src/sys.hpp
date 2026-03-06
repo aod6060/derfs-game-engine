@@ -691,6 +691,8 @@ namespace sound {
     IAudioData* initAudioData(std::string path);
 
     // Listener Section
+     void setListenerVolume(float volume);
+
     void setListenerPosition(const glm::vec3& position);
     void setListenerVelocity(const glm::vec3& velocity);
     void setListenerOrientation(const glm::mat4& rotationMatrix);
@@ -779,6 +781,114 @@ namespace sound {
         };
 
 
+    }
+
+    namespace alw {
+        struct Buffer;
+
+        struct Sounce {
+            ALuint id = 0;
+
+            void init();
+            void release();
+
+            void setPosition(glm::vec3 position);
+            glm::vec3 getPosition();
+
+            void setVelocity(glm::vec3 velocity);
+            glm::vec3 getVelocity();
+
+            void setVolume(float volume);
+            float getVolume();
+
+            void setRelative(bool value);
+            bool isRelative();
+
+            void setType(ALint type);
+            ALint getType();
+
+            void setLooping(bool value);
+            bool isLooping();
+
+            void setBuffer(Buffer* buffer);
+
+            int getBufferedQueued();
+
+            int getBufferedProcessed();
+
+            void setMinVolume(float value);
+            float getMinVolume();
+
+            void setMaxVolume(float value);
+            float getMaxVolume();
+
+            void setReferenceDistance(float value);
+            float getReferenceDistance();
+
+            void setRolloffFactor(float value);
+            float getRolloffFactor();
+
+            void setMaxDistance(float value);
+            float getMaxDistance();
+
+            void setPitch(float value);
+            float getPitch();
+
+            void setDirection(const glm::vec3& direction);
+            glm::vec3 getDirection();
+
+            void setConeInnerAngle(float angle); // Value Between 0.0f, 360.0f
+            float getConeInnerAngle();
+
+            void setConeOuterAngle(float angle);
+            float getConeOuterAngle();
+
+            void setConeOuterVolume(float volume);
+            float getConeOuterVolume();
+
+            void setSecOffset(float sec);
+            float getSecOffset();
+
+            void setSampleOffset(float sample);
+            float getSampleOffset();
+
+            void setByteOffset(ALint offset);
+            ALint getByteOffset();
+
+            void sourceQueueBuffers(std::vector<ALuint>& buffers);
+            void sourceUnqueueBuffers(std::vector<ALuint>& buffers);
+
+            ALenum getState();
+
+            void play();
+            void pause();
+            void stop();
+            void rewind();
+        };
+
+        struct Buffer {
+            ALuint id = 0;
+
+            void init();
+            void release();
+
+            ALenum getState();
+
+            void setFrequency(int freq);
+            int getFrequency();
+
+            void setSize(int size);
+            int getSize();
+
+            void setBits(int bits); // Either 8 or 16
+            int getBits(); // Either 8 or 16
+
+            void setChannels(int channel); // 1 mono or 2 sterio
+            int getChannels(); // 1 mono or 2 sterio
+
+            void bufferData(ALenum format, std::vector<char>& data, ALsizei frequency);
+            
+        };
     }
 }
 

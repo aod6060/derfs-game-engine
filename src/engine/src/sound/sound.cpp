@@ -65,6 +65,10 @@ namespace sound {
         }
     }
 
+    void setListenerVolume(float volume) {
+        alListenerf(AL_GAIN, volume);
+    }
+
     void setListenerPosition(const glm::vec3& pos) {
         alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
     }
