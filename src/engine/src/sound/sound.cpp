@@ -46,7 +46,6 @@ namespace sound {
 
     void release() {
         alcMakeContextCurrent(nullptr);
-
         alcDestroyContext(context);
         alcCloseDevice(device);
     }

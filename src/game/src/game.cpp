@@ -40,7 +40,6 @@ namespace game {
         physics::release();
         render::release();
         input::release();
-
     }
 
 

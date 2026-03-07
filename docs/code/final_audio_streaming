@@ -170,11 +170,13 @@ int main(int argc, char** argv) {
 
     data.release();
 
+    std::cout << "Here 1\n";  
     alcMakeContextCurrent(nullptr);
-
+    std::cout << "Here 2\n";
     alcDestroyContext(context);
+    std::cout << "Here 3\n";
     alcCloseDevice(device);
-
+    std::cout << "Here 1\n";
     return 0;
 }
 

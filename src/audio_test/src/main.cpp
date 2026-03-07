@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -13,13 +12,62 @@
 #include <glm/ext.hpp>
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <vorbis/codec.h>
+#include <vorbis/vorbisfile.h>
 
 
 #define BUFFER_COUNT 2
 #define BUFFER_SIZE 4096 * 32
 #define CHUNK_SIZE 4096
 
-struct AudioData {
+struct WAVHeader {
+    uint32_t type;
+    uint32_t fileSize;
+    uint32_t format;
+};
+
+struct WAVChunkDescription {
+    uint32_t formatBlockID;
+    uint32_t blockSize;
+    uint16_t audioFormat;
+    uint16_t channels;
+    uint32_t frequency;
+    uint32_t bytePerSecond;
+    uint16_t bytePerBlock;
+    uint16_t bitsPerSample;
+};
+
+struct WAVSampledData {
+    uint32_t dataBlockID;
+    uint32_t dataSize;
+};
+
+struct WAVString {
+    unsigned char v1;
+    unsigned char v2;
+    unsigned char v3;
+    unsigned char v4;
+
+    std::string toString() {
+        std::stringstream ss;
+        ss << v1 << v2 << v3 << v4;
+        return ss.str();
+    }
+};
+
+struct WAVFile {
+    WAVHeader header;
+    WAVChunkDescription chunkDescription;
+    WAVSampledData sampleData;
+};
+
+void loadWaveHeader(std::string path, WAVFile* file, std::vector<char>& data);
+
+struct OggAudioData {
+    FILE* fp = nullptr;
+    OggVorbis_File file;
+    vorbis_info* info;
+
     bool init(std::string path);
     long read(std::vector<char>& buffer, int* bitstream);
     int64_t maxSize();
@@ -32,8 +80,8 @@ struct AudioData {
     long getBitPerSample();
 };
 
-struct StreamPlayer {
-    AudioData* data;
+struct OggStreamPlayer {
+    OggAudioData* data;
     //ALuint buffer;
     std::vector<ALuint> buffers;
     ALuint source;
@@ -76,7 +124,7 @@ struct StreamPlayer {
 
     void printQueue();
 
-    void init(AudioData* data);
+    void init(OggAudioData* data);
 
     void release();
 
@@ -91,7 +139,6 @@ struct StreamPlayer {
 };
 
 int main(int argc, char** argv) {
-    /*
     ALCdevice* device = alcOpenDevice(nullptr);
 
     if(!device) {
@@ -108,67 +155,121 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    AudioData data;
-    data.init("data/sound/music/menu.dsaf");
+    OggAudioData data;
+    data.init("data/sound/fx/fart-with-reverb.ogg");
 
-    StreamPlayer player;
+    OggStreamPlayer player;
     player.init(&data);
 
+    /*
     while(player.isPlaying()) {
         player.update();
     }
-
+    */
     
     player.release();
 
     data.release();
 
+    std::cout << "Here 1\n";  
     alcMakeContextCurrent(nullptr);
-
+    std::cout << "Here 2\n";
     alcDestroyContext(context);
+    std::cout << "Here 3\n";
     alcCloseDevice(device);
-    */
-
-
+    std::cout << "Here 1\n";
     return 0;
 }
 
-bool AudioData::init(std::string path) {
+void loadWaveHeader(std::string path, WAVFile* file, std::vector<char>& data) {
+    std::ifstream in(path, std::ios::binary);
+
+    if(!in.is_open()) {
+        std::cout << path << " doesn't exit\n";
+        return;
+    }
+
+    in.read((char*)file, sizeof(WAVFile));
+
+    data.resize(file->sampleData.dataSize);
+
+    in.read(data.data(), data.size());
+
+    in.close();
+}
+
+
+bool OggAudioData::init(std::string path) {
+    //this->fp = fopen(path.c_str(), "rb");
+
+    
+    #if _MSC_VER
+        errno_t err = fopen_s(&this->fp, path.c_str(), "rb");
+
+        if(err == 0) {
+            std::cout << path << " was opened\n";
+        } else {
+            std::cout << path << " wasn't opened\n";
+        }
+    #else
+        this->fp = fopen(path.c_str(), "rb");
+    #endif
+
+    if(!this->fp) {
+        std::cout << path << " doesn't exist\n";
+        return true;
+    }
+
+    if(ov_open_callbacks(this->fp, &this->file, nullptr, 0, OV_CALLBACKS_NOCLOSE)) {
+        std::cout << "Input doesn't not appear to be an Ogg Bitstream\n";
+        return true;
+    }
+
+    this->info = ov_info(&this->file, -1);
+
     return false;
 }
 
-long AudioData::read(std::vector<char>& buffer, int* bitstream) {
-    return 0;
+long OggAudioData::read(std::vector<char>& buffer, int* bitstream) {
+    int len = ov_read(&this->file, buffer.data(), buffer.size(), SDL_BYTEORDER == SDL_BIG_ENDIAN, int(sizeof(int16_t)), 1, bitstream);
+    if(len == 0) {
+        std::cout << buffer.data() << "\n";
+    }
+    return len;
 }
 
-int64_t AudioData::tell() {
-    return 0;
+int64_t OggAudioData::tell() {
+    return ov_pcm_tell(&this->file);
 }
 
-void AudioData::seek(int64_t position) {
+void OggAudioData::seek(int64_t position) {
+    ov_pcm_seek(&this->file, position);
 }
 
-int64_t AudioData::maxSize() {
-    return 0;
+int64_t OggAudioData::maxSize() {
+    return ov_pcm_total(&this->file, -1);
 }
 
-void AudioData::release() {
+void OggAudioData::release() {
+    this->info = nullptr;
+    ov_clear(&this->file);
+    fclose(this->fp);
 }
 
-long AudioData::getFrequence() {
-    return 0;
+long OggAudioData::getFrequence() {
+    return this->info->rate;
 }
 
-long AudioData::getChannelCount() {
-    return 0;
+long OggAudioData::getChannelCount() {
+    return this->info->channels;
 }
 
-long AudioData::getBitPerSample() {
-    return 0;
+long OggAudioData::getBitPerSample() {
+    return 16;
 }
 
 // OggStreamPlayer
-void StreamPlayer::init(AudioData* data) {
+void OggStreamPlayer::init(OggAudioData* data) {
     this->data = data;
     buffers.resize(BUFFER_COUNT);
     alGenBuffers(buffers.size(), buffers.data());
@@ -188,7 +289,7 @@ void StreamPlayer::init(AudioData* data) {
     buffer.resize(BUFFER_SIZE);
 }
 
-void StreamPlayer::release() {
+void OggStreamPlayer::release() {
     //buffer.clear();
     alDeleteSources(1, &this->source);
     alDeleteBuffers(buffers.size(), buffers.data());
@@ -196,7 +297,7 @@ void StreamPlayer::release() {
     this->data = nullptr;
 }
 
-void StreamPlayer::stream_from_ogg() {
+void OggStreamPlayer::stream_from_ogg() {
     if(!eof) {
         int bitstream;
         Chunk chunk;
@@ -223,7 +324,7 @@ void StreamPlayer::stream_from_ogg() {
     }
 }
 
-void StreamPlayer::process_current_buffer() {
+void OggStreamPlayer::process_current_buffer() {
     if(this->chunks.front().type != CT_END) {
         while(!this->chunks.empty()) {
             if(this->chunks.front().type == CT_START) {
@@ -291,7 +392,7 @@ void StreamPlayer::process_current_buffer() {
     }
 }
 
-void StreamPlayer::play_current_buffer() {
+void OggStreamPlayer::play_current_buffer() {
     if(state != AL_PLAYING){
         alSourceQueueBuffers(source, 1, &buffers[playingPointer]);
         alSourcePlay(source);
@@ -299,7 +400,7 @@ void StreamPlayer::play_current_buffer() {
     }
 }
 
-void StreamPlayer::check_current_buffer_state() {
+void OggStreamPlayer::check_current_buffer_state() {
     if(state == AL_PLAYING) {
         alGetSourcei(source, AL_SOURCE_STATE, &state);
         if(state != AL_PLAYING) {
@@ -317,8 +418,7 @@ void StreamPlayer::check_current_buffer_state() {
     }
 }
 
-
-void StreamPlayer::update() {
+void OggStreamPlayer::update() {
     //printQueue();
     stream_from_ogg();
 
@@ -333,11 +433,11 @@ void StreamPlayer::update() {
     }
 }
 
-bool StreamPlayer::isPlaying() {
+bool OggStreamPlayer::isPlaying() {
     return playing;
 }
 
-void StreamPlayer::printQueue() {
+void OggStreamPlayer::printQueue() {
     if(!chunks.empty()) {
         std::string f = "data";
         if(chunks.front().type == CT_START) {

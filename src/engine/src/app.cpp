@@ -70,7 +70,6 @@ namespace app {
         if(g_config->app) {
             g_config->app->release();
         }
-
         SDL_GL_DeleteContext(g_context);
         SDL_DestroyWindow(g_window);
         SDL_Quit();

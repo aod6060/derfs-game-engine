@@ -786,7 +786,7 @@ namespace sound {
     namespace alw {
         struct Buffer;
 
-        struct Sounce {
+        struct Source {
             ALuint id = 0;
 
             void init();
@@ -871,9 +871,7 @@ namespace sound {
 
             void init();
             void release();
-
-            ALenum getState();
-
+            
             void setFrequency(int freq);
             int getFrequency();
 
@@ -887,7 +885,7 @@ namespace sound {
             int getChannels(); // 1 mono or 2 sterio
 
             void bufferData(ALenum format, std::vector<char>& data, ALsizei frequency);
-            
+
         };
     }
 }
