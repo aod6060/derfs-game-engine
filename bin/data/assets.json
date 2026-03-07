@@ -173,6 +173,10 @@
         {
             "name": "demo/puzzle/switch-on",
             "path": "data/meshes/demo/puzzle/switch_on.glb"
+        },
+        {
+            "name": "demo/boom-box",
+            "path": "data/meshes/demo/boom_box.glb"
         }
     ],
     "textures": [
