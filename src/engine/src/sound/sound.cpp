@@ -23,8 +23,10 @@ namespace sound {
 
     static ALCdevice* device = nullptr;
     static ALCcontext* context = nullptr;
-    
 
+    static bool isInited = false;
+    static float masterVolume;
+    static std::map<std::string, float> volumeGroups;
 
     void init() {
         ALCdevice* device = alcOpenDevice(nullptr);
@@ -42,6 +44,9 @@ namespace sound {
             std::cout << "Context wasn't created.\n";
             return;
         }
+
+        isInited = true;
+        setMasterVolume(masterVolume);
     }
 
     void release() {
@@ -64,8 +69,29 @@ namespace sound {
         }
     }
 
-    void setListenerVolume(float volume) {
-        alListenerf(AL_GAIN, volume);
+    void setMasterVolume(float volume) {
+        masterVolume = volume;
+        if(isInited) {
+            alListenerf(AL_GAIN, volume);
+        }
+    }
+
+    float getMasterVolume() {
+        float volume;
+        alGetListenerf(AL_GAIN, &volume);
+        return volume;
+    }
+
+    void addVolumeGroup(std::string name, float value) {
+        volumeGroups[name] = value;
+    }
+
+    void setGroupVolume(std::string name, float value) {
+        volumeGroups.at(name) = value;
+    }
+
+    float getGroupVolume(std::string name) {
+        return volumeGroups.at(name);
     }
 
     void setListenerPosition(const glm::vec3& pos) {

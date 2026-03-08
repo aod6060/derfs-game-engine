@@ -3,7 +3,7 @@
 #include "json/value.h"
 #include <fstream>
 
-#define GLOBAL_VERSION 4
+#define GLOBAL_VERSION 5
 #define SCENE_VERSION 4
 
 namespace manager {
@@ -163,9 +163,28 @@ namespace manager {
             Json::Value _groups = _physics["groups"];
             if(!_groups.empty()) {
                 for(int i = 0; i < _groups.size(); i++) {
-                    std::cout << _groups[i].asString() << "\n";
                     this->groups[_groups[i].asString()] = groupIndex;
                     groupIndex += 1;
+                }
+            }
+        }
+
+        // Sound Section
+        if(!root["sound"].empty() || !root["sound"].isNull()) {
+            Json::Value _sound = root["sound"];
+
+            sound::setMasterVolume(_sound["master-volume"].asFloat());
+
+            Json::Value _vg = _sound["volume-groups"];
+
+            if(!_vg.empty()) {
+                for(int i = 0; i < _vg.size(); i++) {
+                    Json::Value obj = _vg[i];
+                    std::string name;
+                    float value;
+                    name = obj["name"].asString();
+                    value = obj["value"].asFloat();
+                    sound::addVolumeGroup(name, value);  
                 }
             }
         }

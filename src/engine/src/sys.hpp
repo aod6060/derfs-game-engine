@@ -12,6 +12,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
+#include <deque>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -690,8 +691,13 @@ namespace sound {
 
     IAudioData* initAudioData(std::string path);
 
-    // Listener Section
-     void setListenerVolume(float volume);
+    // Volume Section
+    void setMasterVolume(float volume);
+    float getMasterVolume();
+
+    void addVolumeGroup(std::string name, float value);
+    void setGroupVolume(std::string name, float value);
+    float getGroupVolume(std::string name);
 
     void setListenerPosition(const glm::vec3& position);
     void setListenerVelocity(const glm::vec3& velocity);
@@ -871,7 +877,7 @@ namespace sound {
 
             void init();
             void release();
-            
+
             void setFrequency(int freq);
             int getFrequency();
 
@@ -1591,6 +1597,94 @@ namespace manager {
                 virtual void render();
                 virtual void release();
                 virtual void load(Json::Value value);
+            };
+        }
+
+        namespace sound {
+            struct SoundListenerComponent : public IComponent {
+                Entity* entity = nullptr;
+
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+            };
+
+            struct SoundStreamPlayerComponent : public IComponent {
+                const int BUFFER_COUNT = 2;
+                const int BUFFER_SIZE = 4096 * 32;
+                const int CHUNK_SIZE = 4096;
+
+                Entity* entity = nullptr;
+                std::string audioDataName;
+                std::string volumeGroup;
+
+                std::vector<::sound::alw::Buffer> buffers;
+                ::sound::alw::Source sounce;
+
+                int64_t currentPosition = 0;
+
+                bool endOfFile = false;
+                bool endOfQueue = false;
+
+                enum ChunkType {
+                    CT_START = 0,
+                    CT_DATA,
+                    CT_END,
+                    CT_MAX_SIZE
+                };
+
+                enum StreamState {
+                    SS_PLAY = 0,
+                    SS_STOP,
+                    SS_PAUSE,
+                    SS_MAX_SIZE
+                };
+
+                struct Chunk {
+                    ChunkType type;
+                    int len;
+                    std::vector<char> data;
+                };
+
+                struct Buffer {
+                    int len;
+                    std::vector<char> data;
+                };
+
+                std::deque<Chunk> chunks;
+                std::vector<char> bufferData;
+
+                StreamState ssState = StreamState::SS_STOP;
+
+                // Public Interface Variables that need lua Wrappers
+                bool looping = false;
+                bool autoPlay = false;
+                bool relative = false;
+
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+
+                void play();
+                void pause();
+                void stop();
+
+                bool isLooping();
+                void setLooping(bool value);
+
+                bool isAutoPlay();
+                void setAutoPlay(bool value);
+
+                bool isRelative();
+                void setRelative(bool value);
             };
         }
     }

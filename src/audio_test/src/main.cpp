@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
     player.release();
 
     data.release();
-
+    
     std::cout << "Here 1\n";  
     alcMakeContextCurrent(nullptr);
     std::cout << "Here 2\n";

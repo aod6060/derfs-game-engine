@@ -1,6 +1,6 @@
 {
     "name": "global",
-    "version": 4,
+    "version": 5,
     "behavior": "data/scripts/global/test_global.lua",
     "default-scene": "data/scenes/test.scene.json",
     "input": {
@@ -63,6 +63,19 @@
             "crate",
             "player",
             "triggers"
+        ]
+    },
+    "sound": {
+        "master-volume": 1.0,
+        "volume-groups": [
+            {
+                "name": "sfx",
+                "value": 1.0
+            },
+            {
+                "name": "music",
+                "value": 1.0
+            }
         ]
     }
 }
