@@ -15,7 +15,7 @@ cratesEntity = nil
 
 function init()
     -- This function is called once every
-    cratesEntity = manager_scene_getEntity(scene, 1)
+    cratesEntity = manager_scene_getEntity(scene, 2)
 
     for i = 0, amount - 1 do
         temp = manager_createEntityFromPrefab(prefab)

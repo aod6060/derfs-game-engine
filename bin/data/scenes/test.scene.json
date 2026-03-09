@@ -5,6 +5,27 @@
     "entities": [
         {
             "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_menu.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
             "path": "data/prefabs/player_fps.prefab.json",
             "transform": {
                 "position": {
