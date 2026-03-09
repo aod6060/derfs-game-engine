@@ -323,8 +323,8 @@ namespace sound {
             return value;
         }
 
-        void Buffer::bufferData(ALenum format, std::vector<char>& data, ALsizei frequency) {
-            alBufferData(this->id, format, data.data(), data.size(), frequency);
+        void Buffer::bufferData(ALenum format, void* data, size_t size, ALsizei frequency) {
+            alBufferData(this->id, format, data, size, frequency);
         }
 
     }

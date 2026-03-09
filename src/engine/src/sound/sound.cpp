@@ -29,14 +29,16 @@ namespace sound {
     static std::map<std::string, float> volumeGroups;
 
     void init() {
-        ALCdevice* device = alcOpenDevice(nullptr);
+        // These were scoped wrong that why I was getting a funny error! :| My bad.
+        device = alcOpenDevice(nullptr);
 
         if(!device) {
             std::cout << "Device wasn't created.\n";
             return;
         }
         
-        ALCcontext* context = alcCreateContext(device, nullptr);
+        // These were scoped wrong that why I was getting a funny error! :| My bad.
+        context = alcCreateContext(device, nullptr);
 
         alcMakeContextCurrent(context);
 
@@ -44,6 +46,8 @@ namespace sound {
             std::cout << "Context wasn't created.\n";
             return;
         }
+
+        size_t test;
 
         isInited = true;
         setMasterVolume(masterVolume);
@@ -116,7 +120,7 @@ namespace sound {
     
     void transformListener(manager::Transform& tran) {
         setListenerPosition(tran.getTransformedPosition());
-        setListenerOrientation(tran.toGlobalRotaionMatrix());
+        //setListenerOrientation(tran.toGlobalRotaionMatrix());
     }
 
 }

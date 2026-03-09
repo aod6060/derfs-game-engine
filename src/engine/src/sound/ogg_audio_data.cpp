@@ -1,4 +1,5 @@
 #include "../sys.hpp"
+#include "vorbis/vorbisfile.h"
 
 namespace sound {
     namespace codec {

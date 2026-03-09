@@ -66,6 +66,12 @@ namespace manager {
                 []() {
                     return new sound::SoundListenerComponent();
                 }
+            },
+            {
+                "music-stream-player-component",
+                []() {
+                    return new sound::MusicStreamPlayerComponent();
+                }
             }
         };
 

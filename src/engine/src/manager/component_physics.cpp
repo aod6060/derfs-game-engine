@@ -171,7 +171,6 @@ namespace manager {
                 }
                 // Groups
                 Json::Value _groups = value["groups"];
-                std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
@@ -180,7 +179,6 @@ namespace manager {
                 }
                 // Masks
                 Json::Value _masks = value["masks"];
-                std::cout << "Masks: " << _masks.size() << "\n";
                 if(!_masks.empty()) {
                     for(int i = 0; i < _masks.size(); i++) {
                         std::string m = _masks[i].asString();
@@ -219,7 +217,6 @@ namespace manager {
                 }
                 // Groups
                 Json::Value _groups = value["groups"];
-                std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
@@ -228,7 +225,6 @@ namespace manager {
                 }
                 // Masks
                 Json::Value _masks = value["masks"];
-                std::cout << "Masks: " << _masks.size() << "\n";
                 if(!_masks.empty()) {
                     for(int i = 0; i < _masks.size(); i++) {
                         std::string m = _masks[i].asString();
@@ -319,7 +315,6 @@ namespace manager {
                 }
                 // Groups
                 Json::Value _groups = value["groups"];
-                std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
@@ -328,7 +323,6 @@ namespace manager {
                 }
                 // Masks
                 Json::Value _masks = value["masks"];
-                std::cout << "Masks: " << _masks.size() << "\n";
                 if(!_masks.empty()) {
                     for(int i = 0; i < _masks.size(); i++) {
                         std::string m = _masks[i].asString();
@@ -392,8 +386,6 @@ namespace manager {
                     group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
                 }
 
-                std::cout << "Group: " << group << "\n";
-
                 int mask = 0;
                 if(!masks.empty()) {
                     for(int i = 0; i < this->masks.size() - 1; i++) {
@@ -401,8 +393,6 @@ namespace manager {
                     }
                     mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
                 }
-
-                std::cout << "Mask: " << mask << "\n";
 
                 ::physics::getWorld()->addCollisionObject(this->ghostObject, group, mask);
                 std::cout << "End of TriggerComponent::init\n";
@@ -481,7 +471,6 @@ namespace manager {
 
                 // Groups
                 Json::Value _groups = value["groups"];
-                std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
@@ -492,7 +481,6 @@ namespace manager {
                 }
                 // Masks
                 Json::Value _masks = value["masks"];
-                std::cout << "Masks: " << _masks.size() << "\n";
                 if(!_masks.empty()) {
                     for(int i = 0; i < _masks.size(); i++) {
                         std::string m = _masks[i].asString();
@@ -529,8 +517,6 @@ namespace manager {
                     group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
                 }
 
-                std::cout << "Group: " << group << "\n";
-
                 this->filterGroup = group;
 
                 int mask = 0;
@@ -540,8 +526,6 @@ namespace manager {
                     }
                     mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
                 }
-
-                std::cout << "Mask: " << mask << "\n";
 
                 this->filterMask = mask;
             }
@@ -608,7 +592,6 @@ namespace manager {
                 this->distance = value["distance"].asFloat();
                 // Groups
                 Json::Value _groups = value["groups"];
-                std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
@@ -619,7 +602,6 @@ namespace manager {
                 }
                 // Masks
                 Json::Value _masks = value["masks"];
-                std::cout << "Masks: " << _masks.size() << "\n";
                 if(!_masks.empty()) {
                     for(int i = 0; i < _masks.size(); i++) {
                         std::string m = _masks[i].asString();
@@ -640,9 +622,6 @@ namespace manager {
                     }
                     group |= this->entity->scene->global->getPhysicsGroups(groups.at(groups.size() - 1));
                 }
-
-                std::cout << "Group: " << group << "\n";
-
                 this->filterGroup = group;
 
                 int mask = 0;
@@ -652,8 +631,6 @@ namespace manager {
                     }
                     mask |= this->entity->scene->global->getPhysicsGroups(masks.at(masks.size() - 1));
                 }
-
-                std::cout << "Mask: " << mask << "\n";
 
                 this->filterMask = mask;
             }
@@ -718,7 +695,6 @@ namespace manager {
                 // Groups
                 this->disabled = value["disabled"].asBool();
                 Json::Value _groups = value["groups"];
-                std::cout << "Groups: " << _groups.size() << "\n";
                 if(!_groups.empty()) {
                     for(int i = 0; i < _groups.size(); i++) {
                         std::string g = _groups[i].asString();
@@ -729,7 +705,6 @@ namespace manager {
                 }
                 // Masks
                 Json::Value _masks = value["masks"];
-                std::cout << "Masks: " << _masks.size() << "\n";
                 if(!_masks.empty()) {
                     for(int i = 0; i < _masks.size(); i++) {
                         std::string m = _masks[i].asString();

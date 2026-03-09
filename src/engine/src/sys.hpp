@@ -1,6 +1,7 @@
 #ifndef SYS_HPP
 #define SYS_HPP
 
+#include <cfloat>
 // Once this file gets above 2000 to 3000 lines of code I'll refactor it.
 #include "BulletCollision/CollisionDispatch/btCollisionWorld.h"
 #include "BulletCollision/CollisionDispatch/btGhostObject.h"
@@ -15,6 +16,7 @@
 #include <deque>
 #include <iostream>
 #include <fstream>
+#include <limits>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -890,7 +892,7 @@ namespace sound {
             void setChannels(int channel); // 1 mono or 2 sterio
             int getChannels(); // 1 mono or 2 sterio
 
-            void bufferData(ALenum format, std::vector<char>& data, ALsizei frequency);
+            void bufferData(ALenum format, void* data, size_t size, ALsizei frequency);
 
         };
     }
@@ -1613,7 +1615,7 @@ namespace manager {
                 virtual void load(Json::Value value);
             };
 
-            struct SoundStreamPlayerComponent : public IComponent {
+            struct MusicStreamPlayerComponent : public IComponent {
                 const int BUFFER_COUNT = 2;
                 const int BUFFER_SIZE = 4096 * 32;
                 const int CHUNK_SIZE = 4096;
@@ -1624,11 +1626,6 @@ namespace manager {
 
                 std::vector<::sound::alw::Buffer> buffers;
                 ::sound::alw::Source sounce;
-
-                int64_t currentPosition = 0;
-
-                bool endOfFile = false;
-                bool endOfQueue = false;
 
                 enum ChunkType {
                     CT_START = 0,
@@ -1658,12 +1655,29 @@ namespace manager {
                 std::deque<Chunk> chunks;
                 std::vector<char> bufferData;
 
+                int64_t currentPosition = 0;
+                int state = AL_STOPPED;
+                bool endOfFile = false;
+                bool endOfQueue = false;
+                int length = 0;
+                bool start = true;
+                int processingPointer = 0;
+                int playingPointer = 0;
+                int processingIncrementor = 0;
+                int playingIncrementor = 0;
+                bool playlast = false;
+                bool playing = true;
+
                 StreamState ssState = StreamState::SS_STOP;
+
 
                 // Public Interface Variables that need lua Wrappers
                 bool looping = false;
                 bool autoPlay = false;
                 bool relative = false;
+                float referenceDistance = 1.0f;
+                float rolloffFactor = 1.0f;
+                float maxDistance = std::numeric_limits<float>::max();
 
                 virtual void init(Entity* entity);
                 virtual void handleEvent(SDL_Event* e);
@@ -1685,6 +1699,13 @@ namespace manager {
 
                 bool isRelative();
                 void setRelative(bool value);
+
+                void stream_data();
+                void process_current_buffer();
+                void check_current_buffer_state();
+                void play_current_buffer();
+
+                void reset();
             };
         }
     }
