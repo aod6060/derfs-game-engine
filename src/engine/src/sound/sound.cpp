@@ -99,7 +99,14 @@ namespace sound {
     }
 
     void setListenerPosition(const glm::vec3& pos) {
-        alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+        //alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+        std::vector<float> p = {
+            pos.x,
+            pos.y,
+            pos.z
+        };
+
+        alListenerfv(AL_POSITION, p.data());
     }
 
     void setListenerVelocity(const glm::vec3& velocity) {
@@ -119,8 +126,8 @@ namespace sound {
     }
     
     void transformListener(manager::Transform& tran) {
-        setListenerPosition(tran.getTransformedPosition());
-        //setListenerOrientation(tran.toGlobalRotaionMatrix());
+        setListenerPosition(tran.getGlobalPosition());
+        setListenerOrientation(tran.toGlobalRotaionMatrix());
     }
 
 }

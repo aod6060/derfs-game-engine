@@ -1,5 +1,7 @@
 #include "../sys.hpp"
 #include "AL/al.h"
+#include <cstring>
+#include <deque>
 #include <limits>
 #include <vector>
 
@@ -265,7 +267,7 @@ namespace manager {
                         playingIncrementor += 1;
                     }
 
-                    if(processingIncrementor <= playingIncrementor) {
+                    if(processingIncrementor <= playingIncrementor && endOfQueue) {
                         playing = false;
                         this->stop();
                     }
@@ -299,6 +301,143 @@ namespace manager {
                 playlast = false;
                 playing = true;
             }
+
+
+            // SoundPlayerComponent
+            void SoundPlayerComponent::init(Entity* entity) {
+                this->entity = entity;
+
+                // Create Sound
+                this->source.init();
+                
+                // Set Sound Values
+                this->source.setLooping(this->looping);
+                this->source.setRelative(this->relative);
+                this->source.setReferenceDistance(this->referenceDistance);
+                this->source.setRolloffFactor(this->rolloffFactor);
+                this->source.setMaxDistance(this->maxDistance);
+                this->source.setPitch(this->pitch);
+
+                // Create Buffer
+                this->buffer.init();
+
+                // Fill Buffer
+                std::vector<char> bufferData;
+                std::deque<Chunk> chunks;
+
+                int len = 1;
+                int length = 0;
+            
+                std::cout << "Here 1\n";
+
+                while(len != 0 || len < 0) {
+                    Chunk chunk;
+                    std::cout << "Here 2\n";
+
+                    chunk.data.resize(4096);
+                    len = assets::getSound(this->audioDataName)->read(chunk.data);
+                    if(len == 0) {
+                        continue;
+                    } else if(len < 0) {
+                        continue;
+                    } else {
+                        length += len;
+                        chunk.len = len;
+                        chunks.push_back(chunk);
+                    }
+                }
+
+                std::cout << "Here 2\n";
+
+                assets::getSound(this->audioDataName)->seek(::sound::AudioDataSeek::ADS_BEGIN);
+                bufferData.resize(length);
+
+                std::cout << bufferData.size() << "\n";
+
+                int offset = 0;
+
+                while(!chunks.empty()) {
+                    memcpy(bufferData.data() + offset, chunks.front().data.data(), chunks.front().len);
+                    offset += chunks.front().len;
+                    chunks.pop_front();
+                }
+
+                std::cout << "Seeking the the begining.\n";
+
+                int format = 0;
+
+                if(assets::getSound(this->audioDataName)->getChannelCount() == 1 && assets::getSound(this->audioDataName)->getBitPerSample() == 8) {
+                    format = AL_FORMAT_MONO8;
+                } else if(assets::getSound(this->audioDataName)->getChannelCount() == 2 && assets::getSound(this->audioDataName)->getBitPerSample() == 8) {
+                    format = AL_FORMAT_STEREO8;
+                } else if(assets::getSound(this->audioDataName)->getChannelCount() == 1 && assets::getSound(this->audioDataName)->getBitPerSample() == 16) {
+                    format = AL_FORMAT_MONO16;
+                } else if(assets::getSound(this->audioDataName)->getChannelCount() == 2 && assets::getSound(this->audioDataName)->getBitPerSample() == 16) {
+                    format = AL_FORMAT_STEREO16;
+                }
+
+                buffer.bufferData(format, bufferData.data(), bufferData.size(), assets::getSound(this->audioDataName)->getFrequence());
+
+                // Set buffer to source
+                source.setBuffer(&buffer);
+
+                if(this->autoPlay) {
+                    this->play();
+                }
+            }
+
+            void SoundPlayerComponent::handleEvent(SDL_Event* e) {
+
+            }
+
+            void SoundPlayerComponent::update(float delta) {
+
+                this->source.setPosition(entity->transform.getGlobalPosition());
+
+                this->source.setVolume(::sound::getGroupVolume(this->volumeGroup));
+
+
+            }
+
+            void SoundPlayerComponent::preRender() {
+
+            }
+
+            void SoundPlayerComponent::render() {
+
+            }
+
+            void SoundPlayerComponent::release() {
+                this->buffer.release();
+                this->source.release();
+            }
+
+            void SoundPlayerComponent::load(Json::Value value) {
+                this->audioDataName = value["audio-data-name"].asString();
+                this->volumeGroup = value["volume-group"].asString();
+                this->autoPlay = value["auto-play"].asBool();
+                this->looping = value["looping"].asBool();
+                this->relative = value["relative"].asBool();
+                this->referenceDistance = value["reference-distance"].asFloat();
+                this->rolloffFactor = value["rolloff-factor"].asFloat();
+                this->maxDistance = value["max-distance"].asFloat();
+                this->pitch = value["pitch"].asFloat();
+            }
+
+            void SoundPlayerComponent::play() {
+                this->source.play();
+            }
+
+            void SoundPlayerComponent::pause() {
+                this->source.pause();
+            }
+
+            void SoundPlayerComponent::stop() {
+                this->source.stop();
+            }
+
+            
+            
         }
     }
 }

@@ -112,6 +112,9 @@
                                 "masks": [
                                     "static"
                                 ]
+                            },
+                            {
+                                "type": "sound-listener-component"
                             }
                         ],
                         "entities": [
@@ -142,9 +145,6 @@
                                         "fov": 45.0,
                                         "znear": 0.1,
                                         "zfar": 1024.0
-                                    },
-                                    {
-                                        "type": "sound-listener-component"
                                     }
                                 ],
                                 "entities": []

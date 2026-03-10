@@ -1707,6 +1707,41 @@ namespace manager {
 
                 void reset();
             };
+
+            struct SoundPlayerComponent : public IComponent {
+                Entity* entity = nullptr;
+
+                ::sound::alw::Buffer buffer;
+                ::sound::alw::Source source;
+
+                std::string audioDataName;
+                std::string volumeGroup;
+                bool autoPlay = false;
+                bool looping = false;
+                bool relative = false;
+                float referenceDistance = 1.0f;
+                float rolloffFactor = 1.0f;
+                float maxDistance = std::numeric_limits<float>::max();
+                float pitch = 1.0f;
+
+                struct Chunk {
+                    int len;
+                    std::vector<char> data;
+                };
+
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+
+                void play();
+                void pause();
+                void stop();
+
+            };
         }
     }
 

@@ -1,38 +1,42 @@
 {
-    "name": "boom-box-happyHeavenTrance",
-    "behavior": null,
-    "transform": {
-        "position": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "rotation": {
-            "x": 0.0,
-            "y": 0.0,
-            "z": 0.0
-        },
-        "scale": {
-            "x": 1.0,
-            "y": 1.0,
-            "z": 1.0
-        }
-    },
-    "components": [
-        {
-            "type": "mesh-component",
-            "mesh": "demo/boom-box",
-            "texture": "pallet/albedo",
-            "uv-scale": 1.0
-        },
-        {
-            "type": "sound-stream-player-component",
-            "audio-data-name": "music/jungle-example-song",
-            "volume-group": "music",
-            "looping": true,
-            "auto-play": true,
-            "relative": false
-        }
-    ],
-    "entities": []
+    "name": "prefab",
+    "version": 1,
+    "entity": {
+        "name": "boom-box-level",
+        "behavior": null,
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            }
+        }, 
+        "components": [
+            {
+                "type": "mesh-component",
+                "mesh": "demo/boom-box",
+                "texture": "pallet/albedo",
+                "uv-scale": 1.0
+            },
+            {
+                "type": "music-stream-player-component",
+                "audio-data-name": "music/jungle-example-song",
+                "volume-group": "music",
+                "looping": true,
+                "auto-play": true
+            }
+        ],
+        "entities": [
+        ]
+    }
 }

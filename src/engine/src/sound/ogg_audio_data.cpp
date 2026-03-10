@@ -43,7 +43,7 @@ namespace sound {
         }
 
         int64_t OggAudioData::maxSize() {
-            return ov_pcm_total(&this->file, -1);
+            return ov_raw_total(&this->file, -1);
         }
 
         int64_t OggAudioData::tell() {

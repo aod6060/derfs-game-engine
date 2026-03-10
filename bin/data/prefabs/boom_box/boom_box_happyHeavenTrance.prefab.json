@@ -33,8 +33,7 @@
                 "audio-data-name": "music/happy-heaven-trance",
                 "volume-group": "music",
                 "looping": true,
-                "auto-play": true,
-                "relative": false
+                "auto-play": true
             }
         ],
         "entities": [
