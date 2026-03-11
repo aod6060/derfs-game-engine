@@ -1,5 +1,5 @@
 {
-    "name": "prefab",
+    "type": "prefab",
     "version": 1,
     "entity": {
         "name": "boom-box-level",

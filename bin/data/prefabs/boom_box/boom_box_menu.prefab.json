@@ -30,7 +30,7 @@
             },
             {
                 "type": "sound-player-component",
-                "audio-data-name": "music/jungle-example-song",
+                "audio-data-name": "fx/explosion-ogg",
                 "volume-group": "music",
                 "auto-play": true,
                 "looping": true,

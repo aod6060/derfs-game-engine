@@ -215,11 +215,11 @@
     ],
     "sounds": [
         {
-            "name": "fx/explosion_ogg",
+            "name": "fx/explosion-ogg",
             "path": "data/sound/fx/explosion.ogg"
         },
         {
-            "name": "fx/explosion_wav",
+            "name": "fx/explosion-wav",
             "path": "data/sound/fx/explosion.wav"
         },
         {
