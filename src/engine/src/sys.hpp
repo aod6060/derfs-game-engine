@@ -2049,6 +2049,26 @@ namespace script {
     int manager_component_raycast_isDisabled(lua_State* l);
     int manager_component_raycast_setDisabled(lua_State* l);
     
+    // SoundPlayerComponent
+    void manager_component_sound_player_load_library(lua_State* l);
+    int manager_component_sound_player_hasComponent(lua_State* l);
+    int manager_component_sound_player_getComponent(lua_State* l);
+    int manager_component_sound_player_play(lua_State* l);
+    int manager_component_sound_player_pause(lua_State* l);
+    int manager_component_sound_player_stop(lua_State* l);
+    int manager_component_sound_player_setLooping(lua_State* l);
+    int manager_component_sound_player_getLooping(lua_State* l);
+    int manager_component_sound_player_setRelative(lua_State* l);
+    int manager_component_sound_player_getRelative(lua_State* l);
+    int manager_component_sound_player_setReferenceDistance(lua_State* l);
+    int manager_component_sound_player_getReferenceDistance(lua_State* l);
+    int manager_component_sound_player_setRollofFactor(lua_State* l);
+    int manager_component_sound_player_getRollofFactor(lua_State* l);
+    int manager_component_sound_player_setMaxDistance(lua_State* l);
+    int manager_component_sound_player_getMaxDistance(lua_State* l);
+    int manager_component_sound_player_setPitch(lua_State* l);
+    int manager_component_sound_player_getPitch(lua_State* l);
+
     // util_random
     void util_random_load_library(lua_State* l);
     int util_random_randboolean(lua_State* l);

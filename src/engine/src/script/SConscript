@@ -17,6 +17,7 @@ env["source_files"] += [
     source("component_trigger.cpp"),
     source("component_push_arm.cpp"),
     source("component_raycast.cpp"),
+    source("component_sound_player.cpp"),
     source("entity.cpp"),
     source("global.cpp"),
     source("input.cpp"),

@@ -12,5 +12,6 @@ namespace script {
         manager_component_trigger_load_library(l);
         manager_component_push_arm_load_library(l);
         manager_component_raycast_load_library(l);
+        manager_component_sound_player_load_library(l);
     }
 }
