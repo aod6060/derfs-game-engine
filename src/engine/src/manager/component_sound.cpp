@@ -384,6 +384,16 @@ namespace manager {
                 if(this->autoPlay) {
                     this->play();
                 }
+
+                int type = source.getType();
+
+                if(type == AL_STATIC) {
+                    std::cout << "Static Source\n";
+                } else if(type == AL_STREAMING) {
+                    std::cout << "Streaming Source\n";
+                } else {
+                    std::cout << "Undetermined Source\n";
+                }
             }
 
             void SoundPlayerComponent::handleEvent(SDL_Event* e) {

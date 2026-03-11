@@ -52,6 +52,9 @@ function init()
 
     global = manager_scene_getGlobal(scene)
 
+    print("Master Volume: " .. sound_getMasterVolume())
+    print("Music Volume: " .. sound_getGroupVolume("music"))
+    print("SFX Volume: " .. sound_getGroupVolume("sfx"))
 end
 
 
@@ -63,6 +66,25 @@ function update(delta)
     
     if input_isKeyPressedOnce(KEYS_R) then
         manager_global_changeScene(global, "data/scenes/test.scene.json")
+    end
+
+
+    if(input_isKeyPressed(KEYS_J)) then
+        master = sound_getMasterVolume()
+        master = master - (2.0 * delta)
+        if(master < 0.0) then
+            master = 0.0
+        end
+        sound_setMasterVolume(master)
+    end
+
+    if(input_isKeyPressed(KEYS_L)) then
+        master = sound_getMasterVolume()
+        master = master + (2.0 * delta)
+        if(master > 1.0) then
+            master = 1.0
+        end
+        sound_setMasterVolume(master)
     end
 end
 

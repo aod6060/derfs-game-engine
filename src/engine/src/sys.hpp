@@ -1825,6 +1825,13 @@ namespace script {
     int physics_getGravity(lua_State* l);
     int physics_setGravity(lua_State* l);
 
+    // Sound
+    void sound_load_library(lua_State* l);
+    int sound_setGroupVolume(lua_State* l);
+    int sound_getGroupVolume(lua_State* l);
+    int sound_setMasterVolume(lua_State* l);
+    int sound_getMasterVolume(lua_State* l);
+
     // manager
     void manager_load_library(lua_State* l);
     int manager_createEntityFromPrefab(lua_State* l);
