@@ -484,12 +484,22 @@ namespace render {
             void attributePointer(std::string name, int size, GLenum type);
         };
 
+        struct UniformBlock {
+            Program* program = nullptr;
+            std::map<std::string, uint32_t> uniformBlocks;
+
+            void init(Program* program);
+            void release();
+            void createUniformBlock(std::string name, uint32_t index);
+        };
+
         // Program
         struct Program {
             uint32_t id = 0;
             std::vector<Shader*> shaders;
             Uniform uniforms;
             Attribute attributes;
+            UniformBlock uniformBlock;
 
             void init(std::vector<Shader*> shaders);
             void release();
@@ -544,6 +554,43 @@ namespace render {
             size_t typeSize();
             size_t count();
             size_t dataSize();  
+        };
+
+        // UniformBuffers
+        template<typename T>
+        struct UniformBuffer {
+            uint32_t id = 0;
+            T value;
+
+            void init() {
+                glGenBuffers(1, &this->id);
+            }
+
+            void release() {
+                glDeleteBuffers(1, &this->id);
+            }
+
+            void update() {
+                this->bind();
+                glBufferData(GL_UNIFORM_BUFFER, typeSize(), &value, GL_DYNAMIC_DRAW);
+                this->unbind();
+            }
+
+            void bind() {
+                glBindBuffer(GL_UNIFORM_BUFFER, this->id);
+            }
+
+            void unbind() {
+                glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            }
+
+            size_t typeSize() {
+                return sizeof(T);
+            }
+
+            void bufferRange(uint32_t index) {
+                glBindBufferBase(GL_UNIFORM_BUFFER, index, this->id);
+            }
         };
 
         // Texture2D
