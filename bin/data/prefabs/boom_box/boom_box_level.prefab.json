@@ -1,9 +1,9 @@
 {
-    "type": "prefab",
+    "name": "prefab",
     "version": 1,
     "entity": {
         "name": "boom-box-level",
-        "behavior": null,
+        "behavior": "data/scripts/entity/boom_box/boom_box.lua",
         "transform": {
             "position": {
                 "x": 0.0,
@@ -23,20 +23,67 @@
         }, 
         "components": [
             {
-                "type": "mesh-component",
-                "mesh": "demo/boom-box",
-                "texture": "pallet/albedo",
-                "uv-scale": 1.0
+                "type": "trigger-component",
+                "collision-shape": {
+                    "type": "box",
+                    "half-extends": {
+                        "x": 2.0,
+                        "y": 2.0,
+                        "z": 2.0
+                    }
+                },
+                "groups": [
+                    "triggers"
+                ],
+                "masks": [
+                    "player"
+                ]
             },
             {
-                "type": "music-stream-player-component",
+                "type": "sound-player-component",
                 "audio-data-name": "music/level",
                 "volume-group": "music",
-                "looping": true,
-                "auto-play": true
+                "auto-play": false,
+                "looping": false,
+                "relative": false,
+                "reference-distance": 0.1,
+                "rolloff-factor": 0.1,
+                "max-distance": 1024.0,
+                "pitch": 1.0
             }
         ],
         "entities": [
+            {
+                "type": "instance",
+                "name": "mesh",
+                "behavior": null,
+                "transform": {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    }
+                },
+                "components": [
+                    {
+                        "type": "mesh-component",
+                        "mesh": "demo/boom-box",
+                        "texture": "pallet/albedo",
+                        "uv-scale": 1.0
+                    }
+                ],
+                "entities": []
+            }
         ]
     }
 }

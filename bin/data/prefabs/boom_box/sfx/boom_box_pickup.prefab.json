@@ -41,8 +41,8 @@
             },
             {
                 "type": "sound-player-component",
-                "audio-data-name": "music/menu",
-                "volume-group": "music",
+                "audio-data-name": "fx/pickup",
+                "volume-group": "sfx",
                 "auto-play": false,
                 "looping": false,
                 "relative": false,

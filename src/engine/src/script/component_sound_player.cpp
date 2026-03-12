@@ -1,4 +1,5 @@
 #include "../sys.hpp"
+#include "AL/al.h"
 #include "lua/lua.hpp"
 
 
@@ -41,6 +42,8 @@ namespace script {
         lua_register(l, "manager_component_sound_player_setPitch", manager_component_sound_player_setPitch);
         // int manager_component_sound_player_getPitch(lua_State* l);
         lua_register(l, "manager_component_sound_player_getPitch", manager_component_sound_player_getPitch);
+        //int manager_component_sound_player_isPlaying(lua_State* l);
+        lua_register(l, "manager_component_sound_player_isPlaying", manager_component_sound_player_isPlaying);
     }
 
     int manager_component_sound_player_hasComponent(lua_State* l) {
@@ -152,5 +155,9 @@ namespace script {
         return 0;
     }
 
-
+    int manager_component_sound_player_isPlaying(lua_State* l) {
+        manager::component::sound::SoundPlayerComponent* player = (manager::component::sound::SoundPlayerComponent*)lua_touserdata(l, 1);
+        lua_pushboolean(l, player->source.getState() == AL_PLAYING);
+        return 1;
+    }
 }

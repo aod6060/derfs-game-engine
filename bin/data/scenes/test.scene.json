@@ -5,27 +5,6 @@
     "entities": [
         {
             "type": "prefab",
-            "path": "data/prefabs/boom_box/boom_box_menu.prefab.json",
-            "transform": {
-                "position": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -10.0
-                },
-                "rotation": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        },
-        {
-            "type": "prefab",
             "path": "data/prefabs/player_fps.prefab.json",
             "transform": {
                 "position": {
@@ -487,9 +466,9 @@
             "behavior": "data/scripts/entity/kinematic-test.lua",
             "transform": {
                 "position": {
-                    "x": -20.0,
+                    "x": -25.0,
                     "y": 32.0,
-                    "z": -20.0
+                    "z": -25.0
                 },
                 "rotation": {
                     "x": 0.0,
@@ -539,7 +518,7 @@
                 "position": {
                     "x": 0.0,
                     "y": 2.0,
-                    "z": -30
+                    "z": 0.0
                 },
                 "rotation": {
                     "x": 0.0,
@@ -672,14 +651,55 @@
             "entities": []
         },
         {
-            "type": "instance",
-            "name": "island",
-            "behavior": null,
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_menu.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -10.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_level.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 10.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_jungle_example_song.prefab.json",
             "transform": {
                 "position": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": -10.0
                 },
                 "rotation": {
                     "x": 0.0,
@@ -691,16 +711,196 @@
                     "y": 1.0,
                     "z": 1.0
                 }
-            },
-            "components": [
-                {
-                    "type": "mesh-component",
-                    "mesh": "demo/boom-box",
-                    "texture": "pallet/albedo",
-                    "uv-scale": 1.0
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_happyHeavenTrance.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
                 }
-            ],
-            "entities": []
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_explosion.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -30.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_fart_with_reverb.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -20.0,
+                    "y": 0.0,
+                    "z": -20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 45.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_jump.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -30.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_lazer.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 20.0,
+                    "y": 0.0,
+                    "z": -20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 315.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_pickup.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 30.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 270.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_powerup.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 20.0,
+                    "y": 0.0,
+                    "z": 20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 225.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_random.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 30.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_select.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -20.0,
+                    "y": 0.0,
+                    "z": 20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 135.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
         }
     ]
 }

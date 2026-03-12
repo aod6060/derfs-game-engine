@@ -2068,7 +2068,8 @@ namespace script {
     int manager_component_sound_player_getMaxDistance(lua_State* l);
     int manager_component_sound_player_setPitch(lua_State* l);
     int manager_component_sound_player_getPitch(lua_State* l);
-
+    int manager_component_sound_player_isPlaying(lua_State* l);
+    
     // util_random
     void util_random_load_library(lua_State* l);
     int util_random_randboolean(lua_State* l);
