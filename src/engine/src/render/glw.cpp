@@ -386,6 +386,82 @@ namespace render {
             SDL_FreeSurface(temp);
         }
 
-        
+        void Cubemap::init() {
+            glGenTextures(1, &this->id);
+        }
+
+        void Cubemap::release() {
+            glDeleteTextures(1, &this->id);
+        }
+
+        void Cubemap::bind(GLenum active) {
+            glActiveTexture(active);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+        }
+
+        void Cubemap::unbind(GLenum active) {
+            glActiveTexture(active);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+        }
+
+        void Cubemap::texParameter(GLenum type, int32_t value) {
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, type, value);
+        }
+
+        void Cubemap::texImage(
+            Face face,
+            int32_t level,
+            int32_t internalFormat,
+            size_t width,
+            size_t height,
+            GLenum format,
+            GLenum type,
+            const void* pixels
+        ) {
+            glTexImage2D(
+                GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 
+                level, 
+                internalFormat, 
+                width, 
+                height, 
+                0, 
+                format, 
+                type, 
+                pixels
+            );
+        }
+
+        void Cubemap::createTextureFromFile(Cubemap* map, std::vector<std::string> paths) {
+            for(int i = 0; i < paths.size(); i++) {
+                SDL_Surface* temp = IMG_Load(paths[i].c_str());
+
+                if(temp == nullptr) {
+                    std::cout << paths[i] << " doesn't exist\n";
+                }
+
+                if(temp->format->format != SDL_PIXELFORMAT_ABGR8888) {
+                    SDL_Surface* convert = SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_ABGR8888, 0);
+                    SDL_FreeSurface(temp);
+                    temp = convert;
+                    convert = nullptr;
+                }
+
+                map->bind(GL_TEXTURE0);
+
+                map->texImage((Face)i, 0, GL_RGBA, temp->w, temp->h, GL_RGBA, GL_UNSIGNED_BYTE, temp->pixels);
+                map->unbind(GL_TEXTURE0);
+
+                SDL_FreeSurface(temp);
+            }
+
+            map->bind(GL_TEXTURE0);
+            map->texParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            map->texParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            map->texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            map->texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            map->texParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+            map->unbind(GL_TEXTURE0);
+        }
+
     }
 }

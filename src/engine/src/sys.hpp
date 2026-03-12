@@ -611,6 +611,41 @@ namespace render {
 
             static void createTextureFromFile(Texture2D* tex, std::string path);
         };
+
+        // Cubemap
+        struct Cubemap {
+            enum Face {
+                EAST = 0,
+                WEST,
+                UP,
+                DOWN,
+                NORTH,
+                SOUTH,
+                FACE_MAX_SIZE
+            };
+
+            uint32_t id = 0;
+
+            void init();
+            void release();
+
+            void bind(GLenum active);
+            void unbind(GLenum active);
+
+            void texParameter(GLenum type, int32_t value);
+            void texImage(
+                Face face,
+                int32_t level,
+                int32_t internalFormat,
+                size_t width,
+                size_t height,
+                GLenum format,
+                GLenum type,
+                const void* pixels
+            );
+
+            static void createTextureFromFile(Cubemap* map, std::vector<std::string> paths);
+        };
     }
 
     namespace mesh {
