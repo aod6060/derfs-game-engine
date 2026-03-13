@@ -1057,11 +1057,23 @@ namespace sound {
 }
 
 namespace assets {
+
+    template<typename T>
+    struct Asset {
+        uint64_t id = 0;
+        T value;
+    };
+
     void init();
     void release();
 
+    uint64_t getMeshID(std::string name);
     render::mesh::Mesh* getMesh(std::string name);
+
+    uint64_t getTexture2DID(std::string name);
     render::glw::Texture2D* getTexture2D(std::string name);
+
+    uint64_t getSoundID(std::string name);
     sound::IAudioData* getSound(std::string name);
 }
 

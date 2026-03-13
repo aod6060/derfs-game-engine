@@ -327,12 +327,9 @@ namespace manager {
 
                 int len = 1;
                 int length = 0;
-            
-                std::cout << "Here 1\n";
 
                 while(len != 0 || len < 0) {
                     Chunk chunk;
-                    std::cout << "Here 2\n";
 
                     chunk.data.resize(4096);
                     len = assets::getSound(this->audioDataName)->read(chunk.data);
@@ -347,12 +344,8 @@ namespace manager {
                     }
                 }
 
-                std::cout << "Here 2\n";
-
                 assets::getSound(this->audioDataName)->seek(::sound::AudioDataSeek::ADS_BEGIN);
                 bufferData.resize(length);
-
-                std::cout << bufferData.size() << "\n";
 
                 int offset = 0;
 
@@ -361,8 +354,6 @@ namespace manager {
                     offset += chunks.front().len;
                     chunks.pop_front();
                 }
-
-                std::cout << "Seeking the the begining.\n";
 
                 int format = 0;
 
