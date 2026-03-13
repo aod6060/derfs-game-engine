@@ -612,5 +612,42 @@ namespace render {
             glRenderbufferStorage(GL_RENDERBUFFER, type, this->width, this->height);
         }
 
+        // FrameBuffer
+        void FrameBuffer::init() {
+            glGenFramebuffers(1, &this->id);
+        }
+
+        void FrameBuffer::release() {
+            glDeleteFramebuffers(1, &this->id);
+        }
+
+        void FrameBuffer::bind() {
+            glBindFramebuffer(GL_FRAMEBUFFER, this->id);
+        }
+
+        void FrameBuffer::unbind() {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+
+        void FrameBuffer::attachDepthBuffer(Texture2D* tex) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->id, 0);
+        }
+
+        void FrameBuffer::attachDepthBuffer(RenderBuffer* renderBuffer) {
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer->id);
+        }
+
+        void FrameBuffer::attachColorBuffer(Texture2D* tex, GLenum attachment) {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, tex->id, 0);
+        }
+
+        void FrameBuffer::drawBuffers(const std::vector<GLenum>& attachment) {
+            glDrawBuffers(attachment.size(), attachment.data());
+        }
+
+        bool FrameBuffer::wasCreated() {
+            return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+        }
+
     }
 }

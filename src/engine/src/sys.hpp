@@ -701,7 +701,26 @@ namespace render {
             void unbind();
 
             void update(GLenum type, uint32_t width, uint32_t height);
-            
+
+        };
+
+        struct FrameBuffer {
+            uint32_t id = 0;
+
+            void init();
+            void release();
+
+            void bind();
+            void unbind();
+
+            void attachDepthBuffer(Texture2D* tex);
+            void attachDepthBuffer(RenderBuffer* renderBuffer);
+
+            void attachColorBuffer(Texture2D* tex, GLenum attachment);
+
+            void drawBuffers(const std::vector<GLenum>& attachment);
+
+            bool wasCreated();
         };
     }
 
