@@ -1,0 +1,9 @@
+Import("env")
+
+
+def source(file):
+    return "#/src/engine/src/assets/" + file
+
+env["source_files"] += [
+    source("assets.cpp")
+]

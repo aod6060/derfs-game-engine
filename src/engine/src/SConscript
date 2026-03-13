@@ -5,11 +5,12 @@ def source(file):
     return "#/src/engine/src/" + file
 
 env["source_files"] += [
-    source("app.cpp"),
-    source("assets.cpp")
+    source("app.cpp")
 ]
 
 # SConscript("#/src/engine/src/SConscript", exports="env")
+# assets
+SConscript("#/src/engine/src/assets/SConscript", exports="env")
 # input
 SConscript("#/src/engine/src/input/SConscript", exports="env")
 # manager
