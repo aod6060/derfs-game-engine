@@ -37,43 +37,43 @@ namespace script {
     }
 
     int manager_component_mesh_getEntity(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         lua_pushlightuserdata(l, comp->entity);
         return 1;
     }
 
     int manager_component_mesh_getMesh(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         lua_pushstring(l, comp->mesh.c_str());
         return 1;
     }
 
     int manager_component_mesh_setMesh(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         comp->mesh = lua_tostring(l, 2);
         return 0;
     }
 
     int manager_component_mesh_getTexture(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         lua_pushstring(l, comp->texture.c_str());
         return 1;
     }
 
     int manager_component_mesh_setTexture(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         comp->texture = lua_tostring(l, 2);
         return 0;
     }
 
     int manager_component_mesh_getUVScale(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         lua_pushnumber(l, comp->uvScale);
         return 1;
     }
 
     int manager_component_mesh_setUVScale(lua_State* l) {
-        manager::component::MeshComponent* comp = (manager::component::MeshComponent*)lua_touserdata(l, 1);
+        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
         comp->uvScale = lua_tonumber(l, 2);
         return 0;
     }

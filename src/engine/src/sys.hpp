@@ -1547,38 +1547,40 @@ namespace manager {
     namespace component {
         void componentFactory(Entity* entity, std::string type, Json::Value value);
 
-        struct CameraComponent : public IComponent {
-            Entity* entity = nullptr;
-            float fov;
-            float znear;
-            float zfar;
+        namespace render {
+            struct CameraComponent : public IComponent {
+                Entity* entity = nullptr;
+                float fov;
+                float znear;
+                float zfar;
 
-            glm::mat4 toView();
-            glm::mat4 toViewWithParent();
+                glm::mat4 toView();
+                glm::mat4 toViewWithParent();
 
-            virtual void init(Entity* entity);
-            virtual void handleEvent(SDL_Event* e);
-            virtual void update(float delta);
-            virtual void preRender();
-            virtual void render();
-            virtual void release();
-            virtual void load(Json::Value value);
-        };
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+            };
 
-        struct MeshComponent : public IComponent {
-            Entity* entity = nullptr;
-            std::string mesh;
-            std::string texture;
-            float uvScale;
+            struct MeshComponent : public IComponent {
+                Entity* entity = nullptr;
+                std::string mesh;
+                std::string texture;
+                float uvScale;
 
-            virtual void init(Entity* entity);
-            virtual void handleEvent(SDL_Event* e);
-            virtual void update(float delta);
-            virtual void preRender();
-            virtual void render();
-            virtual void release();
-            virtual void load(Json::Value value);
-        };
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+            };
+        }
 
         namespace physics {
 

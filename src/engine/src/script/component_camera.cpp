@@ -37,43 +37,43 @@ namespace script {
     }
     
     int manager_component_camera_getEntity(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         lua_pushlightuserdata(l, comp->entity);
         return 1;
     }
 
     int manager_component_camera_getFOV(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         lua_pushnumber(l, comp->fov);
         return 1;
     }
 
     int manager_component_camera_setFOV(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         comp->fov = lua_tonumber(l, 2);
         return 0;
     }
 
     int manager_component_camera_getZNear(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         lua_pushnumber(l, comp->znear);
         return 1;
     }
 
     int manager_component_camera_setZNear(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         comp->znear = lua_tonumber(l, 2);
         return 0;
     }
 
     int manager_component_camera_getZFar(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         lua_pushnumber(l, comp->zfar);
         return 1;
     }
 
     int manager_component_camera_setZFar(lua_State* l) {
-        manager::component::CameraComponent* comp = (manager::component::CameraComponent*)lua_touserdata(l, 1);
+        manager::component::render::CameraComponent* comp = (manager::component::render::CameraComponent*)lua_touserdata(l, 1);
         comp->zfar = lua_tonumber(l, 2);
         return 0;
     }

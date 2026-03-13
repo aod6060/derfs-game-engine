@@ -76,7 +76,7 @@ namespace manager {
                 btTriangleMesh* triangleMesh = new btTriangleMesh(false, false);
 
                 for(int i = 0; i < assets::getMesh(meshName)->data.triangles.size(); i++) {
-                    render::mesh::Triangle tris = assets::getMesh(meshName)->data.triangles.at(i);
+                    ::render::mesh::Triangle tris = assets::getMesh(meshName)->data.triangles.at(i);
 
                     //triangleMesh->addTriangleIndices(tris.v1, tris.v2, tris.v3);
                     

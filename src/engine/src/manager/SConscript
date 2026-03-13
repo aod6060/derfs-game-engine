@@ -7,6 +7,7 @@ def source(file):
 env["source_files"] += [
     source("behavior.cpp"),
     source("component.cpp"),
+    source("component_render.cpp"),
     source("component_physics.cpp"),
     source("component_sound.cpp"),
     source("entity.cpp"),
