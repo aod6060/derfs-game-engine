@@ -646,6 +646,48 @@ namespace render {
 
             static void createTextureFromFile(Cubemap* map, std::vector<std::string> paths);
         };
+
+        // Texture2DArrays
+        struct Texture2DArray {
+            uint32_t id = 0;
+            uint32_t width = 0;
+            uint32_t height = 0;
+            uint32_t count = 1;
+
+            void init();
+            void release();
+            void bind(GLenum tex);
+            void unbind(GLenum tex);
+            void texParameter(GLenum type, int32_t value);
+            void genMipmaps();
+
+            void texStorage3D(
+                size_t levels,
+                GLenum internalFormat,
+                size_t width,
+                size_t height,
+                size_t depth
+            );
+
+            void texSubImage3D(
+                int32_t level,
+                int32_t xoffset,
+                int32_t yoffset,
+                int32_t zoffset,
+                size_t width,
+                size_t height,
+                size_t depth,
+                GLenum format,
+                GLenum type,
+                const void* pixels   
+            );
+
+            static void createTextureArrayFromFiles(
+                Texture2DArray* tex,
+                const std::vector<std::string>& paths
+            );
+
+        };
     }
 
     namespace mesh {

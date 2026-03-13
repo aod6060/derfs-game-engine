@@ -463,5 +463,126 @@ namespace render {
             map->unbind(GL_TEXTURE0);
         }
 
+        // Texture2DArray
+
+        void Texture2DArray::init() {
+            glGenTextures(1, &this->id);
+        }
+
+        void Texture2DArray::release() {
+            glDeleteTextures(1, &this->id);
+        }
+
+        void Texture2DArray::bind(GLenum tex) {
+            glActiveTexture(tex);
+            glBindTexture(GL_TEXTURE_2D_ARRAY, this->id);
+        }
+
+        void Texture2DArray::unbind(GLenum tex) {
+            glActiveTexture(tex);
+            glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+        }
+
+        void Texture2DArray::texParameter(GLenum type, int32_t value) {
+            glTexParameteri(GL_TEXTURE_2D_ARRAY, type, value);
+        }
+
+        void Texture2DArray::genMipmaps() {
+            glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+        }
+
+        void Texture2DArray::texStorage3D(
+            size_t levels,
+            GLenum internalFormat,
+            size_t width,
+            size_t height,
+            size_t depth
+        ) 
+        {
+            glTexStorage3D(
+                GL_TEXTURE_2D_ARRAY,
+                levels,
+                internalFormat,
+                width,
+                height,
+                depth
+            );
+        }
+
+        void Texture2DArray::texSubImage3D(
+            int32_t level,
+            int32_t xoffset,
+            int32_t yoffset,
+            int32_t zoffset,
+            size_t width,
+            size_t height,
+            size_t depth,
+            GLenum format,
+            GLenum type,
+            const void* pixels   
+        ) 
+        {
+            glTexSubImage3D(
+                GL_TEXTURE_2D_ARRAY,
+                level,
+                xoffset,
+                yoffset,
+                zoffset,
+                width,
+                height,
+                depth,
+                format,
+                type,
+                pixels
+            );
+        }
+
+        void Texture2DArray::createTextureArrayFromFiles(
+            Texture2DArray* tex,
+            const std::vector<std::string>& paths
+        ) 
+        {
+            // All Textures need to be the same width and height for a texture array
+            // Handle Texture Storage
+            SDL_Surface* temp = IMG_Load(paths.at(0).c_str());
+            tex->bind(GL_TEXTURE0);
+            //tex->texStorage3D(8, GL_RGBA, size_t width, size_t height, size_t depth)
+            tex->texStorage3D(8, GL_RGBA, temp->w, temp->h, paths.size());
+            tex->width = temp->w;
+            tex->height = temp->h;
+            tex->count = paths.size();
+
+            // Load Texture Data
+            for(int i = 0; i < paths.size(); i++) {
+                SDL_Surface* s = IMG_Load(paths.at(i).c_str());
+                if(s == nullptr) {
+                    std::cout << i << "> " << paths.at(i) << " doesn't exist\n";
+                }
+
+                if(s->format->format != SDL_PIXELFORMAT_ABGR8888) {
+                    SDL_Surface* convert = SDL_ConvertSurfaceFormat(s, SDL_PIXELFORMAT_ABGR8888, 0);
+                    SDL_FreeSurface(s);
+                    s = convert;
+                    convert = nullptr;
+                }
+
+                tex->texSubImage3D(
+                    0, 
+                    0, 
+                    0, 
+                    i, 
+                    tex->width, 
+                    tex->height, 
+                    1, 
+                    GL_RGBA, 
+                    GL_UNSIGNED_BYTE,
+                    s->pixels);
+                    
+                SDL_FreeSurface(s);
+            }
+
+            tex->unbind(GL_TEXTURE0);
+            SDL_FreeSurface(temp);
+        }
     }
 }
