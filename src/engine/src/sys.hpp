@@ -688,6 +688,21 @@ namespace render {
             );
 
         };
+
+        struct RenderBuffer {
+            uint32_t id = 0;
+            uint32_t width = 0;
+            uint32_t height = 0;
+
+            void init();
+            void release();
+
+            void bind();
+            void unbind();
+
+            void update(GLenum type, uint32_t width, uint32_t height);
+            
+        };
     }
 
     namespace mesh {

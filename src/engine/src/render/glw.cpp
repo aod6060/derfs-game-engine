@@ -577,12 +577,40 @@ namespace render {
                     GL_RGBA, 
                     GL_UNSIGNED_BYTE,
                     s->pixels);
-                    
+
                 SDL_FreeSurface(s);
             }
+
+            tex->texParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            tex->texParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            tex->genMipmaps();
 
             tex->unbind(GL_TEXTURE0);
             SDL_FreeSurface(temp);
         }
+
+        // RenderBuffer
+        void RenderBuffer::init() {
+            glGenRenderbuffers(1, &this->id);
+        }
+
+        void RenderBuffer::release() {
+            glDeleteRenderbuffers(1, &this->id);
+        }
+
+        void RenderBuffer::bind() {
+            glBindRenderbuffer(GL_RENDERBUFFER, this->id);
+        }
+
+        void RenderBuffer::unbind() {
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        }
+
+        void RenderBuffer::update(GLenum type, uint32_t width, uint32_t height) {
+            this->width = width;
+            this->height = height;
+            glRenderbufferStorage(GL_RENDERBUFFER, type, this->width, this->height);
+        }
+
     }
 }
