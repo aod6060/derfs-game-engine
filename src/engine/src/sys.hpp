@@ -791,6 +791,17 @@ namespace render {
         void drawMesh(render::mesh::Mesh* mesh);
     };
 
+
+    struct Material {
+        std::string albedo;
+        std::string metal;
+        std::string roughness;
+        std::string emissive;
+        std::string lit;
+
+        void init(std::string path);
+    };
+
     void init();
     void release();
 
@@ -1075,6 +1086,9 @@ namespace assets {
 
     uint64_t getSoundID(std::string name);
     sound::IAudioData* getSound(std::string name);
+
+    uint64_t getMaterialID(std::string name);
+    render::Material* getMaterial(std::string name);
 }
 
 namespace util {

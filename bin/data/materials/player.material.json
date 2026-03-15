@@ -1,0 +1,9 @@
+{
+    "name": "material",
+    "version": 1,
+    "albedo": "player/albedo",
+    "metal": "player/metal",
+    "roughness": "player/roughness",
+    "emissive": "player/emissive",
+    "lit": "player/lit"
+}

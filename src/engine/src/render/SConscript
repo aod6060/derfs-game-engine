@@ -6,6 +6,7 @@ def source(file):
 
 env["source_files"] += [
     source("glw.cpp"),
+    source("material.cpp"),
     source("mesh.cpp"),
     source("render.cpp")
 ]

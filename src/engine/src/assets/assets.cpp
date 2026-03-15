@@ -3,16 +3,21 @@
 
 namespace assets {
 
-    std::map<std::string, uint64_t> counters;
+    const static std::string ASSET_NAME = "assets";
+    const static int ASSET_VERSION = 3;
+
+    static std::map<std::string, uint64_t> counters;
 
     //std::map<std::string, render::mesh::Mesh> meshes;
-    std::map<std::string, Asset<render::mesh::Mesh>> meshes;
+    static std::map<std::string, Asset<render::mesh::Mesh>> meshes;
     //std::map<std::string, render::glw::Texture2D> texture2Ds;
-    std::map<std::string, Asset<render::glw::Texture2D>> texture2Ds;
+    static std::map<std::string, Asset<render::glw::Texture2D>> texture2Ds;
     //std::map<std::string, sound::IAudioData*> sounds;
-    std::map<std::string, Asset<sound::IAudioData*>> sounds;
+    static std::map<std::string, Asset<sound::IAudioData*>> sounds;
 
-    uint64_t _createID(std::string name);
+    static std::map<std::string, Asset<render::Material>> materials;
+
+    static uint64_t _createID(std::string name);
 
     void init() {
         std::ifstream in("data/assets.json");
@@ -26,33 +31,29 @@ namespace assets {
         std::string name = root["name"].asString();
         int version = root["version"].asInt();
 
-        if(name != "assets") {
+        if(name != ASSET_NAME) {
             std::cout << name << " isn't an assets file. Will try to load.\n";
         }
 
-        if(version != 2) {
+        if(version != ASSET_VERSION) {
             std::cout << version << " isn't the current version which is 1. Will try to load.\n";
         }
 
 
         // Meshes
         Json::Value meshes = root["meshes"];
-
         for(int i = 0; i < meshes.size(); i++) {
             Json::Value obj = meshes[i];
 
             std::string name = obj["name"].asString();
             std::string path = obj["path"].asString();
-
+            
             assets::meshes[name].value.init(path);
             assets::meshes.at(name).id = _createID("meshes");
-
-            std::cout << "MeshID: " << assets::meshes.at(name).id << "\n";
         }
 
         // Textures
         Json::Value textures = root["textures"];
-
         for(int i = 0; i < textures.size(); i++) {
             Json::Value obj = textures[i];
 
@@ -62,13 +63,10 @@ namespace assets {
             assets::texture2Ds[name].value.init();
             render::glw::Texture2D::createTextureFromFile(&assets::texture2Ds.at(name).value, path);
             assets::texture2Ds.at(name).id = _createID("texture2Ds");
-
-            std::cout << "Texture2DID: " << assets::texture2Ds.at(name).id << "\n";
         }
 
         // Sounds
         Json::Value sounds = root["sounds"];
-
         for(int i = 0; i < sounds.size(); i++) {
             Json::Value obj = sounds[i];
 
@@ -77,8 +75,18 @@ namespace assets {
 
             assets::sounds[name].value = ::sound::initAudioData(path);
             assets::sounds.at(name).id = _createID("sounds");
+        }
 
-            std::cout << "SoundID: " << assets::sounds.at(name).id << "\n";
+        // Materials
+        Json::Value materials = root["materials"];
+        for(int i = 0; i < materials.size(); i++) {
+            Json::Value obj = materials[i];
+
+            std::string name = obj["name"].asString();
+            std::string path = obj["path"].asString();
+
+            assets::materials[name].value.init(path);
+            assets::materials.at(name).id = _createID("materials");
         }
     }
 
@@ -102,6 +110,11 @@ namespace assets {
         }
 
         sounds.clear();
+
+        // There is nothing to release from materials :)
+        // Its just strings :D
+        // Easy!!!
+        materials.clear();
     }
 
     render::mesh::Mesh* getMesh(std::string name) {
@@ -128,7 +141,16 @@ namespace assets {
         return assets::sounds.at(name).id;
     }
 
-    uint64_t _createID(std::string name) {
+    uint64_t getMaterialID(std::string name) {
+        return assets::materials.at(name).id;
+    }
+
+    render::Material* getMaterial(std::string name) {
+        return &assets::materials.at(name).value;
+    }
+
+
+    static uint64_t _createID(std::string name) {
         uint64_t id;
         if(counters.find(name) == counters.end()) {
             counters[name] = id = 1;

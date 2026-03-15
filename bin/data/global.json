@@ -1,7 +1,7 @@
 {
     "name": "global",
     "version": 5,
-    "behavior": "data/scripts/global/test_global.lua",
+    "behavior": null,
     "default-scene": "data/scenes/test.scene.json",
     "input": {
         "mapping": [

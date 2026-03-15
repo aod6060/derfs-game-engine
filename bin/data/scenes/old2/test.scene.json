@@ -1,0 +1,906 @@
+{
+    "name": "scene",
+    "version": 4,
+    "behavior": "data/scripts/scene/physics_test_scene.lua",
+    "entities": [
+        {
+            "type": "prefab",
+            "path": "data/prefabs/player_fps.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 60.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "instance",
+            "name": "crates",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 109.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/island-extra-large",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/island-extra-large"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 20.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/tree-01",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/tree-01"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": -20.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/tree-01",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/tree-01"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/tree-02",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/tree-02"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/tree-02",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/tree-02"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": -26.0,
+                    "y": 0.0,
+                    "z": -26.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/square-pillar",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/square-pillar"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 26.0,
+                    "y": 0.0,
+                    "z": -26.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/square-pillar",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/square-pillar"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 26.0,
+                    "y": 0.0,
+                    "z": 26.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/square-pillar",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/square-pillar"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": -26.0,
+                    "y": 0.0,
+                    "z": 26.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/square-pillar-broken",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/square-pillar-broken"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "cube-kinematic-test",
+            "behavior": "data/scripts/entity/kinematic-test.lua",
+            "transform": {
+                "position": {
+                    "x": -25.0,
+                    "y": 32.0,
+                    "z": -25.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "cube",
+                    "texture": "angry",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "kinematic-body-component",
+                    "collision-shape": {
+                        "type": "box",
+                        "half-extends": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "groups": [
+                        "player"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "test-trigger",
+            "behavior": "data/scripts/entity/trigger_test_entity.lua",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 2.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "cube",
+                    "texture": "angry",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "trigger-component",
+                    "collision-shape": {
+                        "type": "box",
+                        "half-extends": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "groups": [
+                        "triggers"
+                    ],
+                    "masks": [
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "bridge-01",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 54.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/bridge-medium",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/bridge-medium-physics"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "island",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 109.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo/island-extra-large",
+                    "texture": "pallet/albedo",
+                    "uv-scale": 1.0
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo/island-extra-large"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_menu.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -10.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_level.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 10.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": -90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_jungle_example_song.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/boom_box_happyHeavenTrance.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 10.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_explosion.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -30.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_fart_with_reverb.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -20.0,
+                    "y": 0.0,
+                    "z": -20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 45.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_jump.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -30.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_lazer.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 20.0,
+                    "y": 0.0,
+                    "z": -20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 315.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_pickup.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 30.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 270.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_powerup.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 20.0,
+                    "y": 0.0,
+                    "z": 20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 225.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_random.prefab.json",
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 30.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        },
+        {
+            "type": "prefab",
+            "path": "data/prefabs/boom_box/sfx/boom_box_select.prefab.json",
+            "transform": {
+                "position": {
+                    "x": -20.0,
+                    "y": 0.0,
+                    "z": 20.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 135.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        }
+    ]
+}

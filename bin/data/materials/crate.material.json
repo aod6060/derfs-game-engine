@@ -1,0 +1,9 @@
+{
+    "name": "material",
+    "version": 1,
+    "albedo": "crate/crate-albedo",
+    "metal": "crate/crate-metal",
+    "roughness": "crate/crate-roughness",
+    "emissive": "crate/crate-emissive",
+    "lit": "crate/crate-lit"
+}
