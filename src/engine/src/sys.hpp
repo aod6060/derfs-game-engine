@@ -765,32 +765,54 @@ namespace render {
         virtual void unbindVertexArray() = 0;
     };
 
-    struct MainShader : public IShader {
-        // Shader
-        render::glw::Shader vertexShader;
-        render::glw::Shader fragmentShader;
+    namespace shader {
+        namespace prepass {
+            void init();
+            void release();
+        }
 
-        // Program
-        render::glw::Program program;
+        namespace geometry {
+            struct MeshShader : public IShader {
+                // Shader
+                render::glw::Shader vertexShader;
+                render::glw::Shader fragmentShader;
 
-        virtual void init();
-        virtual void release();
-        virtual void bind();
-        virtual void unbind();
-        virtual void bindVertexArray();
-        virtual void unbindVertexArray();
+                // Program
+                render::glw::Program program;
 
-        void setProjection(glm::mat4 proj);
-        void setView(glm::mat4 view);
-        void setModel(glm::mat4 model);
-        void setUVScale(float value);
+                virtual void init();
+                virtual void release();
+                virtual void bind();
+                virtual void unbind();
+                virtual void bindVertexArray();
+                virtual void unbindVertexArray();
 
-        void verticePointer();
-        void texCoordPointer();
+                void setProjection(glm::mat4 proj);
+                void setView(glm::mat4 view);
+                void setModel(glm::mat4 model);
+                void setUVScale(float value);
 
-        void drawMesh(render::mesh::Mesh* mesh);
-    };
+                void verticePointer();
+                void texCoordPointer();
 
+                void drawMesh(render::mesh::Mesh* mesh);
+            };
+
+            void init();
+            void release();
+            MeshShader* getMeshShader();
+        }
+
+        namespace lighting {
+            void init();
+            void release();
+        }
+
+        namespace postprocess {
+            void init();
+            void release();
+        }
+    }
 
     struct Material {
         std::string albedo;
@@ -809,9 +831,6 @@ namespace render {
 
     void drawArrays(GLenum type, uint32_t vertexCount);
     void drawElements(GLenum type, uint32_t count);
-
-    MainShader* getMainShader();
-
 }
 
 namespace physics {

@@ -8,5 +8,9 @@ env["source_files"] += [
     source("glw.cpp"),
     source("material.cpp"),
     source("mesh.cpp"),
-    source("render.cpp")
+    source("render.cpp"),
+    source("shader_pre_pass.cpp"),
+    source("shader_geometry.cpp"),
+    source("shader_lighting.cpp"),
+    source("shader_post_processing.cpp")
 ]
