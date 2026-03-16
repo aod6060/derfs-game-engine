@@ -92,20 +92,6 @@ namespace manager {
             }
 
             void MeshComponent::load(Json::Value value) {
-                /*
-                    {
-                        "type": "mesh-component",
-                        "mesh": "crate",
-                        "texture": "crate",
-                        "uv-scale": 1.0
-                    }
-
-                    {
-                        "type": "mesh-component",
-                        "mesh": "crate",
-                        "material": "crate"
-                    }
-                */
                 this->mesh = value["mesh"].asString();
                 this->material = value["material"].asString();
             }
