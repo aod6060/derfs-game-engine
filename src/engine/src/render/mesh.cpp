@@ -26,15 +26,6 @@ namespace render {
                     mesh->mNormals[i].y,
                     mesh->mNormals[i].z
                 );
-
-                // TexCoords
-                /*
-                v.texCoord = glm::vec2(
-                    mesh->mTextureCoords[0][i].x,
-                    mesh->mTextureCoords[0][i].y
-                );
-                */
-
                 // AlbedoTexCoord
                 v.albedoTexCoord = glm::vec2(
                     mesh->mTextureCoords[0][i].x,

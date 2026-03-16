@@ -162,22 +162,34 @@ namespace render {
                 mesh->vertices.unbind();
                 
                 // Normals
+                mesh->normals.bind();
                 this->normalsPointer();
+                mesh->normals.unbind();
 
                 // AlbedoTexCoords
+                mesh->albedoTexCoords.bind();
                 this->albedoTexCoordPointer();
+                mesh->albedoTexCoords.unbind();
 
                 // MetalTexCoords
+                mesh->metalTexCoords.bind();
                 this->metalTexCoordPointer();
+                mesh->metalTexCoords.unbind();
 
                 // RoughnessTexCoords
+                mesh->roughnessTexCoords.bind();
                 this->roughnessTexCoordPointer();
+                mesh->roughnessTexCoords.unbind();
 
                 // EmissiveTexCoords
+                mesh->emissiveTexCoords.bind();
                 this->emissiveTexCoordPointer();
+                mesh->emissiveTexCoords.unbind();
 
                 // LitTexCoords
+                mesh->litTexCoords.bind();
                 this->litTexCoordPointer();
+                mesh->litTexCoords.unbind();
                 
                 mesh->indencies.bind();
                 render::drawElements(GL_TRIANGLES, mesh->indencies.count());
