@@ -49,7 +49,7 @@ namespace manager {
     void Scene::render() {
         render::clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
 
-        render::getMainShader()->bind();
+        render::shader::geometry::getMeshShader()->bind();
 
         for(int i = 0; i < this->entities.size(); i++) {
             this->entities[i]->preRender();
@@ -59,7 +59,7 @@ namespace manager {
             this->entities[i]->render();
         }
 
-        render::getMainShader()->unbind();
+        render::shader::geometry::getMeshShader()->unbind();
     }
 
     void Scene::release() {
