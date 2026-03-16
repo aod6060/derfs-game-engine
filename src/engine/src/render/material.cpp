@@ -38,4 +38,20 @@ namespace render {
         this->lit = root["lit"].asString();
     }
 
+    void Material::bind() {
+        assets::getTexture2D(this->albedo)->bind(GL_TEXTURE0);
+        assets::getTexture2D(this->metal)->bind(GL_TEXTURE1);
+        assets::getTexture2D(this->roughness)->bind(GL_TEXTURE2);
+        assets::getTexture2D(this->emissive)->bind(GL_TEXTURE3);
+        assets::getTexture2D(this->lit)->bind(GL_TEXTURE4);
+    }
+    
+    void Material::unbind() {
+        assets::getTexture2D(this->lit)->unbind(GL_TEXTURE4);
+        assets::getTexture2D(this->emissive)->unbind(GL_TEXTURE3);
+        assets::getTexture2D(this->roughness)->unbind(GL_TEXTURE2);
+        assets::getTexture2D(this->metal)->unbind(GL_TEXTURE1);
+        assets::getTexture2D(this->albedo)->unbind(GL_TEXTURE0);
+    }
+    
 }

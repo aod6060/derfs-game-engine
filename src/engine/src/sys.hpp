@@ -857,6 +857,9 @@ namespace render {
         std::string lit;
 
         void init(std::string path);
+
+        void bind();
+        void unbind();
     };
 
     void init();
@@ -1649,8 +1652,9 @@ namespace manager {
             struct MeshComponent : public IComponent {
                 Entity* entity = nullptr;
                 std::string mesh;
-                std::string texture;
-                float uvScale;
+                std::string material;
+                //std::string texture;
+                //float uvScale;
 
                 virtual void init(Entity* entity);
                 virtual void handleEvent(SDL_Event* e);

@@ -34,12 +34,12 @@ namespace manager {
 
 
             void CameraComponent::preRender() {
-                ::render::getMainShader()->setProjection(glm::perspective(glm::radians(this->fov), app::getAspect(), this->znear, this->zfar));
+                ::render::shader::geometry::getMeshShader()->setProjection(glm::perspective(glm::radians(this->fov), app::getAspect(), this->znear, this->zfar));
 
                 if(this->entity->hasParent()) {
-                    ::render::getMainShader()->setView(toViewWithParent());
+                    ::render::shader::geometry::getMeshShader()->setView(toViewWithParent());
                 } else {
-                    ::render::getMainShader()->setView(this->toView());
+                    ::render::shader::geometry::getMeshShader()->setView(this->toView());
                 }
             }
 
@@ -75,13 +75,14 @@ namespace manager {
             }
 
             void MeshComponent::render() {
-
+                /*
                 if(this->entity->hasParent()) {
                     ::render::getMainShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
                 } else {
                     ::render::getMainShader()->setModel(this->entity->transform.toModel());
                 }
                 ::render::getMainShader()->setUVScale(this->uvScale);
+                // Why was I do this manually???
                 assets::getTexture2D(this->texture)->bind(GL_TEXTURE0);
                 ::render::getMainShader()->bindVertexArray();
                 assets::getMesh(this->mesh)->vertices.bind();
@@ -93,6 +94,17 @@ namespace manager {
                 assets::getMesh(this->mesh)->indencies.unbind();
                 ::render::getMainShader()->unbindVertexArray();
                 assets::getTexture2D(this->texture)->unbind(GL_TEXTURE0);
+                */
+
+                if(this->entity->hasParent()) {
+                    ::render::shader::geometry::getMeshShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
+                } else {
+                    ::render::shader::geometry::getMeshShader()->setModel(this->entity->transform.toModel());
+                }
+
+                assets::getMaterial(this->material)->bind();
+                ::render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(this->mesh));
+                assets::getMaterial(this->material)->unbind();
             }
 
             void MeshComponent::release() {
@@ -100,9 +112,22 @@ namespace manager {
             }
 
             void MeshComponent::load(Json::Value value) {
+                /*
+                    {
+                        "type": "mesh-component",
+                        "mesh": "crate",
+                        "texture": "crate",
+                        "uv-scale": 1.0
+                    }
+
+                    {
+                        "type": "mesh-component",
+                        "mesh": "crate",
+                        "material": "crate"
+                    }
+                */
                 this->mesh = value["mesh"].asString();
-                this->texture = value["texture"].asString();
-                this->uvScale = value["uv-scale"].asFloat();
+                this->material = value["material"].asString();
             }
         }
     }
