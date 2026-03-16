@@ -14,14 +14,10 @@ namespace script {
         lua_register(l, "manager_component_mesh_getMesh", manager_component_mesh_getMesh);
         // int manager_component_MeshComponent_setMesh(lua_State* l);
         lua_register(l, "manager_component_mesh_setMesh", manager_component_mesh_setMesh);
-        // int manager_component_MeshComponent_getTexture(lua_State* l);
-        lua_register(l, "manager_component_mesh_getTexture", manager_component_mesh_getTexture);
-        // int manager_component_MeshComponent_setTexture(lua_State* l);
-        lua_register(l, "manager_component_mesh_setTexture", manager_component_mesh_setTexture);
-        // int manager_component_MeshComponent_getUVScale(lua_State* l);
-        lua_register(l, "manager_component_mesh_getUVScale", manager_component_mesh_getUVScale);
-        // int manager_component_MeshComponent_setUVScale(lua_State* l);
-        lua_register(l, "manager_component_mesh_setUVScale", manager_component_mesh_setUVScale);
+        // int manager_component_mesh_getMaterial(lua_State* l);
+        lua_register(l, "manager_component_mesh_getMaterial", manager_component_mesh_getMaterial);
+        // int manager_component_mesh_setMaterial(lua_State* l);
+        lua_register(l, "manager_component_mesh_setMaterial", manager_component_mesh_setMaterial);
     }
 
     int manager_component_mesh_hasComponent(lua_State* l) {
@@ -54,27 +50,15 @@ namespace script {
         return 0;
     }
 
-    int manager_component_mesh_getTexture(lua_State* l) {
+    int manager_component_mesh_getMaterial(lua_State* l) {
         manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
-        lua_pushstring(l, comp->texture.c_str());
+        lua_pushstring(l, comp->material.c_str());
         return 1;
     }
 
-    int manager_component_mesh_setTexture(lua_State* l) {
+    int manager_component_mesh_setMaterial(lua_State* l) {
         manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
-        comp->texture = lua_tostring(l, 2);
-        return 0;
-    }
-
-    int manager_component_mesh_getUVScale(lua_State* l) {
-        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
-        lua_pushnumber(l, comp->uvScale);
-        return 1;
-    }
-
-    int manager_component_mesh_setUVScale(lua_State* l) {
-        manager::component::render::MeshComponent* comp = (manager::component::render::MeshComponent*)lua_touserdata(l, 1);
-        comp->uvScale = lua_tonumber(l, 2);
+        comp->material = lua_tostring(l, 2);
         return 0;
     }
 

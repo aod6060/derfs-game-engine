@@ -2183,11 +2183,15 @@ namespace script {
     int manager_component_mesh_getEntity(lua_State* l);
     int manager_component_mesh_getMesh(lua_State* l);
     int manager_component_mesh_setMesh(lua_State* l);
+    int manager_component_mesh_getMaterial(lua_State* l);
+    int manager_component_mesh_setMaterial(lua_State* l);
+    
+    /*
     int manager_component_mesh_getTexture(lua_State* l);
     int manager_component_mesh_setTexture(lua_State* l);
     int manager_component_mesh_getUVScale(lua_State* l);
     int manager_component_mesh_setUVScale(lua_State* l);
-
+    */
     // body ~ This covers all body types (dynamic, static, kinematic)
     void manager_component_body_load_library(lua_State* l);
     int manager_component_body_updateTransform(lua_State* l);
