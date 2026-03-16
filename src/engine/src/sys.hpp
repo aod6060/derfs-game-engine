@@ -773,6 +773,23 @@ namespace render {
 
         namespace geometry {
             struct MeshShader : public IShader {
+                enum TestType {
+                    TT_REGULAR =  0,
+                    TT_POSITION =  1,
+                    TT_NORMALS =  2,
+                    TT_ALBEDO_MATERIAL =  3,
+                    TT_METAL_MATERIAL =  4,
+                    TT_ROUGHNESS_MATERIAL =  5,
+                    TT_EMISSIVE_MATERIAL =  6,
+                    TT_LIT_MATERIAL =  7,
+                    TT_ALBEDO_TC =  8,
+                    TT_METAL_TC =  9,
+                    TT_ROUGHNESS_TC  = 10,
+                    TT_EMISSIVE_TC  = 11,
+                    TT_LIT_TC  = 12,
+                    TT_MAX_SIZE
+                };
+
                 // Shader
                 render::glw::Shader vertexShader;
                 render::glw::Shader fragmentShader;
@@ -790,10 +807,17 @@ namespace render {
                 void setProjection(glm::mat4 proj);
                 void setView(glm::mat4 view);
                 void setModel(glm::mat4 model);
-                void setUVScale(float value);
+                //void setUVScale(float value);
+                void setText(int test);
 
-                void verticePointer();
-                void texCoordPointer();
+                void verticesPointer();
+                //void texCoordPointer();
+                void normalsPointer();
+                void albedoTexCoordPointer();
+                void metalTexCoordPointer();
+                void roughnessTexCoordPointer();
+                void emissiveTexCoordPointer();
+                void litTexCoordPointer();
 
                 void drawMesh(render::mesh::Mesh* mesh);
             };
