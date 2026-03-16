@@ -728,7 +728,12 @@ namespace render {
         struct Vertex {
             glm::vec3 position;
             glm::vec3 normal;
-            glm::vec2 texCoord;
+            //glm::vec2 texCoord;
+            glm::vec2 albedoTexCoord;
+            glm::vec2 metalTexCoord;
+            glm::vec2 roughnessTexCoord;
+            glm::vec2 emissiveTexCoord;
+            glm::vec2 litTexCoord;
         };
 
         struct Triangle {
@@ -747,7 +752,13 @@ namespace render {
 
             render::glw::VertexBuffer vertices;
             render::glw::VertexBuffer normals;
-            render::glw::VertexBuffer texCoords;
+            //render::glw::VertexBuffer texCoords;
+            render::glw::VertexBuffer albedoTexCoords;
+            render::glw::VertexBuffer metalTexCoords;
+            render::glw::VertexBuffer roughnessTexCoords;
+            render::glw::VertexBuffer emissiveTexCoords;
+            render::glw::VertexBuffer litTexCoords;
+            
             render::glw::IndexBuffer indencies;
 
             void init(std::string path);

@@ -28,9 +28,37 @@ namespace render {
                 );
 
                 // TexCoords
+                /*
                 v.texCoord = glm::vec2(
                     mesh->mTextureCoords[0][i].x,
                     mesh->mTextureCoords[0][i].y
+                );
+                */
+
+                // AlbedoTexCoord
+                v.albedoTexCoord = glm::vec2(
+                    mesh->mTextureCoords[0][i].x,
+                    mesh->mTextureCoords[0][i].y
+                );
+                // MetalTexCoords
+                v.metalTexCoord = glm::vec2(
+                    mesh->mTextureCoords[1][i].x,
+                    mesh->mTextureCoords[1][i].y
+                );
+                // RoughnessTexCoords
+                v.roughnessTexCoord = glm::vec2(
+                    mesh->mTextureCoords[2][i].x,
+                    mesh->mTextureCoords[2][i].y
+                );
+                // EmissiveTexCoords
+                v.emissiveTexCoord = glm::vec2(
+                    mesh->mTextureCoords[3][i].x,
+                    mesh->mTextureCoords[3][i].y
+                );
+                // LitTexCoords
+                v.litTexCoord = glm::vec2(
+                    mesh->mTextureCoords[4][i].x,
+                    mesh->mTextureCoords[4][i].y
                 );
 
                 this->data.vertices.push_back(v);
@@ -46,17 +74,32 @@ namespace render {
 
             vertices.init();
             normals.init();
-            texCoords.init();
+            //texCoords.init();
+            albedoTexCoords.init();
+            metalTexCoords.init();
+            roughnessTexCoords.init();
+            emissiveTexCoords.init();
+            litTexCoords.init();
 
             for(int i = 0; i < this->data.vertices.size(); i++) {
                 vertices.add3f(data.vertices[i].position.x, data.vertices[i].position.y, data.vertices[i].position.z);
                 normals.add3f(data.vertices[i].normal.x, data.vertices[i].normal.y, data.vertices[i].normal.z);
-                texCoords.add2f(data.vertices[i].texCoord.x, data.vertices[i].texCoord.y);
+                //texCoords.add2f(data.vertices[i].texCoord.x, data.vertices[i].texCoord.y);
+                albedoTexCoords.add2f(data.vertices[i].albedoTexCoord.x, data.vertices[i].albedoTexCoord.y);
+                metalTexCoords.add2f(data.vertices[i].metalTexCoord.x, data.vertices[i].metalTexCoord.y);
+                roughnessTexCoords.add2f(data.vertices[i].roughnessTexCoord.x, data.vertices[i].roughnessTexCoord.y);
+                emissiveTexCoords.add2f(data.vertices[i].emissiveTexCoord.x, data.vertices[i].emissiveTexCoord.y);
+                litTexCoords.add2f(data.vertices[i].litTexCoord.x, data.vertices[i].litTexCoord.y);
             }
 
             vertices.update();
             normals.update();
-            texCoords.update();
+            //texCoords.update();
+            albedoTexCoords.update();
+            metalTexCoords.update();
+            roughnessTexCoords.update();
+            emissiveTexCoords.update();
+            litTexCoords.init();
 
             this->indencies.init();
 
@@ -73,7 +116,13 @@ namespace render {
 
         void Mesh::release() {
             indencies.release();
-            texCoords.release();
+            //texCoords.release();
+            albedoTexCoords.release();
+            metalTexCoords.release();
+            roughnessTexCoords.release();
+            emissiveTexCoords.release();
+            litTexCoords.release();
+
             normals.release();
             vertices.release();
         }
