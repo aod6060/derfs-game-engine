@@ -190,10 +190,11 @@ namespace render {
                 mesh->litTexCoords.bind();
                 this->litTexCoordPointer();
                 mesh->litTexCoords.unbind();
-                
+
                 mesh->indencies.bind();
                 render::drawElements(GL_TRIANGLES, mesh->indencies.count());
                 mesh->indencies.unbind();
+                
                 this->unbindVertexArray();
             }
         }

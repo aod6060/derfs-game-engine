@@ -75,26 +75,6 @@ namespace manager {
             }
 
             void MeshComponent::render() {
-                /*
-                if(this->entity->hasParent()) {
-                    ::render::getMainShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
-                } else {
-                    ::render::getMainShader()->setModel(this->entity->transform.toModel());
-                }
-                ::render::getMainShader()->setUVScale(this->uvScale);
-                // Why was I do this manually???
-                assets::getTexture2D(this->texture)->bind(GL_TEXTURE0);
-                ::render::getMainShader()->bindVertexArray();
-                assets::getMesh(this->mesh)->vertices.bind();
-                ::render::getMainShader()->verticePointer();
-                assets::getMesh(this->mesh)->texCoords.bind();
-                ::render::getMainShader()->texCoordPointer();
-                assets::getMesh(this->mesh)->indencies.bind();
-                ::render::drawElements(GL_TRIANGLES, assets::getMesh(this->mesh)->indencies.count());
-                assets::getMesh(this->mesh)->indencies.unbind();
-                ::render::getMainShader()->unbindVertexArray();
-                assets::getTexture2D(this->texture)->unbind(GL_TEXTURE0);
-                */
 
                 if(this->entity->hasParent()) {
                     ::render::shader::geometry::getMeshShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
