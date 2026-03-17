@@ -31,13 +31,13 @@ uniform sampler2D emissiveMaterial;
 uniform sampler2D litMaterial;
 
 // Varying Variables
-out vec3 v_WorldPosition;
-out vec3 v_Normal;
-out vec2 v_AlbedoTexCoords;
-out vec2 v_MetalTexCoords;
-out vec2 v_RoughnessTexCoords;
-out vec2 v_EmissiveTexCoords;
-out vec2 v_LitTexCoords;
+in vec3 v_WorldPosition;
+in vec3 v_Normal;
+in vec2 v_AlbedoTexCoords;
+in vec2 v_MetalTexCoords;
+in vec2 v_RoughnessTexCoords;
+in vec2 v_EmissiveTexCoords;
+in vec2 v_LitTexCoords;
 
 // Output Variable
 out vec4 out_Color;

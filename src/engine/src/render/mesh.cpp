@@ -90,7 +90,7 @@ namespace render {
             metalTexCoords.update();
             roughnessTexCoords.update();
             emissiveTexCoords.update();
-            litTexCoords.init();
+            litTexCoords.update();
 
             this->indencies.init();
 
