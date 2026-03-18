@@ -44,6 +44,9 @@ out vec4 out_Color;
 
 void main() {
     //out_Color = texture(tex0, v_TexCoords * uvScale);
+
+    // I'll be needing depth buffer, position, normals, output from albedo as well as metal, roughness, emissive, and lit values.
+    // to be passed to the lighting stage. Maybe the texcoords but I don't thing I'll be needing those at the moment. 
     switch(test) {
         case REGULAR:
             out_Color = texture(albedoMaterial, v_AlbedoTexCoords);

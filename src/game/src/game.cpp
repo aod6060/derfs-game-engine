@@ -33,10 +33,18 @@ namespace game {
 
         // This is the test section of the code.
         if(input::isKeyPressedOnce(input::Keyboard::KEYS_LALT)) {
+            /*
             if(this->testType > render::shader::geometry::MeshShader::TestType::TT_MAX_SIZE - 1) {
                 this->testType = 0;
             } else {
                 this->testType += 1;
+
+            }
+            */
+
+            this->testType += 1;
+            if(this->testType > render::shader::geometry::MeshShader::TestType::TT_MAX_SIZE - 1) {
+                this->testType = 0;
             }
         }
 
