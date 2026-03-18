@@ -178,9 +178,11 @@ namespace render {
 
             uniforms.init(this);
             attributes.init(this);
+            this->uniformBlock.init(this);
         }
 
         void Program::release() {
+            this->uniformBlock.release();
             attributes.release();
             uniforms.release();
 

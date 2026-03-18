@@ -9,8 +9,17 @@ layout(location=4) in vec2 roughnessTexCoords;
 layout(location=5) in vec2 emissiveTexCoords;
 layout(location=6) in vec2 litTexCoords;
 
+
+/*
 uniform mat4 proj;
 uniform mat4 view;
+*/
+
+layout(std140) uniform Camera {
+    mat4 proj;
+    mat4 view;
+};
+
 uniform mat4 model;
 uniform mat4 normalMatrix;
 

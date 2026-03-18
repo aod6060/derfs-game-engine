@@ -783,6 +783,13 @@ namespace render {
         }
 
         namespace geometry {
+
+            struct Camera {
+                glm::mat4 proj;
+                glm::mat4 view;
+            };
+
+
             struct MeshShader : public IShader {
                 enum TestType {
                     TT_REGULAR =  0,
@@ -815,8 +822,10 @@ namespace render {
                 virtual void bindVertexArray();
                 virtual void unbindVertexArray();
 
+                /*
                 void setProjection(glm::mat4 proj);
                 void setView(glm::mat4 view);
+                */
                 void setModel(glm::mat4 model);
                 //void setUVScale(float value);
                 void setTest(int test);
@@ -836,6 +845,7 @@ namespace render {
             void init();
             void release();
             MeshShader* getMeshShader();
+            render::glw::UniformBuffer<Camera>* getCameraUBO();
         }
 
         namespace lighting {

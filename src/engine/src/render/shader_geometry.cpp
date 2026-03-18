@@ -5,18 +5,32 @@
 namespace render {
     namespace shader {
         namespace geometry {
+            static render::glw::UniformBuffer<Camera> camera;
+
             static MeshShader meshShader;
 
             void init() {
+                camera.init();
+                camera.value.proj = glm::mat4(1.0f);
+                camera.value.view = glm::mat4(1.0f);
+                camera.update();
+                camera.bind();
+                camera.bufferRange(0);
+                camera.unbind();
                 meshShader.init();
             }
 
             void release() {
                 meshShader.release();
+                camera.release();
             }
 
             MeshShader* getMeshShader() {
                 return &meshShader;
+            }
+
+            render::glw::UniformBuffer<Camera>* getCameraUBO() {
+                return &camera;
             }
 
             void MeshShader::init() {
@@ -27,8 +41,10 @@ namespace render {
 
                 program.bind();
 
-                program.uniforms.createUniform("proj");
-                program.uniforms.createUniform("view");
+                // UniformBlock
+                program.uniformBlock.createUniformBlock("Camera", 0);
+
+                // Uniforms
                 program.uniforms.createUniform("model");
                 program.uniforms.createUniform("normalMatrix");
                 program.uniforms.createUniform("test");
@@ -108,14 +124,6 @@ namespace render {
                 program.attributes.unbind();
             }
 
-            void MeshShader::setProjection(glm::mat4 proj) {
-                program.uniforms.uniformMat4("proj", proj);
-            }
-
-            void MeshShader::setView(glm::mat4 view) {
-                program.uniforms.uniformMat4("view", view);
-            }
-
             void MeshShader::setModel(glm::mat4 model) {
                 program.uniforms.uniformMat4("model", model);
                 program.uniforms.uniformMat4("normalMatrix", glm::inverseTranspose(model));
@@ -152,7 +160,6 @@ namespace render {
             void MeshShader::litTexCoordPointer() {
                 program.attributes.attributePointer("litTexCoords", 2, GL_FLOAT);
             }
-
 
             void MeshShader::drawMesh(render::mesh::Mesh* mesh) {
                 this->bindVertexArray();

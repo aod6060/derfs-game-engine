@@ -34,6 +34,7 @@ namespace manager {
 
 
             void CameraComponent::preRender() {
+                /*
                 ::render::shader::geometry::getMeshShader()->setProjection(glm::perspective(glm::radians(this->fov), app::getAspect(), this->znear, this->zfar));
 
                 if(this->entity->hasParent()) {
@@ -41,6 +42,14 @@ namespace manager {
                 } else {
                     ::render::shader::geometry::getMeshShader()->setView(this->toView());
                 }
+                */
+                ::render::shader::geometry::getCameraUBO()->value.proj = glm::perspective(glm::radians(this->fov), app::getAspect(), this->znear, this->zfar);
+                if(this->entity->hasParent()) {
+                    ::render::shader::geometry::getCameraUBO()->value.view = this->toViewWithParent();
+                } else {
+                    ::render::shader::geometry::getCameraUBO()->value.view = this->toView();
+                }
+                ::render::shader::geometry::getCameraUBO()->update();
             }
 
             void CameraComponent::render() {
