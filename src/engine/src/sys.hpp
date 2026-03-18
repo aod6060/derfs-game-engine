@@ -819,7 +819,7 @@ namespace render {
                 void setView(glm::mat4 view);
                 void setModel(glm::mat4 model);
                 //void setUVScale(float value);
-                void setText(int test);
+                void setTest(int test);
 
                 void verticesPointer();
                 //void texCoordPointer();

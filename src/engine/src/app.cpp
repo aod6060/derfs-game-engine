@@ -107,7 +107,6 @@ namespace app {
         return g_context;
     }
 
-
     void exit() {
         g_isRunning = false;
     }

@@ -121,7 +121,7 @@ namespace render {
                 program.uniforms.uniformMat4("normalMatrix", glm::inverseTranspose(model));
             }
 
-            void MeshShader::setText(int test) {
+            void MeshShader::setTest(int test) {
                 program.uniforms.uniform1i("test", test);
             }
 
