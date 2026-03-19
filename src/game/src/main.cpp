@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include <fstream>
 
 
 int main(int argc, char** argv) {
@@ -8,5 +9,6 @@ int main(int argc, char** argv) {
     app::init(&config);
     app::update();
     app::release();
+
     return 0;
 }

@@ -84,7 +84,7 @@ namespace manager {
             }
 
             void MeshComponent::render() {
-
+                /*
                 if(this->entity->hasParent()) {
                     ::render::shader::geometry::getMeshShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
                 } else {
@@ -94,6 +94,13 @@ namespace manager {
                 assets::getMaterial(this->material)->bind();
                 ::render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(this->mesh));
                 assets::getMaterial(this->material)->unbind();
+                */
+
+                glm::mat4 m = this->entity->transform.toModel();
+                if(this->entity->hasParent()) {
+                    m = this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel();
+                }
+                ::render::submitMeshDraw(this->mesh, this->material, m);
             }
 
             void MeshComponent::release() {

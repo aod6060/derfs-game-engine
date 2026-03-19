@@ -1,20 +1,46 @@
 #include "SDL_video.h"
 #include "../sys.hpp"
+#include <functional>
+#include <vector>
+
 
 
 
 namespace render {
 
     //static MainShader mainShader;
+    struct MeshName {
+        uint64_t meshID;
+        uint64_t materialID;
+        uint64_t toHash() const;
+    };
+
+    struct MeshBatch {
+        std::string mesh;
+        std::string material;
+        std::vector<glm::mat4> model;
+    };
+}
+
+namespace std {
+    template<> struct less<render::MeshName> {
+        bool operator() (const render::MeshName& l, const render::MeshName& r) const {
+            //return l.meshID < r.meshID || l.materialID < r.materialID;
+            return l.toHash() < r.toHash();
+        }
+    };
+}
+
+namespace render {
+
+    std::map<MeshName, MeshBatch> meshBaches;
 
     void init() {
-
         SDL_GL_SetSwapInterval(1);
-        
+    
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         //mainShader.init();
-
         shader::prepass::init();
         shader::geometry::init();
         shader::lighting::init();
@@ -42,4 +68,56 @@ namespace render {
     void drawElements(GLenum type, uint32_t count) {
         glDrawElements(type, count, GL_UNSIGNED_INT, nullptr);
     }
+
+    void submitMeshDraw(std::string mesh, std::string material, const glm::mat4& model) {
+        MeshName name;
+        name.meshID = assets::getMeshID(mesh);
+        name.materialID = assets::getMaterialID(material);
+
+        if(meshBaches.find(name) != meshBaches.end()) {
+            // Insert matrix into batch
+            meshBaches.at(name).model.push_back(model);
+        } else {
+            // Create a new Mesh Batch
+            meshBaches[name].mesh = mesh;
+            meshBaches.at(name).material = material;
+            meshBaches.at(name).model.push_back(model);
+        }
+    }
+
+    void present() {
+        render::clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+        render::shader::geometry::getMeshShader()->bind();
+        // Testing batching...
+        for(std::map<MeshName, MeshBatch>::iterator it = meshBaches.begin(); it != meshBaches.end(); it++) {
+            assets::getMaterial(it->second.material)->bind();
+
+            std::cout << "Name: " << it->first.toHash() << "\n";
+
+            // Loop through model matrices and render them
+            for(std::vector<glm::mat4>::iterator it2 = it->second.model.begin(); it2 != it->second.model.end(); it2++) {
+                render::shader::geometry::getMeshShader()->setModel(*it2);
+                render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(it->second.mesh));
+            }
+            assets::getMaterial(it->second.material)->unbind();
+            // Clear Models
+            it->second.model.clear(); // To make sure the models are clear.
+        }
+
+        render::shader::geometry::getMeshShader()->unbind();
+        meshBaches.clear(); // This has to be cleared out every frame because 
+        // if not it will over draw.
+    }
+
+    uint64_t MeshName::toHash() const {
+        uint64_t a = this->meshID;
+        uint64_t b = this->materialID;
+        // Cantor pairing Function 
+        // https://stackoverflow.com/questions/919612/mapping-two-integers-to-one-in-a-unique-and-deterministic-way
+        return (a + b) * (a + b + 1) / 2 + a;
+        // Szudzik's Function
+        //https://stackoverflow.com/questions/919612/mapping-two-integers-to-one-in-a-unique-and-deterministic-way
+        //return a >= b ? a * a + a + b : a + b * b;
+    }
 }
+

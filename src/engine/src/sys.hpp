@@ -872,6 +872,7 @@ namespace render {
         void unbind();
     };
 
+
     void init();
     void release();
 
@@ -879,6 +880,10 @@ namespace render {
 
     void drawArrays(GLenum type, uint32_t vertexCount);
     void drawElements(GLenum type, uint32_t count);
+
+    void submitMeshDraw(std::string mesh, std::string material, const glm::mat4& model);
+
+    void present();
 }
 
 namespace physics {
