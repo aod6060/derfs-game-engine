@@ -34,6 +34,7 @@ namespace std {
 namespace render {
 
     std::map<MeshName, MeshBatch> meshBaches;
+    glw::VertexBuffer modelBuffer;
 
     void init() {
         SDL_GL_SetSwapInterval(1);
@@ -45,9 +46,12 @@ namespace render {
         shader::geometry::init();
         shader::lighting::init();
         shader::postprocess::init();
+        modelBuffer.init();
+
     }
 
     void release() {
+        modelBuffer.release();
         shader::postprocess::release();
         shader::lighting::release();
         shader::geometry::release();
@@ -69,6 +73,16 @@ namespace render {
         glDrawElements(type, count, GL_UNSIGNED_INT, nullptr);
     }
 
+    void drawElementsInstance(GLenum type, uint32_t indexCount, uint32_t instanceCount) {
+        glDrawElementsInstanced(
+            type,
+            indexCount,
+            GL_UNSIGNED_INT,
+            0,
+            instanceCount
+        );
+    }
+
     void submitMeshDraw(std::string mesh, std::string material, const glm::mat4& model) {
         MeshName name;
         name.meshID = assets::getMeshID(mesh);
@@ -85,28 +99,34 @@ namespace render {
         }
     }
 
-    void present() {
-        render::clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+    void _render_mesh_gb() {
         render::shader::geometry::getMeshShader()->bind();
         // Testing batching...
         for(std::map<MeshName, MeshBatch>::iterator it = meshBaches.begin(); it != meshBaches.end(); it++) {
             assets::getMaterial(it->second.material)->bind();
-
-            std::cout << "Name: " << it->first.toHash() << "\n";
-
-            // Loop through model matrices and render them
-            for(std::vector<glm::mat4>::iterator it2 = it->second.model.begin(); it2 != it->second.model.end(); it2++) {
-                render::shader::geometry::getMeshShader()->setModel(*it2);
-                render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(it->second.mesh));
+            modelBuffer.clear();
+            for(int i = 0; i < it->second.model.size(); i++) {
+                modelBuffer.addMat4(it->second.model.at(i));
             }
+            // Make sure this is clear for next frame
+            it->second.model.clear();
+            modelBuffer.update();
+            // Draw Meshes
+            render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(it->second.mesh), &modelBuffer);
+            // Loop through model matrices and render them
             assets::getMaterial(it->second.material)->unbind();
             // Clear Models
             it->second.model.clear(); // To make sure the models are clear.
         }
-
         render::shader::geometry::getMeshShader()->unbind();
         meshBaches.clear(); // This has to be cleared out every frame because 
         // if not it will over draw.
+    }
+    
+    void present() {
+        render::clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+
+        _render_mesh_gb();
     }
 
     uint64_t MeshName::toHash() const {

@@ -81,6 +81,7 @@ namespace render {
                 // layout(location=6) in vec2 litTexCoords;
                 program.attributes.createAttribute("litTexCoords", 6);
                 //program.attributes.createAttribute("texCoords", 1);
+                program.attributes.createAttribute("model", 7);
 
                 program.attributes.bind();
                 program.attributes.enableAttribute("vertices");
@@ -96,7 +97,10 @@ namespace render {
                 program.attributes.enableAttribute("emissiveTexCoords");
                 // layout(location=6) in vec2 litTexCoords;
                 program.attributes.enableAttribute("litTexCoords");
-
+                program.attributes.enableAttribute("model", 0);
+                program.attributes.enableAttribute("model", 1);
+                program.attributes.enableAttribute("model", 2);
+                program.attributes.enableAttribute("model", 3);
                 program.attributes.unbind();
 
                 program.unbind();
@@ -123,11 +127,12 @@ namespace render {
             void MeshShader::unbindVertexArray() {
                 program.attributes.unbind();
             }
-
+            /*
             void MeshShader::setModel(glm::mat4 model) {
                 program.uniforms.uniformMat4("model", model);
                 program.uniforms.uniformMat4("normalMatrix", glm::inverseTranspose(model));
             }
+            */
 
             void MeshShader::setTest(int test) {
                 program.uniforms.uniform1i("test", test);
@@ -161,7 +166,19 @@ namespace render {
                 program.attributes.attributePointer("litTexCoords", 2, GL_FLOAT);
             }
 
-            void MeshShader::drawMesh(render::mesh::Mesh* mesh) {
+            void MeshShader::modelMatrixPointer() {
+                uint32_t vec4Size = sizeof(glm::vec4);
+                program.attributes.attributePointer("model", 0, 4, GL_FLOAT, 4 * vec4Size, (const void*)0);
+                program.attributes.attributePointer("model", 1, 4, GL_FLOAT, 4 * vec4Size, (const void*)(vec4Size));
+                program.attributes.attributePointer("model", 2, 4, GL_FLOAT, 4 * vec4Size, (const void*)(vec4Size * 2));
+                program.attributes.attributePointer("model", 3, 4, GL_FLOAT, 4 * vec4Size, (const void*)(vec4Size * 3));
+                program.attributes.attributeDivisor("model", 0, 1);
+                program.attributes.attributeDivisor("model", 1, 1);
+                program.attributes.attributeDivisor("model", 2, 1);
+                program.attributes.attributeDivisor("model", 3, 1);
+            }
+
+            void MeshShader::drawMesh(render::mesh::Mesh* mesh, render::glw::VertexBuffer* model) {
                 this->bindVertexArray();
 
                 mesh->vertices.bind();
@@ -198,8 +215,13 @@ namespace render {
                 this->litTexCoordPointer();
                 mesh->litTexCoords.unbind();
 
+                model->bind();
+                this->modelMatrixPointer();
+                model->unbind();
+
                 mesh->indencies.bind();
-                render::drawElements(GL_TRIANGLES, mesh->indencies.count());
+                //render::drawElements(GL_TRIANGLES, mesh->indencies.count());
+                render::drawElementsInstance(GL_TRIANGLES, mesh->indencies.count(), model->count() / 16);
                 mesh->indencies.unbind();
                 
                 this->unbindVertexArray();

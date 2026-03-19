@@ -480,8 +480,14 @@ namespace render {
             void createAttribute(std::string name, uint32_t id);
 
             void enableAttribute(std::string name);
+            void enableAttribute(std::string name, uint32_t index);
             void disableAttribute(std::string name);
+            void disableAttribute(std::string name, uint32_t index);
+
             void attributePointer(std::string name, int size, GLenum type);
+            void attributePointer(std::string name, uint32_t index, int size, GLenum type, uint32_t offset, const void* pointer);
+
+            void attributeDivisor(std::string name, uint32_t index, uint32_t divisor);
         };
 
         struct UniformBlock {
@@ -520,6 +526,8 @@ namespace render {
             void add2f(float x, float y);
             void add3f(float x, float y, float z);
             void add4f(float x, float y, float z, float w);
+            void addVec4(const glm::vec4& v);
+            void addMat4(const glm::mat4& m);
 
             void init();
             void release();
@@ -826,7 +834,7 @@ namespace render {
                 void setProjection(glm::mat4 proj);
                 void setView(glm::mat4 view);
                 */
-                void setModel(glm::mat4 model);
+                //void setModel(glm::mat4 model);
                 //void setUVScale(float value);
                 void setTest(int test);
 
@@ -839,7 +847,9 @@ namespace render {
                 void emissiveTexCoordPointer();
                 void litTexCoordPointer();
 
-                void drawMesh(render::mesh::Mesh* mesh);
+                void modelMatrixPointer();
+
+                void drawMesh(render::mesh::Mesh* mesh, render::glw::VertexBuffer* model);
             };
 
             void init();
@@ -880,7 +890,8 @@ namespace render {
 
     void drawArrays(GLenum type, uint32_t vertexCount);
     void drawElements(GLenum type, uint32_t count);
-
+    void drawElementsInstance(GLenum type, uint32_t indexCount, uint32_t instanceCount);
+    
     void submitMeshDraw(std::string mesh, std::string material, const glm::mat4& model);
 
     void present();

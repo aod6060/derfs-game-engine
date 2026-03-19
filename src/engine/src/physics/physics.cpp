@@ -4,8 +4,8 @@
 #include "BulletCollision/CollisionDispatch/btCollisionDispatcher.h"
 #include "BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h"
 #include "BulletCollision/CollisionDispatch/btGhostObject.h"
-#include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
 #include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+#include "BulletDynamics/Dynamics/btDiscreteDynamicsWorldMt.h"
 
 namespace physics {
 
@@ -14,6 +14,9 @@ namespace physics {
     static btBroadphaseInterface* broadPhase = nullptr;
     static btSequentialImpulseConstraintSolver* solver = nullptr;
     static btDiscreteDynamicsWorld* world = nullptr;
+    //static btSequentialImpulseConstraintSolverMt* solver = nullptr;
+    //static btConstraintSolverPoolMt* solverPool = nullptr;
+    //static btDiscreteDynamicsWorldMt* world = nullptr;
 
     static btGhostPairCallback* ghostPairCB = nullptr;
 
@@ -26,6 +29,17 @@ namespace physics {
         broadPhase = new btDbvtBroadphase();
         solver = new btSequentialImpulseConstraintSolver();
         world = new btDiscreteDynamicsWorld(disp, broadPhase, solver, collisionConf);
+        /*
+        solver = new btSequentialImpulseConstraintSolverMt();
+        solverPool = new btConstraintSolverPoolMt(4);
+        world = new btDiscreteDynamicsWorldMt(
+            disp,
+            broadPhase,
+            solverPool,
+            solver,
+            collisionConf
+        );
+        */
 
         ghostPairCB = new btGhostPairCallback();
 
@@ -35,13 +49,15 @@ namespace physics {
     }
 
     void update() {
-        world->stepSimulation(timeStep);
+        //world->stepSimulation(timeStep);
+        world->stepSimulation(timeStep, 1, 1.0 / 60.0);
     }
 
     void release() {
         world->getPairCache()->setInternalGhostPairCallback(nullptr);
         delete ghostPairCB;
         delete world;
+        //delete solverPool;
         delete solver;
         delete broadPhase;
         delete disp;

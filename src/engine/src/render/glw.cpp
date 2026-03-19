@@ -130,16 +130,47 @@ namespace render {
         }
 
         void Attribute::enableAttribute(std::string name) {
-            glEnableVertexAttribArray(this->attributes.at(name));
+            //glEnableVertexAttribArray(this->attributes.at(name));
+            this->enableAttribute(name, 0);
         }
 
         void Attribute::disableAttribute(std::string name) {
-            glDisableVertexAttribArray(this->attributes.at(name));
+            //glDisableVertexAttribArray(this->attributes.at(name));
+            this->disableAttribute(name, 0);
         }
+
+        void Attribute::enableAttribute(std::string name, uint32_t index) {
+            glEnableVertexAttribArray(this->attributes.at(name) + index);
+        }
+
+        void Attribute::disableAttribute(std::string name, uint32_t index) {
+            glDisableVertexAttribArray(this->attributes.at(name) + index);
+        }
+
 
         void Attribute::attributePointer(std::string name, int size, GLenum type) {
             glVertexAttribPointer(this->attributes.at(name), size, type, GL_FALSE, 0, nullptr);
         }
+
+        void Attribute::attributePointer(std::string name, uint32_t index, int size, GLenum type, uint32_t offset, const void* pointer) {
+            glVertexAttribPointer(
+                attributes.at(name) + index,
+                size,
+                type,
+                GL_FALSE,
+                offset,
+                pointer
+            );
+
+        }
+        
+        void Attribute::attributeDivisor(std::string name, uint32_t index, uint32_t divisor) {
+            glVertexAttribDivisor(
+                attributes.at(name) + index,
+                divisor
+            );
+        }
+
 
         // UniformBlock
         void UniformBlock::init(Program* program) {
@@ -230,6 +261,17 @@ namespace render {
             list.push_back(w);
         }
         
+        void VertexBuffer::addVec4(const glm::vec4& v) {
+            add4f(v.x, v.y, v.z, v.w);
+        }
+
+        void VertexBuffer::addMat4(const glm::mat4& m) {
+            this->addVec4(m[0]);
+            this->addVec4(m[1]);
+            this->addVec4(m[2]);
+            this->addVec4(m[3]);
+        }
+
         void VertexBuffer::init() {
             glGenBuffers(1, &this->id);
         }

@@ -95,7 +95,6 @@ namespace manager {
                 ::render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(this->mesh));
                 assets::getMaterial(this->material)->unbind();
                 */
-
                 glm::mat4 m = this->entity->transform.toModel();
                 if(this->entity->hasParent()) {
                     m = this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel();
