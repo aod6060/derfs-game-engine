@@ -8,7 +8,8 @@ layout(location=3) in vec2 metalTexCoords;
 layout(location=4) in vec2 roughnessTexCoords;
 layout(location=5) in vec2 emissiveTexCoords;
 layout(location=6) in vec2 litTexCoords;
-
+// 7, 8, 9, 10
+layout(location=7) in mat4 model;
 
 /*
 uniform mat4 proj;
@@ -20,8 +21,8 @@ layout(std140) uniform Camera {
     mat4 view;
 };
 
-uniform mat4 model;
-uniform mat4 normalMatrix;
+//uniform mat4 model;
+//uniform mat4 normalMatrix;
 
 // Varying Variables
 out vec3 v_WorldPosition;
@@ -35,6 +36,7 @@ out vec2 v_LitTexCoords;
 void main() {
     gl_Position = proj * view * model * vec4(vertices, 1.0);
     v_WorldPosition = (model * vec4(vertices, 1.0)).xyz;
+    mat4 normalMatrix = inverse(transpose(model));
     v_Normal = normalize(mat3(normalMatrix) * normals);
     v_AlbedoTexCoords = albedoTexCoords;
     v_MetalTexCoords = metalTexCoords;

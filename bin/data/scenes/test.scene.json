@@ -1,7 +1,7 @@
 {
     "name": "scene",
     "version": 4,
-    "behavior": null,
+    "behavior": "data/scripts/scene/physics_test_scene.lua",
     "entities": [
         {
             "type": "prefab",
@@ -10,7 +10,7 @@
                 "position": {
                     "x": 0.0,
                     "y": 3.0,
-                    "z": 0.0
+                    "z": -30.0
                 },
                 "rotation": {
                     "x": 0.0,
@@ -25,13 +25,13 @@
             }
         },
         {
-            "type": "prefab",
-            "path": "data/prefabs/crate.prefab.json",
+            "type": "instance",
+            "name": "crate-area",
             "transform": {
                 "position": {
                     "x": 0.0,
-                    "y": 3.0,
-                    "z": -10.0
+                    "y": 0.0,
+                    "z": 0.0
                 },
                 "rotation": {
                     "x": 0.0,
@@ -43,7 +43,9 @@
                     "y": 1.0,
                     "z": 1.0
                 }
-            }
+            },
+            "components": [],
+            "entities": []
         },
         {
             "type": "instance",
