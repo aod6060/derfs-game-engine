@@ -11,8 +11,6 @@ namespace game {
         float time = 0.0f;
         float maxTime = 1.0f;
 
-        int testType = (int)render::shader::geometry::MeshShader::TestType::TT_REGULAR;
-
         virtual void init();
         virtual void handleEvent(SDL_Event* e);
         virtual void update(float delta);

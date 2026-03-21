@@ -48,7 +48,6 @@ namespace render {
                 program.uniforms.createUniform("model");
                 program.uniforms.createUniform("normalMatrix");
                 program.uniforms.createUniform("test");
-                program.uniforms.uniform1i("test", TestType::TT_REGULAR);
 
                 // uniform sampler2D albedoMaterial;
                 program.uniforms.createUniform("albedoMaterial");
@@ -127,17 +126,7 @@ namespace render {
             void MeshShader::unbindVertexArray() {
                 program.attributes.unbind();
             }
-            /*
-            void MeshShader::setModel(glm::mat4 model) {
-                program.uniforms.uniformMat4("model", model);
-                program.uniforms.uniformMat4("normalMatrix", glm::inverseTranspose(model));
-            }
-            */
-
-            void MeshShader::setTest(int test) {
-                program.uniforms.uniform1i("test", test);
-            }
-
+            
             void MeshShader::verticesPointer() {
                 program.attributes.attributePointer("vertices", 3, GL_FLOAT);
             }

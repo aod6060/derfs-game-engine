@@ -797,25 +797,7 @@ namespace render {
                 glm::mat4 view;
             };
 
-
             struct MeshShader : public IShader {
-                enum TestType {
-                    TT_REGULAR =  0,
-                    TT_POSITION =  1,
-                    TT_NORMALS =  2,
-                    TT_ALBEDO_MATERIAL =  3,
-                    TT_METAL_MATERIAL =  4,
-                    TT_ROUGHNESS_MATERIAL =  5,
-                    TT_EMISSIVE_MATERIAL =  6,
-                    TT_LIT_MATERIAL =  7,
-                    TT_ALBEDO_TC =  8,
-                    TT_METAL_TC =  9,
-                    TT_ROUGHNESS_TC  = 10,
-                    TT_EMISSIVE_TC  = 11,
-                    TT_LIT_TC  = 12,
-                    TT_MAX_SIZE
-                };
-
                 // Shader
                 render::glw::Shader vertexShader;
                 render::glw::Shader fragmentShader;
@@ -829,14 +811,6 @@ namespace render {
                 virtual void unbind();
                 virtual void bindVertexArray();
                 virtual void unbindVertexArray();
-
-                /*
-                void setProjection(glm::mat4 proj);
-                void setView(glm::mat4 view);
-                */
-                //void setModel(glm::mat4 model);
-                //void setUVScale(float value);
-                void setTest(int test);
 
                 void verticesPointer();
                 //void texCoordPointer();
@@ -882,11 +856,11 @@ namespace render {
         void unbind();
     };
 
-
     void init();
     void release();
 
     void clear(glm::vec4 clearColor);
+    void clear2D(glm::vec4 clearColor);
 
     void drawArrays(GLenum type, uint32_t vertexCount);
     void drawElements(GLenum type, uint32_t count);
