@@ -833,6 +833,46 @@ namespace render {
         }
 
         namespace lighting {
+            struct LightingShader : public IShader {
+                enum LightingTest {
+                    LT_DEPTH = 0,
+                    LT_POSITION,
+                    LT_NORMAL,
+                    LT_ALBEDO,
+                    LT_METAL,
+                    LT_ROUGHNESS,
+                    LT_EMISSIVE,
+                    LT_LIT,
+                    LT_MAX_SIZE
+                };
+
+               // Shader
+                render::glw::Shader vertexShader;
+                render::glw::Shader fragmentShader;
+
+                // Program
+                render::glw::Program program;
+
+                virtual void init();
+
+                virtual void release();
+
+                virtual void bind();
+
+                virtual void unbind();
+
+                virtual void bindVertexArray();
+
+                virtual void unbindVertexArray();
+
+                void setTest(int value);
+
+                void verticesPointer();
+
+                void texCoordPointer();
+                
+            };
+
             void init();
             void release();
         }
