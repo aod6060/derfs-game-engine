@@ -50,6 +50,10 @@ namespace manager {
                     ::render::shader::geometry::getCameraUBO()->value.view = this->toView();
                 }
                 ::render::shader::geometry::getCameraUBO()->update();
+
+                ::render::shader::lighting::getLightingShader()->bind();
+                ::render::shader::lighting::getLightingShader()->setCameraPosition(entity->transform.getGlobalPosition());
+                ::render::shader::lighting::getLightingShader()->unbind();
             }
 
             void CameraComponent::render() {

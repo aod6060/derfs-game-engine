@@ -91,6 +91,231 @@
                 }
             ],
             "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "gold_ore",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo2/gold-ore",
+                    "material": "standard"
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo2/gold-ore"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "light-post",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -40.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 270.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo2/light-post",
+                    "material": "standard"
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo2/light-post"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "light-post",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 40.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 90.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo2/light-post",
+                    "material": "standard"
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo2/light-post"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "light-post",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": -40.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo2/light-post",
+                    "material": "standard"
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo2/light-post"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "light-post",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 40.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 0.0,
+                    "y": 180.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "mesh-component",
+                    "mesh": "demo2/light-post",
+                    "material": "standard"
+                },
+                {
+                    "type": "static-body-component",
+                    "collision-shape": {
+                        "type": "triangle-mesh",
+                        "mesh": "demo2/light-post"
+                    },
+                    "groups": [
+                        "static"
+                    ],
+                    "masks": [
+                        "static",
+                        "crate",
+                        "player"
+                    ]
+                }
+            ],
+            "entities": []
         }
     ]
 }

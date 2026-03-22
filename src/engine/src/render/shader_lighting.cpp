@@ -30,10 +30,7 @@ namespace render {
                 // UniformBlocks
                 program.uniformBlock.createUniformBlock("Standard2DTransform", 1);
 
-                // Uniforms
-                program.uniforms.createUniform("test");
-                program.uniforms.uniform1i("test", (int)LightingShader::LightingTest::LT_DEPTH);
-
+                program.uniforms.createUniform("cameraPosition");
                 program.uniforms.createUniform("depthBuffer");
                 program.uniforms.uniform1i("depthBuffer", 0);
                 program.uniforms.createUniform("positionBuffer");
@@ -70,6 +67,10 @@ namespace render {
                 program.unbind();
             }
 
+            void LightingShader::setCameraPosition(glm::vec3 pos) {
+                program.uniforms.uniform3f("cameraPosition", pos.x, pos.y, pos.z);
+            }
+
             void LightingShader::bindVertexArray() {
                 program.attributes.bind();
             }
@@ -77,11 +78,6 @@ namespace render {
             void LightingShader::unbindVertexArray() {
                 program.attributes.unbind();
             }
-
-            void LightingShader::setTest(int value) {
-                program.uniforms.uniform1i("test", value);
-            }
-
 
             void LightingShader::verticesPointer() {
                 program.attributes.attributePointer("vertices", 3, GL_FLOAT);

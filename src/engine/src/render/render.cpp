@@ -356,8 +356,7 @@ namespace render {
 
         render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
         shader::lighting::getLightingShader()->bind();
-        shader::lighting::getLightingShader()->setTest(shader::lighting::LightingShader::LightingTest::LT_ALBEDO);
-
+        
         geom->depthBuffer.bind(GL_TEXTURE0);
         geom->positionBuffer.bind(GL_TEXTURE1);
         geom->normalBuffer.bind(GL_TEXTURE2);
