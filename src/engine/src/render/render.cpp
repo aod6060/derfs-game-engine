@@ -79,6 +79,14 @@ namespace render {
         void submitMeshComponent(std::string mesh, std::string material, const glm::mat4& model);
     } geometryBufferStage;
 
+    struct LightingStage : public IStage {
+        IStage* previousStage = nullptr;
+
+        virtual void init(IStage* previousStage);
+        virtual void render();
+        virtual void release();
+    } lightingStage;
+
     void init() {
         SDL_GL_SetSwapInterval(1);
         //mainShader.init();
@@ -98,10 +106,10 @@ namespace render {
 
         // Screen TexCoords
         screenTexCoords.init();
-        screenTexCoords.add2f(0.0f, 0.0f);
-        screenTexCoords.add2f(1.0f, 0.0f);
         screenTexCoords.add2f(0.0f, 1.0f);
         screenTexCoords.add2f(1.0f, 1.0f);
+        screenTexCoords.add2f(0.0f, 0.0f);
+        screenTexCoords.add2f(1.0f, 0.0f);
         screenTexCoords.update();
 
         // Screen Indencies
@@ -121,9 +129,11 @@ namespace render {
         stand2DUniformBuffer.unbind();
 
         geometryBufferStage.init(nullptr);
+        lightingStage.init(&geometryBufferStage);
     }
 
     void release() {
+        lightingStage.release();
         geometryBufferStage.release();
 
         stand2DUniformBuffer.release();
@@ -174,6 +184,7 @@ namespace render {
 
     void present() {
         geometryBufferStage.render();
+        lightingStage.render();
     }
 
     uint64_t MeshName::toHash() const {
@@ -195,19 +206,103 @@ namespace render {
     void GeometryBufferStage::init(IStage* previousStage) {
         this->previousStage = previousStage;
         this->modelBuffer.init();
+
+        // Init Textures
+        // Init DepthBuffer
+        depthBuffer.init();
+        depthBuffer.bind(GL_TEXTURE0);
+        depthBuffer.texImage2D(0, GL_DEPTH_COMPONENT32F, app::getWidthInteger(), app::getHeightInteger(), GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+        depthBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        depthBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        depthBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        depthBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        depthBuffer.unbind(GL_TEXTURE0);
+
+        // Init PositionBuffer
+        positionBuffer.init();
+        positionBuffer.bind(GL_TEXTURE0);
+        positionBuffer.texImage2D(0, GL_RGBA32F, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_FLOAT, nullptr);
+        positionBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        positionBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        positionBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        positionBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        positionBuffer.unbind(GL_TEXTURE0);
+
+        // Init NormalBuffer
+        normalBuffer.init();
+        normalBuffer.bind(GL_TEXTURE0);
+        normalBuffer.texImage2D(0, GL_RGBA32F, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_FLOAT, nullptr);
+        normalBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        normalBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        normalBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        normalBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        normalBuffer.unbind(GL_TEXTURE0);
+
+        // Init AlbedoBuffer
+        albedoBuffer.init();
+        albedoBuffer.bind(GL_TEXTURE0);
+        albedoBuffer.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        albedoBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        albedoBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        albedoBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        albedoBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        albedoBuffer.unbind(GL_TEXTURE0);
+
+        // Init MRELBuffer
+        mrelBuffer.init();
+        mrelBuffer.bind(GL_TEXTURE0);
+        mrelBuffer.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        mrelBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        mrelBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        mrelBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        mrelBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        mrelBuffer.unbind(GL_TEXTURE0);
+
+
+        frameBuffer.init();
+
+        frameBuffer.bind();
+        frameBuffer.attachDepthBuffer(&this->depthBuffer);
+        frameBuffer.attachColorBuffer(&positionBuffer, GL_COLOR_ATTACHMENT0);
+        frameBuffer.attachColorBuffer(&normalBuffer, GL_COLOR_ATTACHMENT1);
+        frameBuffer.attachColorBuffer(&albedoBuffer, GL_COLOR_ATTACHMENT2);
+        frameBuffer.attachColorBuffer(&mrelBuffer, GL_COLOR_ATTACHMENT3);
+        frameBuffer.drawBuffers({
+            GL_COLOR_ATTACHMENT0,
+            GL_COLOR_ATTACHMENT1,
+            GL_COLOR_ATTACHMENT2,
+            GL_COLOR_ATTACHMENT3
+        });
+        if(!frameBuffer.wasCreated()) {
+            std::cout << "The framebuffer wasn't create :(!\n";
+        } else {
+            std::cout << "The framebuffer was create :D!!!\n";
+        }
+        frameBuffer.unbind();
     }
 
     void GeometryBufferStage::render() {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+        frameBuffer.bind();
         render::clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
         this->renderMeshComponents();
+        frameBuffer.unbind();
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
     }
 
     void GeometryBufferStage::release() {
+        frameBuffer.release();
+
+        mrelBuffer.release();
+        albedoBuffer.release();
+        normalBuffer.release();
+        positionBuffer.release();
+        depthBuffer.release();
+
         this->modelBuffer.release();
+        this->previousStage = nullptr;
     }
 
     void GeometryBufferStage::renderMeshComponents() {
@@ -248,6 +343,52 @@ namespace render {
             meshBaches.at(name).material = material;
             meshBaches.at(name).model.push_back(model);
         }
+    }
+
+
+    // Lighting Stage
+    void LightingStage::init(IStage* previousStage) {
+        this->previousStage = previousStage;
+    }
+
+    void LightingStage::render() {
+        GeometryBufferStage* geom = (GeometryBufferStage*)this->previousStage;
+
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::lighting::getLightingShader()->bind();
+        shader::lighting::getLightingShader()->setTest(shader::lighting::LightingShader::LightingTest::LT_ALBEDO);
+
+        geom->depthBuffer.bind(GL_TEXTURE0);
+        geom->positionBuffer.bind(GL_TEXTURE1);
+        geom->normalBuffer.bind(GL_TEXTURE2);
+        geom->albedoBuffer.bind(GL_TEXTURE3);
+        geom->mrelBuffer.bind(GL_TEXTURE4);
+
+        shader::lighting::getLightingShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::lighting::getLightingShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::lighting::getLightingShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::lighting::getLightingShader()->unbindVertexArray();
+
+        geom->mrelBuffer.bind(GL_TEXTURE4);
+        geom->albedoBuffer.bind(GL_TEXTURE3);
+        geom->normalBuffer.bind(GL_TEXTURE2);
+        geom->positionBuffer.bind(GL_TEXTURE1);
+        geom->depthBuffer.bind(GL_TEXTURE0);
+        shader::lighting::getLightingShader()->unbind();
+    }
+
+    void LightingStage::release() {
+        this->previousStage = nullptr;
     }
 
 }

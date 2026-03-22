@@ -24,10 +24,11 @@ uniform sampler2D mrelBuffer; // 4
 
 in vec2 v_TexCoords;
 
-vec4 out_Color;
+out vec4 out_Color;
 
 void main() {
     // Testing to see if this data is being passed to the lighting shader
+    //out_Color = vec4(v_TexCoords, 0.0, 1.0);
     switch(test) {
         case DEPTH:
             out_Color = vec4(vec3(texture(depthBuffer, v_TexCoords).r), 1.0);
@@ -39,7 +40,7 @@ void main() {
             out_Color = vec4(texture(normalBuffer, v_TexCoords).rgb, 1.0);
             break;
         case ALBEDO:
-            out_Color = texture(albedoBuffer, v_TexCoords)
+            out_Color = vec4(texture(albedoBuffer, v_TexCoords).rgb, 1.0);
             break;
         case METAL:
             out_Color = vec4(vec3(texture(mrelBuffer, v_TexCoords).r), 1.0);
@@ -53,5 +54,9 @@ void main() {
         case LIT:
             out_Color = vec4(vec3(texture(mrelBuffer, v_TexCoords).a), 1.0);
             break;
+        default:
+            out_Color = vec4(v_TexCoords, 0.0, 1.0);
+            break;
     }
+
 }

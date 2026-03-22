@@ -870,11 +870,13 @@ namespace render {
                 void verticesPointer();
 
                 void texCoordPointer();
-                
+
             };
 
             void init();
             void release();
+
+            LightingShader* getLightingShader();
         }
 
         namespace postprocess {
