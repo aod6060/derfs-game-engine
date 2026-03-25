@@ -868,8 +868,86 @@ namespace render {
         }
 
         namespace postprocess {
+
+            struct PostProcessShader : public IShader {
+                std::string fragmentShaderPath;
+
+                // Shader
+                render::glw::Shader vertexShader;
+                render::glw::Shader fragmentShader;
+
+                // Program
+                render::glw::Program program;
+
+                virtual void init();
+
+                virtual void release();
+
+                virtual void bind();
+
+                virtual void unbind();
+
+                virtual void bindVertexArray();
+
+                virtual void unbindVertexArray();
+                
+                void verticesPointer();
+
+                void texCoordPointer();
+
+                void setFragmentShaderPath(std::string path);
+
+                virtual void buildShader() = 0;
+            };
+
+            // Copy Shader
+            struct CopyPostProcessShader : public PostProcessShader {
+                virtual void buildShader();
+            };
+
+
+            struct GaussianBlurPostProcessShader : public PostProcessShader {
+                virtual void buildShader();
+                void setSampleDistance(float value);
+            };
+
+            struct CombinePostProcessShader : public PostProcessShader {
+                enum CombineOP {
+                    COMBINE_OP_ADD = 0,
+                    COMBINE_OP_SUB,
+                    COMBINE_OP_MUL,
+                    COMBINE_OP_DIV,
+                    COMBINE_OP_MIX
+                };
+
+                virtual void buildShader();
+
+                void setCombineOp(CombineOP op);
+                // If COMBINE_OP_MIX is used it will be 
+                // a Value between 0 -> 1 using the mix function
+                void setMixValue(float value);
+            };
+
+            struct ThresholdPostProcessShader : public PostProcessShader {
+                virtual void buildShader();
+
+                void setMinValue(float value);
+                void setMaxValue(float value);
+            };
+
+            struct ModifiedEdgeDetectionPostProcessShader : public PostProcessShader {
+                virtual void buildShader();
+                void setSampleDistance(float value);
+            };
+
             void init();
             void release();
+
+            CopyPostProcessShader* getCopyShader();
+            GaussianBlurPostProcessShader* getGaussianBlurShader();
+            CombinePostProcessShader* getCombineShader();
+            ThresholdPostProcessShader* getThresholdShader();
+            ModifiedEdgeDetectionPostProcessShader* getModifiedEdgeDetectionShader();
         }
     }
 

@@ -20,16 +20,33 @@ out vec4 out_Color;
 
 
 // Here is a test light
+float ambient() {
+    return 0.1;
+}
+
+float diffuse(float ndotl) {
+    //return ndotl;
+    float ret = 1.0;
+    if(ndotl <= 0.1) {
+        ret = 0.1;
+    } else if(ndotl > 0.1 && ndotl < 0.8 ) {
+        ret = 0.5;
+    } else {
+        ret = 1.0;
+    }
+    return ret;
+}
+
+float specular(float ndoth, float power) {
+    return pow(ndoth, power) > 0.1 ? 1.0 : 0.0;
+}
+
+float emissive(float e) {
+    return e > 0.1 ? 1.0 : 0.0;
+}
 
 void main() {
-    vec3 ambient = vec3(0.1);
-    vec3 diffuse = vec3(1.0);
-    vec3 specular = vec3(1.0);
-    
-    vec3 material = texture(albedoBuffer, v_TexCoords).rgb;
-
     vec3 p = texture(positionBuffer, v_TexCoords).xyz;
-
     vec3 l = normalize(vec3(1.0, 1.0, 0.0));
     vec3 n = texture(normalBuffer, v_TexCoords).xyz;
     vec3 v = normalize(cameraPosition - p);
@@ -39,24 +56,27 @@ void main() {
     float ndotv = dot(n, v);
     float ndoth = dot(n, h);
 
+    vec3 material = texture(albedoBuffer, v_TexCoords).rgb;
     float metal = texture(mrelBuffer, v_TexCoords).r;
     float roughness = texture(mrelBuffer, v_TexCoords).g;
-    float emissive = texture(mrelBuffer, v_TexCoords).b;
+    float emi = texture(mrelBuffer, v_TexCoords).b;
     float lit = texture(mrelBuffer, v_TexCoords).a;
 
-    float sv = pow(ndoth, (1.0 - roughness) * 256.0);
+    vec3 lightColor = vec3(1.0f);
 
-    vec3 a = ambient * material;
-    vec3 d = mix(diffuse * material * ndotl, a, metal) * (1.0 - sv);
-    vec3 s = specular * sv;
-    s = mix(s, s * material, metal);
+    float A = ambient();
+    float D = diffuse(ndotl);
+    float S = specular(ndoth, (1.0 - roughness) * 256.0);
+    float E = emissive(emi);
 
-    vec3 e = material * emissive;
+    vec3 Ac = A * lightColor * material;
+    vec3 Dc = mix((D * lightColor * material) * (1.0 - S), Ac * (1.0 - S), metal);
+    vec3 Sc = (S * mix(lightColor, lightColor * material, metal));
+    vec3 Ec = E * material;
 
-    vec3 color = mix(a + d + s + e, material, 1.0 - lit);
+    vec3 finalColor = mix(Ec, Ac + Dc + Sc + Ec, lit);
+    vec3 specularColor = mix(Ec, Sc + Ec, lit);
+
     
-    //color = mix(s, material, 1.0 - lit) * 1.1;
-    //vec3 color = ambient * material + diffuse * material * ndotl + specular * pow(ndoth, 128.0);
-
-    out_Color = vec4(color, 1.0);
+    out_Color = vec4(finalColor, 1.0);
 }
