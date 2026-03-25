@@ -10,6 +10,8 @@ namespace render {
             CombinePostProcessShader combineShader;
             ThresholdPostProcessShader thresholdShader;
             ModifiedEdgeDetectionPostProcessShader modifiedEdgeDetectionShader;
+            InvertPostProcessShader invertShader;
+            DesaturatePostProcessShader desatShader;
 
             void init() {
                 copyShader.setFragmentShaderPath("data/shaders/post_pass/copy.fs.glsl");
@@ -22,9 +24,15 @@ namespace render {
                 thresholdShader.init();
                 modifiedEdgeDetectionShader.setFragmentShaderPath("data/shaders/post_pass/modified_edge_detection.glsl");
                 modifiedEdgeDetectionShader.init();
+                invertShader.setFragmentShaderPath("data/shaders/post_pass/invert.fs.glsl");
+                invertShader.init();
+                desatShader.setFragmentShaderPath("data/shaders/post_pass/desaturate.fs.glsl");
+                desatShader.init();
             }
 
             void release() {
+                desatShader.release();
+                invertShader.release();
                 modifiedEdgeDetectionShader.release();
                 thresholdShader.release();
                 combineShader.release();
@@ -50,6 +58,14 @@ namespace render {
 
             ModifiedEdgeDetectionPostProcessShader* getModifiedEdgeDetectionShader() {
                 return &modifiedEdgeDetectionShader;
+            }
+
+            InvertPostProcessShader* getInvertShader() {
+                return &invertShader;
+            }
+
+            DesaturatePostProcessShader* getDesaturateShader() {
+                return &desatShader;
             }
 
             // PostProcessShader
@@ -176,6 +192,23 @@ namespace render {
 
             void ModifiedEdgeDetectionPostProcessShader::setSampleDistance(float value) {
                 this->program.uniforms.uniform1f("sampleDistance", value);
+            }
+
+            // Invert Shader
+            void InvertPostProcessShader::buildShader() {
+                this->program.uniforms.createUniform("tex0");
+                this->program.uniforms.uniform1i("tex0", 0);
+            }
+
+            // DesaturateShader
+            void DesaturatePostProcessShader::buildShader() {
+                this->program.uniforms.createUniform("tex0");
+                this->program.uniforms.uniform1i("tex0", 0);
+                this->program.uniforms.createUniform("value");
+            }
+
+            void DesaturatePostProcessShader::setValue(float value) {
+                this->program.uniforms.uniform1f("value", value);
             }
 
         }

@@ -940,6 +940,15 @@ namespace render {
                 void setSampleDistance(float value);
             };
 
+            struct InvertPostProcessShader : public PostProcessShader {
+                virtual void buildShader();
+            };
+
+            struct DesaturatePostProcessShader : public PostProcessShader {
+                virtual void buildShader();
+                void setValue(float value);
+            };
+
             void init();
             void release();
 
@@ -948,6 +957,9 @@ namespace render {
             CombinePostProcessShader* getCombineShader();
             ThresholdPostProcessShader* getThresholdShader();
             ModifiedEdgeDetectionPostProcessShader* getModifiedEdgeDetectionShader();
+            InvertPostProcessShader* getInvertShader();
+            DesaturatePostProcessShader* getDesaturateShader();
+            
         }
     }
 
