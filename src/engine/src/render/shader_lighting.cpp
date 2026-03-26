@@ -68,9 +68,13 @@ namespace render {
             }
 
             void LightingShader::setCameraPosition(glm::vec3 pos) {
+                this->cameraPosition = pos;
                 program.uniforms.uniform3f("cameraPosition", pos.x, pos.y, pos.z);
             }
 
+            glm::vec3 LightingShader::getCameraPosition() {
+                return this->cameraPosition;
+            }
             void LightingShader::bindVertexArray() {
                 program.attributes.bind();
             }

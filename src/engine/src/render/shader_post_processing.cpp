@@ -12,6 +12,7 @@ namespace render {
             ModifiedEdgeDetectionPostProcessShader modifiedEdgeDetectionShader;
             InvertPostProcessShader invertShader;
             DesaturatePostProcessShader desatShader;
+            AxisPostProcessShader axisShader;
 
             void init() {
                 copyShader.setFragmentShaderPath("data/shaders/post_pass/copy.fs.glsl");
@@ -28,9 +29,12 @@ namespace render {
                 invertShader.init();
                 desatShader.setFragmentShaderPath("data/shaders/post_pass/desaturate.fs.glsl");
                 desatShader.init();
+                axisShader.setFragmentShaderPath("data/shaders/post_pass/axis.fs.glsl");
+                axisShader.init();
             }
 
             void release() {
+                axisShader.release();
                 desatShader.release();
                 invertShader.release();
                 modifiedEdgeDetectionShader.release();
@@ -68,6 +72,10 @@ namespace render {
                 return &desatShader;
             }
 
+            AxisPostProcessShader* getAxisShader() {
+                return &axisShader;
+            }
+            
             // PostProcessShader
             void PostProcessShader::init() {
                 this->vertexShader.init(GL_VERTEX_SHADER, "data/shaders/standard2D.vs.glsl");
@@ -211,6 +219,18 @@ namespace render {
                 this->program.uniforms.uniform1f("value", value);
             }
 
+            // AxisShader
+            void AxisPostProcessShader::buildShader() {
+                this->program.uniforms.createUniform("tex0");
+                this->program.uniforms.uniform1i("tex0", 0);
+                this->program.uniforms.createUniform("axis");
+            }
+
+            void AxisPostProcessShader::setAxis(Axis axis) {
+                this->program.uniforms.uniform1i("axis", (int)axis);
+            }
+
+            
         }
     }
 }

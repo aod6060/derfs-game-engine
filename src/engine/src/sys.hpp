@@ -841,6 +841,8 @@ namespace render {
                 // Program
                 render::glw::Program program;
 
+                glm::vec3 cameraPosition;
+                
                 virtual void init();
 
                 virtual void release();
@@ -854,7 +856,8 @@ namespace render {
                 virtual void unbindVertexArray();
 
                 void setCameraPosition(glm::vec3 pos);
-                
+                glm::vec3 getCameraPosition();
+
                 void verticesPointer();
 
                 void texCoordPointer();
@@ -917,7 +920,8 @@ namespace render {
                     COMBINE_OP_SUB,
                     COMBINE_OP_MUL,
                     COMBINE_OP_DIV,
-                    COMBINE_OP_MIX
+                    COMBINE_OP_MIX,
+                    COMBINE_OP_TEXTURE
                 };
 
                 virtual void buildShader();
@@ -949,6 +953,18 @@ namespace render {
                 void setValue(float value);
             };
 
+            struct AxisPostProcessShader : public PostProcessShader {
+                enum Axis {
+                    AXIS_X = 0,
+                    AXIS_Y,
+                    AXIS_Z,
+                    AXIS_W
+                };
+
+                virtual void buildShader();
+                void setAxis(Axis axis);
+            };
+
             void init();
             void release();
 
@@ -959,7 +975,8 @@ namespace render {
             ModifiedEdgeDetectionPostProcessShader* getModifiedEdgeDetectionShader();
             InvertPostProcessShader* getInvertShader();
             DesaturatePostProcessShader* getDesaturateShader();
-            
+            AxisPostProcessShader* getAxisShader();
+
         }
     }
 

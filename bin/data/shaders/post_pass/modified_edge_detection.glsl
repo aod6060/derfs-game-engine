@@ -31,7 +31,7 @@ void main() {
     kernal[8] = 0.0;
 
     for(int i = 0; i < ARRAY_SIZE; i++) {
-        kernal[i] /= 16.0;
+        kernal[i] /= 8.0;
     }
 
     float s = 1.0 / sampleDistance;
@@ -58,9 +58,9 @@ void main() {
     // Here is the modifiction. If the value is above
     // A certain value the result across all values will be 
     // 1.0 otherwise it will be 0.0
-    result.r = (result.r > 0.0) ? 1.0 : 0.0;
-    result.g = (result.g > 0.0) ? 1.0 : 0.0;
-    result.b = (result.b > 0.0) ? 1.0 : 0.0;
+    result = (result.r > 0.0 || result.g > 0.0 || result.b > 0.0) ? vec3(1.0) : vec3(0.0);
+    //result.g = (result.g > 0.0) ? 1.0 : 0.0;
+    //result.b = (result.b > 0.0) ? 1.0 : 0.0;
 
     out_Color.rgb = result;
     out_Color.a = texture(tex0, v_TexCoords).a;

@@ -82,10 +82,48 @@ namespace render {
     struct LightingStage : public IStage {
         IStage* previousStage = nullptr;
 
+        glw::FrameBuffer frameBuffer;
+        glw::Texture2D output;
+
         virtual void init(IStage* previousStage);
         virtual void render();
         virtual void release();
     } lightingStage;
+
+    struct PostProcessingStage : public IStage {
+        IStage* previousStage = nullptr;
+
+        glw::Texture2D a, b, output, bloom, lineArt;
+        glw::FrameBuffer frameBuffer;
+
+        virtual void init(IStage* previousStage);
+        virtual void render();
+        virtual void release();
+        
+        void copy(glw::Texture2D* output, glw::Texture2D* in);
+        
+        void gaussianBlur(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance);
+        
+        void combine(
+            glw::Texture2D* output, 
+            glw::Texture2D* a, 
+            glw::Texture2D* b, 
+            shader::postprocess::CombinePostProcessShader::CombineOP op, 
+            float mixValue = 0.0f);
+
+        void threshold(glw::Texture2D* output, glw::Texture2D* in, float minValue, float maxValue);
+
+        void edgeDetection(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance);
+
+        void invert(glw::Texture2D* output, glw::Texture2D* in);
+
+        void desaturate(glw::Texture2D* output, glw::Texture2D* in, float value);
+
+        void axis(glw::Texture2D* output, glw::Texture2D* in, shader::postprocess::AxisPostProcessShader::Axis axis);
+
+        void outputScreenFrameBuffer(glw::Texture2D* in);
+
+    } postProcessingStage;
 
     void init() {
         SDL_GL_SetSwapInterval(1);
@@ -130,9 +168,11 @@ namespace render {
 
         geometryBufferStage.init(nullptr);
         lightingStage.init(&geometryBufferStage);
+        postProcessingStage.init(&lightingStage);
     }
 
     void release() {
+        postProcessingStage.release();
         lightingStage.release();
         geometryBufferStage.release();
 
@@ -185,6 +225,7 @@ namespace render {
     void present() {
         geometryBufferStage.render();
         lightingStage.render();
+        postProcessingStage.render();
     }
 
     uint64_t MeshName::toHash() const {
@@ -211,7 +252,7 @@ namespace render {
         // Init DepthBuffer
         depthBuffer.init();
         depthBuffer.bind(GL_TEXTURE0);
-        depthBuffer.texImage2D(0, GL_DEPTH_COMPONENT32F, app::getWidthInteger(), app::getHeightInteger(), GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+        depthBuffer.texImage2D(0, GL_DEPTH_COMPONENT32, app::getWidthInteger(), app::getHeightInteger(), GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
         depthBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         depthBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         depthBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -349,9 +390,34 @@ namespace render {
     // Lighting Stage
     void LightingStage::init(IStage* previousStage) {
         this->previousStage = previousStage;
+
+        this->output.init();
+        this->output.bind(GL_TEXTURE0);
+        this->output.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        this->output.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        this->output.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        this->output.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        this->output.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        this->output.unbind(GL_TEXTURE0);
+
+        frameBuffer.init();
+
+        frameBuffer.bind();
+        frameBuffer.attachColorBuffer(&output, GL_COLOR_ATTACHMENT0);
+        frameBuffer.drawBuffers({
+            GL_COLOR_ATTACHMENT0,
+        });
+
+        if(!frameBuffer.wasCreated()) {
+            std::cout << "Lighting pass framebuffer wasn't create :(!\n";
+        } else {
+            std::cout << "Lighting pass framebuffer was create :D!!!\n";
+        }
+        frameBuffer.unbind();
     }
 
     void LightingStage::render() {
+        this->frameBuffer.bind();
         GeometryBufferStage* geom = (GeometryBufferStage*)this->previousStage;
 
         render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -384,11 +450,445 @@ namespace render {
         geom->positionBuffer.bind(GL_TEXTURE1);
         geom->depthBuffer.bind(GL_TEXTURE0);
         shader::lighting::getLightingShader()->unbind();
+        this->frameBuffer.unbind();
+
     }
 
     void LightingStage::release() {
+        this->frameBuffer.release();
+        this->output.release();
         this->previousStage = nullptr;
     }
 
+    // Post Processing Stage
+    void PostProcessingStage::init(IStage* previousStage) {
+        this->previousStage = previousStage;
+
+        a.init();
+        a.bind(GL_TEXTURE0);
+        a.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        a.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        a.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        a.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        a.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        a.unbind(GL_TEXTURE0);
+
+        b.init();
+        b.bind(GL_TEXTURE0);
+        b.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        b.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        b.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        b.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        b.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        b.unbind(GL_TEXTURE0);
+
+        output.init();
+        output.bind(GL_TEXTURE0);
+        output.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        output.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        output.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        output.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        output.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        output.unbind(GL_TEXTURE0);
+
+        bloom.init();
+        bloom.bind(GL_TEXTURE0);
+        bloom.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        bloom.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        bloom.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        bloom.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        bloom.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        bloom.unbind(GL_TEXTURE0);
+
+        lineArt.init();
+        lineArt.bind(GL_TEXTURE0);
+        lineArt.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        lineArt.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        lineArt.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        lineArt.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        lineArt.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        lineArt.unbind(GL_TEXTURE0);
+
+        frameBuffer.init();
+    }
+
+    void PostProcessingStage::render() {
+        LightingStage* lightingStage = (LightingStage*)this->previousStage;
+        GeometryBufferStage* geomStage = (GeometryBufferStage*)lightingStage->previousStage;
+
+        // Bloom
+        this->copy(&this->a, &lightingStage->output);
+        this->threshold(&this->output, &this->a, 0.7, 1.0);
+        for(int i = 0; i < 128; i++) {
+            this->copy(&a, &output);
+            this->gaussianBlur(&output, &a,512.0);
+        }
+
+        this->copy(&a, &output);
+        this->combine(&bloom, &a, &lightingStage->output, shader::postprocess::CombinePostProcessShader::CombineOP::COMBINE_OP_ADD);
+
+        // Line Art
+        this->copy(&a, &geomStage->normalBuffer);
+        //this->copy(&b, &geomStage->depthBuffer);
+        this->copy(&b, &geomStage->positionBuffer);
+        //this->invert(&output, &b);
+        this->axis(&output, &b, shader::postprocess::AxisPostProcessShader::Axis::AXIS_Z);
+        
+        this->outputScreenFrameBuffer(&output);
+
+        /*
+        this->copy(&b, &output);
+        this->combine(&output, &b, &a, shader::postprocess::CombinePostProcessShader::CombineOP::COMBINE_OP_MUL);
+        this->copy(&a, &output);
+        this->edgeDetection(&output, &a, 1024.0f);
+        this->copy(&a, &output);
+        this->invert(&this->lineArt, &a);
+
+        this->combine(&output, &bloom, &lineArt, shader::postprocess::CombinePostProcessShader::CombineOP::COMBINE_OP_MUL);
+        */
+        //this->outputScreenFrameBuffer(&output);
+
+        //this->invert(&output, &a);
+        /*
+        this->copy(&a, &output);
+        this->edgeDetection(&output, &a, 1024.0f);
+        this->outputScreenFrameBuffer(&this->output);
+        */
+    }
+
+    void PostProcessingStage::release() {
+        frameBuffer.release();
+        lineArt.release();
+        bloom.release();
+        output.release();
+        b.release();
+        a.release();
+        this->previousStage = nullptr;
+    }
+
+    void PostProcessingStage::copy(glw::Texture2D* output, glw::Texture2D* in) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getCopyShader()->bind();
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getCopyShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getCopyShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getCopyShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getCopyShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getCopyShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::gaussianBlur(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getGaussianBlurShader()->bind();
+
+        shader::postprocess::getGaussianBlurShader()->setSampleDistance(sampleDistance);
+        //lightingStage->output.bind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getGaussianBlurShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getGaussianBlurShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getGaussianBlurShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getGaussianBlurShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getGaussianBlurShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::combine(
+        glw::Texture2D* output, 
+        glw::Texture2D* a, 
+        glw::Texture2D* b, 
+        shader::postprocess::CombinePostProcessShader::CombineOP op, 
+        float mixValue) 
+    {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getCombineShader()->bind();
+
+        shader::postprocess::getCombineShader()->setCombineOp(op);
+        shader::postprocess::getCombineShader()->setMixValue(mixValue);
+        //lightingStage->output.bind(GL_TEXTURE0);
+        a->bind(GL_TEXTURE0);
+        b->bind(GL_TEXTURE1);
+        shader::postprocess::getCombineShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getCombineShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getCombineShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getCombineShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        b->bind(GL_TEXTURE1);
+        a->bind(GL_TEXTURE0);
+
+        shader::postprocess::getCombineShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::threshold(glw::Texture2D* output, glw::Texture2D* in, float minValue, float maxValue) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getThresholdShader()->bind();
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        shader::postprocess::getThresholdShader()->setMinValue(minValue);
+        shader::postprocess::getThresholdShader()->setMaxValue(maxValue);
+
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getThresholdShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getThresholdShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getThresholdShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getThresholdShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getThresholdShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::edgeDetection(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getModifiedEdgeDetectionShader()->bind();
+
+        shader::postprocess::getModifiedEdgeDetectionShader()->setSampleDistance(sampleDistance);
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getModifiedEdgeDetectionShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getModifiedEdgeDetectionShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getModifiedEdgeDetectionShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getModifiedEdgeDetectionShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getModifiedEdgeDetectionShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::invert(glw::Texture2D* output, glw::Texture2D* in) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getInvertShader()->bind();
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getInvertShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getInvertShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getInvertShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getInvertShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getInvertShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::desaturate(glw::Texture2D* output, glw::Texture2D* in, float value) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getDesaturateShader()->bind();
+
+        shader::postprocess::getDesaturateShader()->setValue(value);
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getDesaturateShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getDesaturateShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getDesaturateShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getDesaturateShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getDesaturateShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::axis(glw::Texture2D* output, glw::Texture2D* in, shader::postprocess::AxisPostProcessShader::Axis axis) {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getAxisShader()->bind();
+
+        shader::postprocess::getAxisShader()->setAxis(axis);
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getAxisShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getAxisShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getAxisShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getAxisShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getAxisShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
+    void PostProcessingStage::outputScreenFrameBuffer(glw::Texture2D* in) {
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getCopyShader()->bind();
+
+        in->bind(GL_TEXTURE0);
+
+        shader::postprocess::getCopyShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getCopyShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getCopyShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getCopyShader()->unbindVertexArray();
+
+        in->unbind(GL_TEXTURE0);
+
+        shader::postprocess::getCopyShader()->unbind();
+    }
 }
 
