@@ -53,6 +53,8 @@ namespace render {
 
     glw::UniformBuffer<Standard2DTransform> stand2DUniformBuffer;
 
+    uint32_t tex = GL_LINEAR;
+
     struct GeometryBufferStage : public IStage {
         IStage* previousStage = nullptr;
 
@@ -259,8 +261,8 @@ namespace render {
         depthBuffer.init();
         depthBuffer.bind(GL_TEXTURE0);
         depthBuffer.texImage2D(0, GL_DEPTH_COMPONENT32F, app::getWidthInteger(), app::getHeightInteger(), GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-        depthBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        depthBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        depthBuffer.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        depthBuffer.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         depthBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         depthBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         depthBuffer.unbind(GL_TEXTURE0);
@@ -269,8 +271,8 @@ namespace render {
         positionBuffer.init();
         positionBuffer.bind(GL_TEXTURE0);
         positionBuffer.texImage2D(0, GL_RGBA32F, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_FLOAT, nullptr);
-        positionBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        positionBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        positionBuffer.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        positionBuffer.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         positionBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         positionBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         positionBuffer.unbind(GL_TEXTURE0);
@@ -279,8 +281,8 @@ namespace render {
         normalBuffer.init();
         normalBuffer.bind(GL_TEXTURE0);
         normalBuffer.texImage2D(0, GL_RGBA32F, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_FLOAT, nullptr);
-        normalBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        normalBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        normalBuffer.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        normalBuffer.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         normalBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         normalBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         normalBuffer.unbind(GL_TEXTURE0);
@@ -289,8 +291,8 @@ namespace render {
         albedoBuffer.init();
         albedoBuffer.bind(GL_TEXTURE0);
         albedoBuffer.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        albedoBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        albedoBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        albedoBuffer.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        albedoBuffer.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         albedoBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         albedoBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         albedoBuffer.unbind(GL_TEXTURE0);
@@ -299,8 +301,8 @@ namespace render {
         mrelBuffer.init();
         mrelBuffer.bind(GL_TEXTURE0);
         mrelBuffer.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        mrelBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        mrelBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        mrelBuffer.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        mrelBuffer.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         mrelBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         mrelBuffer.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         mrelBuffer.unbind(GL_TEXTURE0);
@@ -400,8 +402,8 @@ namespace render {
         this->output.init();
         this->output.bind(GL_TEXTURE0);
         this->output.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        this->output.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        this->output.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        this->output.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        this->output.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         this->output.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         this->output.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         this->output.unbind(GL_TEXTURE0);
@@ -473,8 +475,8 @@ namespace render {
         a.init();
         a.bind(GL_TEXTURE0);
         a.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        a.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        a.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        a.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        a.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         a.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         a.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         a.unbind(GL_TEXTURE0);
@@ -482,8 +484,8 @@ namespace render {
         b.init();
         b.bind(GL_TEXTURE0);
         b.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        b.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        b.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        b.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        b.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         b.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         b.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         b.unbind(GL_TEXTURE0);
@@ -491,8 +493,8 @@ namespace render {
         output.init();
         output.bind(GL_TEXTURE0);
         output.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        output.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        output.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        output.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        output.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         output.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         output.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         output.unbind(GL_TEXTURE0);
@@ -500,8 +502,8 @@ namespace render {
         bloom.init();
         bloom.bind(GL_TEXTURE0);
         bloom.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        bloom.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        bloom.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        bloom.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        bloom.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         bloom.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         bloom.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         bloom.unbind(GL_TEXTURE0);
@@ -509,8 +511,8 @@ namespace render {
         lineArt.init();
         lineArt.bind(GL_TEXTURE0);
         lineArt.texImage2D(0, GL_RGBA, app::getWidthInteger(), app::getHeightInteger(), GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        lineArt.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        lineArt.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        lineArt.texParameter(GL_TEXTURE_MAG_FILTER, tex);
+        lineArt.texParameter(GL_TEXTURE_MIN_FILTER, tex);
         lineArt.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         lineArt.texParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         lineArt.unbind(GL_TEXTURE0);
@@ -547,7 +549,7 @@ namespace render {
 
         this->combine(&output, &bloom, &lineArt, shader::postprocess::CombinePostProcessShader::COMBINE_OP_MUL);
 
-        this->outputScreenFrameBuffer(&output);
+        this->outputScreenFrameBuffer(&bloom);
     }
 
     void PostProcessingStage::release() {
