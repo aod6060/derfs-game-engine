@@ -124,18 +124,24 @@ void load_sampler(out vec3 valueA, out vec3 valueB) {
 
 void camera_texture_sampler() {
     vec4 color = texture(a, v_TexCoords);
-    vec3 
-    out_Color = 
+    vec3 offset = cameraPosition - color.xyz;
+    out_Color = vec4(offset, color.a);
 }
 
 void texture_camera_sampler() {
-
+    vec4 color = texture(a, v_TexCoords);
+    vec3 offset = color.xyz - cameraPosition;
+    out_Color = vec4(offset, color.a);
 }
 
 void camera_texture_normalized_sampler() {
-
+    vec4 color = texture(a, v_TexCoords);
+    vec3 offset = normalize(cameraPosition - color.xyz);
+    out_Color = vec4(offset, color.a);
 }
 
 void texture_camera_normalized_sampler() {
-
+    vec4 color = texture(a, v_TexCoords);
+    vec3 offset = normalize(color.xyz - cameraPosition);
+    out_Color = vec4(offset, color.a);
 }

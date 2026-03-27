@@ -52,9 +52,9 @@ void main() {
     vec3 v = normalize(cameraPosition - p);
     vec3 h = normalize(l + v);
 
-    float ndotl = dot(n, l);
+    float ndotl = max(dot(n, l), 0.0);
     float ndotv = dot(n, v);
-    float ndoth = dot(n, h);
+    float ndoth = max(dot(n, h), 0.0);
 
     vec3 material = texture(albedoBuffer, v_TexCoords).rgb;
     float metal = texture(mrelBuffer, v_TexCoords).r;
@@ -75,8 +75,6 @@ void main() {
     vec3 Ec = E * material;
 
     vec3 finalColor = mix(Ec, Ac + Dc + Sc + Ec, lit);
-    vec3 specularColor = mix(Ec, Sc + Ec, lit);
 
-    
     out_Color = vec4(finalColor, 1.0);
 }

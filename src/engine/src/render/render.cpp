@@ -102,7 +102,7 @@ namespace render {
         
         void copy(glw::Texture2D* output, glw::Texture2D* in);
         
-        void gaussianBlur(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance);
+        void gaussianBlur(glw::Texture2D* output, glw::Texture2D* in, float widthDistance, float heightDistance);
         
         void combine(
             glw::Texture2D* output, 
@@ -111,9 +111,15 @@ namespace render {
             shader::postprocess::CombinePostProcessShader::CombineOP op, 
             float mixValue = 0.0f);
 
+        void combineCamera(
+            glw::Texture2D* output,
+            glw::Texture2D* a,
+            shader::postprocess::CombinePostProcessShader::CombineOP op
+        );
+
         void threshold(glw::Texture2D* output, glw::Texture2D* in, float minValue, float maxValue);
 
-        void edgeDetection(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance);
+        void edgeDetection(glw::Texture2D* output, glw::Texture2D* in, float widthDistance, float heightDistance);
 
         void invert(glw::Texture2D* output, glw::Texture2D* in);
 
@@ -252,7 +258,7 @@ namespace render {
         // Init DepthBuffer
         depthBuffer.init();
         depthBuffer.bind(GL_TEXTURE0);
-        depthBuffer.texImage2D(0, GL_DEPTH_COMPONENT32, app::getWidthInteger(), app::getHeightInteger(), GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+        depthBuffer.texImage2D(0, GL_DEPTH_COMPONENT32F, app::getWidthInteger(), app::getHeightInteger(), GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
         depthBuffer.texParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         depthBuffer.texParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         depthBuffer.texParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -519,41 +525,29 @@ namespace render {
         // Bloom
         this->copy(&this->a, &lightingStage->output);
         this->threshold(&this->output, &this->a, 0.7, 1.0);
+
+        float size_limit = 0.3f;
+
         for(int i = 0; i < 128; i++) {
             this->copy(&a, &output);
-            this->gaussianBlur(&output, &a,512.0);
+            this->gaussianBlur(&output, &a, app::getWidthFloat() * size_limit, app::getHeightFloat() * size_limit);
         }
 
         this->copy(&a, &output);
         this->combine(&bloom, &a, &lightingStage->output, shader::postprocess::CombinePostProcessShader::CombineOP::COMBINE_OP_ADD);
 
         // Line Art
+        float size_limit_2 = 0.9f;
+
         this->copy(&a, &geomStage->normalBuffer);
-        //this->copy(&b, &geomStage->depthBuffer);
-        this->copy(&b, &geomStage->positionBuffer);
-        //this->invert(&output, &b);
-        this->axis(&output, &b, shader::postprocess::AxisPostProcessShader::Axis::AXIS_Z);
-        
+        this->edgeDetection(&output, &a, app::getWidthFloat() * size_limit_2, app::getHeightFloat() * size_limit_2);
+        this->copy(&a, &output);
+        this->invert(&output, &a);
+        this->copy(&this->lineArt, &output);
+
+        this->combine(&output, &bloom, &lineArt, shader::postprocess::CombinePostProcessShader::COMBINE_OP_MUL);
+
         this->outputScreenFrameBuffer(&output);
-
-        /*
-        this->copy(&b, &output);
-        this->combine(&output, &b, &a, shader::postprocess::CombinePostProcessShader::CombineOP::COMBINE_OP_MUL);
-        this->copy(&a, &output);
-        this->edgeDetection(&output, &a, 1024.0f);
-        this->copy(&a, &output);
-        this->invert(&this->lineArt, &a);
-
-        this->combine(&output, &bloom, &lineArt, shader::postprocess::CombinePostProcessShader::CombineOP::COMBINE_OP_MUL);
-        */
-        //this->outputScreenFrameBuffer(&output);
-
-        //this->invert(&output, &a);
-        /*
-        this->copy(&a, &output);
-        this->edgeDetection(&output, &a, 1024.0f);
-        this->outputScreenFrameBuffer(&this->output);
-        */
     }
 
     void PostProcessingStage::release() {
@@ -601,7 +595,7 @@ namespace render {
         this->frameBuffer.unbind();
     }
 
-    void PostProcessingStage::gaussianBlur(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance) {
+    void PostProcessingStage::gaussianBlur(glw::Texture2D* output, glw::Texture2D* in, float widthDistance, float heightDistance) {
         this->frameBuffer.bind();
         this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
         this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
@@ -610,7 +604,10 @@ namespace render {
         render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
         shader::postprocess::getGaussianBlurShader()->bind();
 
-        shader::postprocess::getGaussianBlurShader()->setSampleDistance(sampleDistance);
+        //shader::postprocess::getGaussianBlurShader()->setSampleDistance(sampleDistance);
+        shader::postprocess::getGaussianBlurShader()->setWidthDistance(widthDistance);
+        shader::postprocess::getGaussianBlurShader()->setHeightDistance(heightDistance);
+
         //lightingStage->output.bind(GL_TEXTURE0);
         in->bind(GL_TEXTURE0);
 
@@ -681,6 +678,48 @@ namespace render {
         this->frameBuffer.unbind();
     }
 
+    void PostProcessingStage::combineCamera(
+        glw::Texture2D* output,
+        glw::Texture2D* a,
+        shader::postprocess::CombinePostProcessShader::CombineOP op
+    )
+    {
+        this->frameBuffer.bind();
+        this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
+        this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
+
+        
+        render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        shader::postprocess::getCombineShader()->bind();
+
+        shader::postprocess::getCombineShader()->setCombineOp(op);
+        shader::postprocess::getCombineShader()->setCameraPosition(shader::lighting::getLightingShader()->getCameraPosition());
+
+        //lightingStage->output.bind(GL_TEXTURE0);
+        a->bind(GL_TEXTURE0);
+        shader::postprocess::getCombineShader()->bindVertexArray();
+        screenVertices.bind();
+        shader::postprocess::getCombineShader()->verticesPointer();
+        screenVertices.unbind();
+
+        screenTexCoords.bind();
+        shader::postprocess::getCombineShader()->texCoordPointer();
+        screenTexCoords.unbind();
+
+        screenIndencies.bind();
+        drawElements(GL_TRIANGLES, screenIndencies.count());
+        screenIndencies.unbind();
+
+        shader::postprocess::getCombineShader()->unbindVertexArray();
+
+        //lightingStage->output.unbind(GL_TEXTURE0);
+        a->bind(GL_TEXTURE0);
+
+        shader::postprocess::getCombineShader()->unbind();
+
+        this->frameBuffer.unbind();
+    }
+
     void PostProcessingStage::threshold(glw::Texture2D* output, glw::Texture2D* in, float minValue, float maxValue) {
         this->frameBuffer.bind();
         this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
@@ -719,7 +758,7 @@ namespace render {
         this->frameBuffer.unbind();
     }
 
-    void PostProcessingStage::edgeDetection(glw::Texture2D* output, glw::Texture2D* in, float sampleDistance) {
+    void PostProcessingStage::edgeDetection(glw::Texture2D* output, glw::Texture2D* in, float widthDistance, float heightDistance) {
         this->frameBuffer.bind();
         this->frameBuffer.attachColorBuffer(output, GL_COLOR_ATTACHMENT0);
         this->frameBuffer.drawBuffers({GL_COLOR_ATTACHMENT0});
@@ -728,7 +767,9 @@ namespace render {
         render::clear2D(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
         shader::postprocess::getModifiedEdgeDetectionShader()->bind();
 
-        shader::postprocess::getModifiedEdgeDetectionShader()->setSampleDistance(sampleDistance);
+        //shader::postprocess::getModifiedEdgeDetectionShader()->setSampleDistance(sampleDistance);
+        shader::postprocess::getModifiedEdgeDetectionShader()->setWidthDistance(widthDistance);
+        shader::postprocess::getModifiedEdgeDetectionShader()->setHeightDistance(heightDistance);
 
         //lightingStage->output.bind(GL_TEXTURE0);
         in->bind(GL_TEXTURE0);

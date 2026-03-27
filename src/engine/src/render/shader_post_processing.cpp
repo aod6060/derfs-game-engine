@@ -148,13 +148,20 @@ namespace render {
             void GaussianBlurPostProcessShader::buildShader() {
                 this->program.uniforms.createUniform("tex0");
                 this->program.uniforms.uniform1i("tex0", 0);
-                this->program.uniforms.createUniform("sampleDistance");
+                //this->program.uniforms.createUniform("sampleDistance");
+                this->program.uniforms.createUniform("widthDistance");
+                this->program.uniforms.createUniform("heightDistance");
             }
 
-            void GaussianBlurPostProcessShader::setSampleDistance(float value) {
-                this->program.uniforms.uniform1f("sampleDistance", value);
+            void GaussianBlurPostProcessShader::setWidthDistance(float value) {
+                this->program.uniforms.uniform1f("widthDistance", value);
             }
 
+            void GaussianBlurPostProcessShader::setHeightDistance(float value) {
+                this->program.uniforms.uniform1f("heightDistance", value);
+            }
+
+            
             // CombinePostProcessShader
             void CombinePostProcessShader::buildShader() {
                 this->program.uniforms.createUniform("op");
@@ -163,6 +170,7 @@ namespace render {
                 this->program.uniforms.createUniform("b");
                 this->program.uniforms.uniform1i("b", 1);
                 this->program.uniforms.createUniform("mixValue");
+                this->program.uniforms.createUniform("cameraPosition");
             }
 
             void CombinePostProcessShader::setCombineOp(CombineOP op) {
@@ -175,6 +183,9 @@ namespace render {
                 this->program.uniforms.uniform1f("mixValue", value);
             }
 
+            void CombinePostProcessShader::setCameraPosition(glm::vec3 cameraPosition) {
+                this->program.uniforms.uniform3f("cameraPosition", cameraPosition.x, cameraPosition.y, cameraPosition.z);
+            }
             // ThresholdPostProcessShader
             void ThresholdPostProcessShader::buildShader() {
                 this->program.uniforms.createUniform("tex0");
@@ -195,13 +206,20 @@ namespace render {
             void ModifiedEdgeDetectionPostProcessShader::buildShader() {
                 this->program.uniforms.createUniform("tex0");
                 this->program.uniforms.uniform1i("tex0", 0);
-                this->program.uniforms.createUniform("sampleDistance");
+                //this->program.uniforms.createUniform("sampleDistance");
+                this->program.uniforms.createUniform("widthDistance");
+                this->program.uniforms.createUniform("heightDistance");
             }
 
-            void ModifiedEdgeDetectionPostProcessShader::setSampleDistance(float value) {
-                this->program.uniforms.uniform1f("sampleDistance", value);
+            void ModifiedEdgeDetectionPostProcessShader::setWidthDistance(float value) {
+                this->program.uniforms.uniform1f("widthDistance", value);
             }
 
+            void ModifiedEdgeDetectionPostProcessShader::setHeightDistance(float value) {
+                this->program.uniforms.uniform1f("heightDistance", value);
+            }
+
+            
             // Invert Shader
             void InvertPostProcessShader::buildShader() {
                 this->program.uniforms.createUniform("tex0");

@@ -911,7 +911,9 @@ namespace render {
 
             struct GaussianBlurPostProcessShader : public PostProcessShader {
                 virtual void buildShader();
-                void setSampleDistance(float value);
+                //void setSampleDistance(float value);
+                void setWidthDistance(float value);
+                void setHeightDistance(float value);
             };
 
             struct CombinePostProcessShader : public PostProcessShader {
@@ -921,7 +923,11 @@ namespace render {
                     COMBINE_OP_MUL,
                     COMBINE_OP_DIV,
                     COMBINE_OP_MIX,
-                    COMBINE_OP_TEXTURE
+                    COMBINE_OP_TEXTURE,
+                    COMBINE_OP_CAMERA_TEXTURE,
+                    COMBINE_OP_TEXTURE_CAMERA,
+                    COMBINE_OP_CAMERA_TEXTURE_NORMALIZED,
+                    COMBINE_OP_TEXTURE_CAMERA_NORMALIZED
                 };
 
                 virtual void buildShader();
@@ -930,6 +936,8 @@ namespace render {
                 // If COMBINE_OP_MIX is used it will be 
                 // a Value between 0 -> 1 using the mix function
                 void setMixValue(float value);
+
+                void setCameraPosition(glm::vec3 cameraPosition);
             };
 
             struct ThresholdPostProcessShader : public PostProcessShader {
@@ -941,7 +949,9 @@ namespace render {
 
             struct ModifiedEdgeDetectionPostProcessShader : public PostProcessShader {
                 virtual void buildShader();
-                void setSampleDistance(float value);
+                //void setSampleDistance(float value);
+                void setWidthDistance(float value);
+                void setHeightDistance(float value);
             };
 
             struct InvertPostProcessShader : public PostProcessShader {
