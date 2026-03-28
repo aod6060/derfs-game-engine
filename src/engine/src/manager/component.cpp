@@ -25,6 +25,12 @@ namespace manager {
                     return new render::CameraComponent();
                 }
             },
+        {
+                "sun-component",
+                []() {
+                    return new render::SunComponent();
+                }
+            },
             {
                 "static-body-component",
                 []() {

@@ -7,17 +7,40 @@ namespace render {
         namespace lighting {
 
             LightingShader lightingShader;
+            render::glw::UniformBuffer<SunLight> sunLight;
 
             void init() {
+                int amount;
+
+                glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, &amount);
+
+                std::cout << "Fragment Uniform Buffers: " << amount << "\n";
+
+                sunLight.init();
+                sunLight.value.isOn = GL_TRUE;
+                sunLight.value.direction = glm::vec3(1.0f, 1.0f, 0.0f);
+                sunLight.value.albedo = glm::vec3(1.0f);
+                sunLight.value.ambient = 0.1f;
+                sunLight.value.diffuse = 1.0f;
+                sunLight.value.specular = 1.0f;
+                sunLight.update();
+                sunLight.bind();
+                sunLight.bufferRange(2);
+                sunLight.unbind();
                 lightingShader.init();
             }
 
             void release() {
                 lightingShader.release();
+                sunLight.release();
             }
 
             LightingShader* getLightingShader() {
                 return &lightingShader;
+            }
+
+            render::glw::UniformBuffer<SunLight>* getSunLight() {
+                return &sunLight;
             }
 
             void LightingShader::init() {
@@ -29,6 +52,7 @@ namespace render {
 
                 // UniformBlocks
                 program.uniformBlock.createUniformBlock("Standard2DTransform", 1);
+                program.uniformBlock.createUniformBlock("SunLight", 2);
 
                 program.uniforms.createUniform("cameraPosition");
                 program.uniforms.createUniform("depthBuffer");

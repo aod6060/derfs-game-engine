@@ -138,6 +138,16 @@ namespace render {
         //mainShader.init();
         shader::prepass::init();
         shader::geometry::init();
+        stand2DUniformBuffer.init();
+        stand2DUniformBuffer.value.proj = glm::ortho(0.0f, app::getWidthFloat(), app::getHeightFloat(), 0.0f);
+        stand2DUniformBuffer.value.model = 
+            glm::translate(glm::mat4(1.0f), glm::vec3(0.0)) *
+            glm::scale(glm::mat4(1.0f), glm::vec3(app::getWidthFloat(), app::getHeightFloat(), 0.0f));
+        stand2DUniformBuffer.update();
+        stand2DUniformBuffer.bind();
+        stand2DUniformBuffer.bufferRange(1);
+        stand2DUniformBuffer.unbind();
+        
         shader::lighting::init();
         shader::postprocess::init();
         //modelBuffer.init();
@@ -163,16 +173,6 @@ namespace render {
         screenIndencies.add3ui(0, 1, 2);
         screenIndencies.add3ui(2, 1, 3);
         screenIndencies.update();
-
-        stand2DUniformBuffer.init();
-        stand2DUniformBuffer.value.proj = glm::ortho(0.0f, app::getWidthFloat(), app::getHeightFloat(), 0.0f);
-        stand2DUniformBuffer.value.model = 
-            glm::translate(glm::mat4(1.0f), glm::vec3(0.0)) *
-            glm::scale(glm::mat4(1.0f), glm::vec3(app::getWidthFloat(), app::getHeightFloat(), 0.0f));
-        stand2DUniformBuffer.update();
-        stand2DUniformBuffer.bind();
-        stand2DUniformBuffer.bufferRange(1);
-        stand2DUniformBuffer.unbind();
 
         geometryBufferStage.init(nullptr);
         lightingStage.init(&geometryBufferStage);

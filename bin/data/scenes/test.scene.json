@@ -316,6 +316,43 @@
                 }
             ],
             "entities": []
+        },
+        {
+            "type": "instance",
+            "name": "sun",
+            "behavior": null,
+            "transform": {
+                "position": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "rotation": {
+                    "x": 35.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            "components": [
+                {
+                    "type": "sun-component",
+                    "albedo": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 0.9
+                    },
+                    "ambient": 0.1,
+                    "diffuse": 1.0,
+                    "specular": 1.0,
+                    "isOn": true
+                }
+            ],
+            "entities": []
         }
     ]
 }

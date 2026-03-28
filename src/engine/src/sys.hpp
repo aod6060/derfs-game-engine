@@ -597,6 +597,7 @@ namespace render {
             }
 
             void bufferRange(uint32_t index) {
+                std::cout << "UBO: " << this->id << ", Index: " << index << "\n";
                 glBindBufferBase(GL_UNIFORM_BUFFER, index, this->id);
             }
         };
@@ -833,6 +834,17 @@ namespace render {
         }
 
         namespace lighting {
+            struct SunLight {
+                glm::vec3 direction;
+                float unused1;
+                glm::vec3 albedo;
+                float unused2;
+                float ambient;
+                float diffuse;
+                float specular;
+                int isOn;
+            };
+
             struct LightingShader : public IShader {
                 // Shader
                 render::glw::Shader vertexShader;
@@ -868,6 +880,7 @@ namespace render {
             void release();
 
             LightingShader* getLightingShader();
+            render::glw::UniformBuffer<SunLight>* getSunLight();
         }
 
         namespace postprocess {
@@ -1810,6 +1823,25 @@ namespace manager {
                 virtual void render();
                 virtual void release();
                 virtual void load(Json::Value value);
+            };
+
+            struct SunComponent : public IComponent {
+                Entity* entity = nullptr;
+
+                glm::vec3 albedo;
+                float ambient;
+                float diffuse;
+                float specular;
+                bool isOn;
+
+                virtual void init(Entity* entity);
+                virtual void handleEvent(SDL_Event* e);
+                virtual void update(float delta);
+                virtual void preRender();
+                virtual void render();
+                virtual void release();
+                virtual void load(Json::Value value);
+
             };
         }
 

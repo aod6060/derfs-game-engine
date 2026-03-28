@@ -183,6 +183,7 @@ namespace render {
 
         void UniformBlock::createUniformBlock(std::string name, uint32_t index) {
             this->uniformBlocks[name] = glGetUniformBlockIndex(program->id, name.c_str());
+            std::cout << "Uniform Block: " << this->uniformBlocks.at(name) << " index: " << index << "\n";
             glUniformBlockBinding(this->program->id, this->uniformBlocks.at(name), index);
         }
 

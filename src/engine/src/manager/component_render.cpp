@@ -1,4 +1,7 @@
 #include "../sys.hpp"
+#include "glm/ext/quaternion_float.hpp"
+#include "glm/ext/quaternion_trigonometric.hpp"
+#include "glm/geometric.hpp"
 
 namespace manager {
     namespace component {
@@ -114,6 +117,65 @@ namespace manager {
                 this->mesh = value["mesh"].asString();
                 this->material = value["material"].asString();
             }
+
+
+
+            // SunComponent
+            void SunComponent::init(Entity* entity) {
+                this->entity = entity;
+            }
+
+            void SunComponent::handleEvent(SDL_Event* e) {
+
+            }
+
+            void SunComponent::update(float delta) {
+                glm::vec3 rotation = this->entity->transform.getTransformedRotation();
+                //std::cout << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
+
+                float angle = glm::length(rotation);
+                glm::vec3 axis = glm::normalize(rotation);
+                glm::vec3 down = glm::vec3(0.0f, 1.0f, 0.0f);
+
+                if(angle < 0.001f) {
+                    axis = glm::vec3(1.0f, 0.0f, 0.0f);
+                }
+
+                glm::vec3 direction = glm::angleAxis(angle, axis) * down;
+
+                ::render::shader::lighting::getSunLight()->value.direction = direction;
+                ::render::shader::lighting::getSunLight()->value.albedo = albedo;
+                ::render::shader::lighting::getSunLight()->value.ambient = ambient;
+                ::render::shader::lighting::getSunLight()->value.diffuse = diffuse;
+                ::render::shader::lighting::getSunLight()->value.specular = specular;
+                ::render::shader::lighting::getSunLight()->value.isOn = (isOn) ? 1 : 0;
+                ::render::shader::lighting::getSunLight()->update();
+            }
+
+            void SunComponent::preRender() {
+
+            }
+
+            void SunComponent::render() {
+
+            }
+
+            void SunComponent::release() {
+                this->entity = nullptr;
+            }
+
+            void SunComponent::load(Json::Value value) {
+                this->albedo = glm::vec3(
+                    value["albedo"]["x"].asFloat(),
+                    value["albedo"]["y"].asFloat(),
+                    value["albedo"]["z"].asFloat()
+                );
+                this->ambient = value["ambient"].asFloat();
+                this->diffuse = value["diffuse"].asFloat();
+                this->specular = value["specular"].asFloat();
+                this->isOn = value["isOn"].asBool();
+            }
+
         }
     }
 }
