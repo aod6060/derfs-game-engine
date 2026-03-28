@@ -10,6 +10,10 @@ namespace manager {
     void Scene::init(Global* global) {
         this->global = global;
 
+        // Making Sure Sun is disabled unless it there is a component.
+        ::render::shader::lighting::getSunLight()->value.isOn = GL_FALSE;
+        ::render::shader::lighting::getSunLight()->update();
+        
         for(int i = 0; i < this->entities.size(); i++) {
             this->entities[i]->init(this);
         }

@@ -17,7 +17,7 @@ namespace render {
                 std::cout << "Fragment Uniform Buffers: " << amount << "\n";
 
                 sunLight.init();
-                sunLight.value.isOn = GL_TRUE;
+                sunLight.value.isOn = GL_FALSE;
                 sunLight.value.direction = glm::vec3(1.0f, 1.0f, 0.0f);
                 sunLight.value.albedo = glm::vec3(1.0f);
                 sunLight.value.ambient = 0.1f;
