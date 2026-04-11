@@ -22,7 +22,7 @@ namespace render {
             in.read(src.data(), src.size());
             in.close();
 
-            std::cout << src << "\n";
+            //std::cout << src << "\n";
 
             const char* c_src = src.c_str();
 

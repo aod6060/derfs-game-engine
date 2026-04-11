@@ -83,19 +83,6 @@ namespace render {
                         */
                         lightSystem.value.lights[i].albedo = lights[i].albedo;
                         /*
-                        // Point Light Attenuation
-                        float constant;
-                        */
-                        //lightSystem.value.lights[i].constant = lights[i].constant;
-                        /*
-                        float linear;
-                        */
-                        //lightSystem.value.lights[i].linear = lights[i].linear;
-                        /*
-                        float quadratic;
-                        */
-                        //lightSystem.value.lights[i].quadratic = lights[i].quadratic;
-                        /*
                         float radius;
                         */
                         lightSystem.value.lights[i].radius = lights[i].radius;

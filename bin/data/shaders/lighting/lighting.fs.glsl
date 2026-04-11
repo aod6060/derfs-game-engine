@@ -136,7 +136,7 @@ vec3 getLight(
         } else if(lights.lights[i].type == SPOT_LIGHT) {
             vec3 l = normalize(lights.lights[i].position - p);
             vec3 h = normalize(l + v);
-            vec3 d = normalize(-lights.lights[i].spotDirection);
+            vec3 d = normalize(lights.lights[i].spotDirection);
             
             float spotCutOff = cos(lights.lights[i].spotCutOff * (3.14 / 180.0));
             float spotCutOffOut = (spotCutOff * 1.5);
