@@ -3,23 +3,23 @@
 
 
 int main(int argc, char** argv) {
-    
     game::GameApp app;
     app::Config config;
     game::setup(&config, &app);
     app::init(&config);
     app::update();
     app::release();
-    
+
     /*
-    uint32_t sizeOfSunLight = sizeof(render::shader::lighting::SunLight) + sizeof(glm::vec2);
-    uint32_t sizeOfVec4 = sizeof(glm::vec4);
+    size_t lightSystemSize = sizeof(render::shader::lighting::LightSystem);
+    size_t v4Size = sizeof(glm::vec4);
 
-    std::cout << "SunLight Size: " << sizeOfSunLight << "\n";
-    std::cout << "vec4 Size: " << sizeOfVec4 << "\n";
+    std::cout << "lightSystemSize: " << lightSystemSize << "\n";
+    std::cout << "v4Size: " << v4Size << "\n";
 
-    std::cout << "sls/v4s: " << sizeOfSunLight / sizeOfVec4 << "\n";
-    std::cout << "sls/v4s: " << sizeOfSunLight % sizeOfVec4 << "\n";
+    std::cout << "lightSystemSize / v4Size: " << (lightSystemSize / v4Size) << "\n";
+    std::cout << "lightSystemSize % v4Size: " << (lightSystemSize % v4Size) << "\n";
     */
+
     return 0;
 }

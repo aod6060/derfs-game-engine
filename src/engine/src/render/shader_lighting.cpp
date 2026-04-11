@@ -1,4 +1,8 @@
 #include "../sys.hpp"
+#include "glm/geometric.hpp"
+#include "glm/trigonometric.hpp"
+#include <algorithm>
+#include <vector>
 
 
 
@@ -7,40 +11,172 @@ namespace render {
         namespace lighting {
 
             LightingShader lightingShader;
-            render::glw::UniformBuffer<SunLight> sunLight;
+            ::render::glw::UniformBuffer<LightSystem> lightSystem;
+            std::vector<Light> lights;
 
             void init() {
-                int amount;
-
-                glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, &amount);
-
-                std::cout << "Fragment Uniform Buffers: " << amount << "\n";
-
-                sunLight.init();
-                sunLight.value.isOn = GL_FALSE;
-                sunLight.value.direction = glm::vec3(1.0f, 1.0f, 0.0f);
-                sunLight.value.albedo = glm::vec3(1.0f);
-                sunLight.value.ambient = 0.1f;
-                sunLight.value.diffuse = 1.0f;
-                sunLight.value.specular = 1.0f;
-                sunLight.update();
-                sunLight.bind();
-                sunLight.bufferRange(2);
-                sunLight.unbind();
+                lightSystem.init();
+                lightSystem.bind();
+                lightSystem.bufferRange(2);
+                lightSystem.unbind();
                 lightingShader.init();
             }
 
             void release() {
                 lightingShader.release();
-                sunLight.release();
+                lightSystem.release();
             }
 
             LightingShader* getLightingShader() {
                 return &lightingShader;
             }
 
-            render::glw::UniformBuffer<SunLight>* getSunLight() {
-                return &sunLight;
+            void addLight(Light light) {
+                lights.push_back(light);
+            }
+
+            void uploadLights() {
+                // Sort
+                std::sort(lights.begin(), lights.end(), [&](Light& a, Light& b) {
+                    if(a.type == LightType::LT_DIRECTION) {
+                        return true;
+                    } else {
+                        glm::vec3 cameraPos = getLightingShader()->getCameraPosition();
+
+                        float a_dist = glm::abs(glm::length(a.position - cameraPos));
+                        float b_dist = glm::abs(glm::length(b.position - cameraPos));
+
+                        return a_dist < b_dist;
+                    }
+                });
+
+                // Upload
+                if(lights.size() > MAX_LIGHTS) {
+                    for(int i = 0; i < MAX_LIGHTS; i++) {
+                        /*
+                            int type;
+                        */
+                        lightSystem.value.lights[i].type = lights[i].type;
+                        /*
+                            float ambient;
+                        */
+                        lightSystem.value.lights[i].ambient = lights[i].ambient;
+                        /*
+                            float diffuse;
+                        */
+                        lightSystem.value.lights[i].diffuse = lights[i].diffuse;
+                        /*
+                            float specular;
+                        */
+                        lightSystem.value.lights[i].specular = lights[i].specular;
+                        // All  light type will use this
+                        // Direction ~ Basically a Direction
+                        // Point ~ The Position of the point light
+                        // Spot ~ The Position of the spot light
+                        /*
+                            glm::vec3 position; 
+                        */
+                        lightSystem.value.lights[i].position = lights[i].position;
+                        // The color of the light
+                        /*
+                            glm::vec3 albedo;
+                        */
+                        lightSystem.value.lights[i].albedo = lights[i].albedo;
+                        /*
+                        // Point Light Attenuation
+                        float constant;
+                        */
+                        //lightSystem.value.lights[i].constant = lights[i].constant;
+                        /*
+                        float linear;
+                        */
+                        //lightSystem.value.lights[i].linear = lights[i].linear;
+                        /*
+                        float quadratic;
+                        */
+                        //lightSystem.value.lights[i].quadratic = lights[i].quadratic;
+                        /*
+                        float radius;
+                        */
+                        lightSystem.value.lights[i].radius = lights[i].radius;
+                        /*
+                            // Spot Light Section
+                            glm::vec3 spotDirection;
+                        */
+                        lightSystem.value.lights[i].spotDirection = lights[i].spotDirection;
+                        /*
+                            float spotCutOff;
+                        */
+                        lightSystem.value.lights[i].spotCutOff = lights[i].spotCutOff;
+                    }
+                    lightSystem.value.lightSize = MAX_LIGHTS;
+                } else {
+                    for(int i = 0; i < lights.size(); i++) {
+                        /*
+                            int type;
+                        */
+                        lightSystem.value.lights[i].type = lights[i].type;
+                        /*
+                            float ambient;
+                        */
+                        lightSystem.value.lights[i].ambient = lights[i].ambient;
+                        /*
+                            float diffuse;
+                        */
+                        lightSystem.value.lights[i].diffuse = lights[i].diffuse;
+                        /*
+                            float specular;
+                        */
+                        lightSystem.value.lights[i].specular = lights[i].specular;
+                        // All  light type will use this
+                        // Direction ~ Basically a Direction
+                        // Point ~ The Position of the point light
+                        // Spot ~ The Position of the spot light
+                        /*
+                            glm::vec3 position; 
+                        */
+                        lightSystem.value.lights[i].position = lights[i].position;
+                        // The color of the light
+                        /*
+                            glm::vec3 albedo;
+                        */
+                        lightSystem.value.lights[i].albedo = lights[i].albedo;
+                        /*
+                        // Point Light Attenuation
+                        float constant;
+                        */
+                        
+                        //lightSystem.value.lights[i].constant = lights[i].constant;
+                        /*
+                        float linear;
+                        */
+                        //lightSystem.value.lights[i].linear = lights[i].linear;
+                        /*
+                        float quadratic;
+                        */
+                        //lightSystem.value.lights[i].quadratic = lights[i].quadratic;
+                        /*
+                        float radius;
+                        */
+                        lightSystem.value.lights[i].radius = lights[i].radius;
+                        /*
+                            // Spot Light Section
+                            glm::vec3 spotDirection;
+                        */
+                        lightSystem.value.lights[i].spotDirection = lights[i].spotDirection;
+                        /*
+                            float spotCutOff;
+                        */
+                        lightSystem.value.lights[i].spotCutOff = lights[i].spotCutOff;
+                    }
+                    lightSystem.value.lightSize = lights.size();
+                }
+
+                lightSystem.update();
+            }
+
+            void clearLights() {
+                lights.clear();
             }
 
             void LightingShader::init() {
@@ -52,7 +188,7 @@ namespace render {
 
                 // UniformBlocks
                 program.uniformBlock.createUniformBlock("Standard2DTransform", 1);
-                program.uniformBlock.createUniformBlock("SunLight", 2);
+                program.uniformBlock.createUniformBlock("LightSystem", 2);
 
                 program.uniforms.createUniform("cameraPosition");
                 program.uniforms.createUniform("depthBuffer");
@@ -99,6 +235,7 @@ namespace render {
             glm::vec3 LightingShader::getCameraPosition() {
                 return this->cameraPosition;
             }
+
             void LightingShader::bindVertexArray() {
                 program.attributes.bind();
             }
@@ -115,7 +252,6 @@ namespace render {
                 program.attributes.attributePointer("texCoords", 2, GL_FLOAT);
             }
 
-            
         }
     }
 }

@@ -25,10 +25,10 @@ namespace manager {
                     return new render::CameraComponent();
                 }
             },
-        {
-                "sun-component",
+            {
+                "light-component",
                 []() {
-                    return new render::SunComponent();
+                    return new render::LightComponent();
                 }
             },
             {

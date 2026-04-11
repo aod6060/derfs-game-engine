@@ -2,6 +2,7 @@
 #include "glm/ext/quaternion_float.hpp"
 #include "glm/ext/quaternion_trigonometric.hpp"
 #include "glm/geometric.hpp"
+#include "json/value.h"
 
 namespace manager {
     namespace component {
@@ -37,15 +38,6 @@ namespace manager {
 
 
             void CameraComponent::preRender() {
-                /*
-                ::render::shader::geometry::getMeshShader()->setProjection(glm::perspective(glm::radians(this->fov), app::getAspect(), this->znear, this->zfar));
-
-                if(this->entity->hasParent()) {
-                    ::render::shader::geometry::getMeshShader()->setView(toViewWithParent());
-                } else {
-                    ::render::shader::geometry::getMeshShader()->setView(this->toView());
-                }
-                */
                 ::render::shader::geometry::getCameraUBO()->value.proj = glm::perspective(glm::radians(this->fov), app::getAspect(), this->znear, this->zfar);
                 if(this->entity->hasParent()) {
                     ::render::shader::geometry::getCameraUBO()->value.view = this->toViewWithParent();
@@ -91,17 +83,6 @@ namespace manager {
             }
 
             void MeshComponent::render() {
-                /*
-                if(this->entity->hasParent()) {
-                    ::render::shader::geometry::getMeshShader()->setModel(this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel());
-                } else {
-                    ::render::shader::geometry::getMeshShader()->setModel(this->entity->transform.toModel());
-                }
-
-                assets::getMaterial(this->material)->bind();
-                ::render::shader::geometry::getMeshShader()->drawMesh(assets::getMesh(this->mesh));
-                assets::getMaterial(this->material)->unbind();
-                */
                 glm::mat4 m = this->entity->transform.toModel();
                 if(this->entity->hasParent()) {
                     m = this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel();
@@ -121,59 +102,104 @@ namespace manager {
 
 
             // SunComponent
-            void SunComponent::init(Entity* entity) {
+            void LightComponent::init(Entity* entity) {
                 this->entity = entity;
             }
 
-            void SunComponent::handleEvent(SDL_Event* e) {
+            void LightComponent::handleEvent(SDL_Event* e) {
 
             }
 
-            void SunComponent::update(float delta) {
-                glm::vec3 rotation = this->entity->transform.getTransformedRotation();
-                //std::cout << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
+            void LightComponent::update(float delta) {
+                if(this->light.type == ::render::shader::lighting::LightType::LT_DIRECTION) {
+                    glm::vec3 rotation = this->entity->transform.getTransformedRotation();
+                    //std::cout << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
 
-                float angle = glm::length(rotation);
-                glm::vec3 axis = glm::normalize(rotation);
-                glm::vec3 down = glm::vec3(0.0f, 1.0f, 0.0f);
+                    float angle = glm::length(rotation);
+                    glm::vec3 axis = glm::normalize(rotation);
+                    glm::vec3 down = glm::vec3(0.0f, 1.0f, 0.0f);
 
-                if(angle < 0.001f) {
-                    axis = glm::vec3(1.0f, 0.0f, 0.0f);
+                    if(angle < 0.001f) {
+                        axis = glm::vec3(1.0f, 0.0f, 0.0f);
+                    }
+
+                    glm::vec3 direction = glm::angleAxis(angle, axis) * down;
+
+                    this->light.position = direction;
+            
+                } else if(this->light.type == ::render::shader::lighting::LightType::LT_POINT) {
+                    this->light.position = this->entity->transform.getTransformedPosition();
+                } else if(this->light.type == ::render::shader::lighting::LightType::LT_SPOT) {
+                    this->light.position = this->entity->transform.getTransformedPosition();
+                    // spotDirection
+                    glm::vec3 rotation = this->entity->transform.getTransformedRotation();
+                    //std::cout << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
+
+                    float angle = glm::length(rotation);
+                    glm::vec3 axis = glm::normalize(rotation);
+                    glm::vec3 forward = glm::vec3(0.0f, 1.0f, 0.0f);
+
+                    if(angle < 0.001f) {
+                        axis = glm::vec3(1.0f, 0.0f, 0.0f);
+                    }
+
+                    glm::vec3 direction = glm::angleAxis(angle, axis) * forward;
+
+                    this->light.spotDirection = direction;
                 }
 
-                glm::vec3 direction = glm::angleAxis(angle, axis) * down;
-
-                ::render::shader::lighting::getSunLight()->value.direction = direction;
-                ::render::shader::lighting::getSunLight()->value.albedo = albedo;
-                ::render::shader::lighting::getSunLight()->value.ambient = ambient;
-                ::render::shader::lighting::getSunLight()->value.diffuse = diffuse;
-                ::render::shader::lighting::getSunLight()->value.specular = specular;
-                ::render::shader::lighting::getSunLight()->value.isOn = (isOn) ? 1 : 0;
-                ::render::shader::lighting::getSunLight()->update();
+                ::render::shader::lighting::addLight(this->light);
             }
 
-            void SunComponent::preRender() {
+            void LightComponent::preRender() {
 
             }
 
-            void SunComponent::render() {
+            void LightComponent::render() {
 
             }
 
-            void SunComponent::release() {
+            void LightComponent::release() {
                 this->entity = nullptr;
             }
 
-            void SunComponent::load(Json::Value value) {
-                this->albedo = glm::vec3(
-                    value["albedo"]["x"].asFloat(),
-                    value["albedo"]["y"].asFloat(),
-                    value["albedo"]["z"].asFloat()
+            void LightComponent::load(Json::Value value) {
+                Json::Value light = value["light"];
+
+                std::string type = light["type"].asString();
+                // type
+                if(type == "direction") {
+                    this->light.type = ::render::shader::lighting::LightType::LT_DIRECTION;
+                } else if(type == "point") {
+                    this->light.type = ::render::shader::lighting::LightType::LT_POINT;
+                } else if(type == "spot") {
+                    this->light.type = ::render::shader::lighting::LightType::LT_SPOT;
+                }
+                // albedo
+                this->light.albedo = glm::vec3(
+                    light["albedo"]["x"].asFloat(),
+                    light["albedo"]["y"].asFloat(),
+                    light["albedo"]["z"].asFloat()
                 );
-                this->ambient = value["ambient"].asFloat();
-                this->diffuse = value["diffuse"].asFloat();
-                this->specular = value["specular"].asFloat();
-                this->isOn = value["isOn"].asBool();
+                // ambient
+                this->light.ambient = light["ambient"].asFloat();
+                // diffuse
+                this->light.diffuse = light["diffuse"].asFloat();
+                // specular
+                this->light.specular = light["specular"].asFloat();
+                // attenuation
+                /*
+                Json::Value attenuation = light["attenuation"];
+                this->light.constant = attenuation["constant"].asFloat();
+                std::cout << "constant: " << this->light.constant << "\n";
+                this->light.linear = attenuation["linear"].asFloat();
+                std::cout << "linear: " << this->light.linear << "\n";
+                this->light.quadratic = attenuation["quadratic"].asFloat();
+                std::cout << "quadratic: " << this->light.quadratic << "\n";
+                */
+                this->light.radius = light["radius"].asFloat();
+                // spot-cut-off
+                this->light.spotCutOff = light["spotCutOff"].asFloat();
             }
 
         }

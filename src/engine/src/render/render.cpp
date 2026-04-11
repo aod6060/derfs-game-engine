@@ -232,7 +232,9 @@ namespace render {
 
     void present() {
         geometryBufferStage.render();
+        shader::lighting::uploadLights();
         lightingStage.render();
+        shader::lighting::clearLights();
         postProcessingStage.render();
     }
 
@@ -246,8 +248,6 @@ namespace render {
         //https://stackoverflow.com/questions/919612/mapping-two-integers-to-one-in-a-unique-and-deterministic-way
         //return a >= b ? a * a + a + b : a + b * b;
     }
-
-
 
     // Stages
 
@@ -526,7 +526,7 @@ namespace render {
 
         // Bloom
         this->copy(&this->a, &lightingStage->output);
-        this->threshold(&this->output, &this->a, 0.7, 1.0);
+        this->threshold(&this->output, &this->a, 0.9, 1.0);
 
         float size_limit = 0.3f;
 

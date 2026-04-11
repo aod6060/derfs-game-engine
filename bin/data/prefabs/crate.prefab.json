@@ -2,6 +2,7 @@
     "name": "prefab",
     "version": 1,
     "entity": {
+        "type": "instance",
         "name": "crate",
         "behavior": "data/scripts/entity/crate_test_entity.lua",
         "transform": {

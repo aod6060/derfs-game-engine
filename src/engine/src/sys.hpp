@@ -426,6 +426,8 @@ namespace input {
     }
 }
 
+#define MAX_LIGHTS 128
+
 namespace render {
     // This will be used to build shader for the render
     namespace glw {
@@ -594,6 +596,64 @@ namespace render {
 
             size_t typeSize() {
                 return sizeof(T);
+            }
+
+            void bufferRange(uint32_t index) {
+                std::cout << "UBO: " << this->id << ", Index: " << index << "\n";
+                glBindBufferBase(GL_UNIFORM_BUFFER, index, this->id);
+            }
+        };
+
+        template<typename T>
+        struct UniformBufferArray {
+            uint32_t id = 0;
+            uint32_t maxCount = 1;
+            std::vector<T> list;
+
+            void add(T t) {
+                if(list.size() < maxCount) {
+                    list.push_back(t);
+                }
+            }
+
+            void clear() {
+                list.clear();
+            }
+
+            size_t typeSize() {
+                return sizeof(T);
+            }
+
+            size_t count() {
+                return list.size();
+            }
+
+            size_t dataSize() {
+                return count() * typeSize();
+            }
+
+            void init(uint32_t maxCount) {
+                this->maxCount = maxCount;
+                glGenBuffers(1, &id);
+            }
+
+            void release() {
+                this->clear();
+                glDeleteBuffers(1, &id);
+            }
+
+            void bind() {
+                glBindBuffer(GL_UNIFORM_BUFFER, id);
+            }
+
+            void unbind() {
+                glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            }
+
+            void update() {
+                this->bind();
+                glBufferData(GL_UNIFORM_BUFFER, this->dataSize(), list.data(), GL_DYNAMIC_DRAW);
+                this->unbind();
             }
 
             void bufferRange(uint32_t index) {
@@ -785,6 +845,7 @@ namespace render {
         virtual void unbindVertexArray() = 0;
     };
 
+    
     namespace shader {
         namespace prepass {
             void init();
@@ -834,15 +895,39 @@ namespace render {
         }
 
         namespace lighting {
-            struct SunLight {
-                glm::vec3 direction;
-                float unused1;
-                glm::vec3 albedo;
-                float unused2;
+            enum LightType {
+                LT_DIRECTION = 0,
+                LT_POINT,
+                LT_SPOT,
+                LT_MAX_SIZE
+            };
+
+            struct Light {
+                int type;
                 float ambient;
                 float diffuse;
                 float specular;
-                int isOn;
+                // All  light type will use this
+                // Direction ~ Basically a Direction
+                // Point ~ The Position of the point light
+                // Spot ~ The Position of the spot light
+                glm::vec3 position; 
+                float unused1;
+                // The color of the light
+                glm::vec3 albedo;
+                float unused2;
+                // Point Light Attenuation
+                glm::vec3 unused3;
+                float radius;
+                // Spot Light Section
+                glm::vec3 spotDirection;
+                float spotCutOff;
+            };
+
+            struct LightSystem {
+                Light lights[MAX_LIGHTS];
+                int lightSize;
+                glm::ivec3 unused;
             };
 
             struct LightingShader : public IShader {
@@ -880,7 +965,10 @@ namespace render {
             void release();
 
             LightingShader* getLightingShader();
-            render::glw::UniformBuffer<SunLight>* getSunLight();
+
+            void addLight(Light light);
+            void uploadLights();
+            void clearLights();
         }
 
         namespace postprocess {
@@ -1825,14 +1913,17 @@ namespace manager {
                 virtual void load(Json::Value value);
             };
 
-            struct SunComponent : public IComponent {
+            struct LightComponent : public IComponent {
                 Entity* entity = nullptr;
 
+                /*
                 glm::vec3 albedo;
                 float ambient;
                 float diffuse;
                 float specular;
                 bool isOn;
+                */
+                ::render::shader::lighting::Light light;
 
                 virtual void init(Entity* entity);
                 virtual void handleEvent(SDL_Event* e);
