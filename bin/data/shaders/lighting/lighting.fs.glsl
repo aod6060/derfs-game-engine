@@ -132,16 +132,22 @@ vec3 getLight(
                 vec3 Sc = (S * mix(lightColor, lightColor * material * 2.0, metal));
 
                 amount += (Ac + Dc + Sc) * mix(1.0, 0.0, clamp(dist / rad, 0.0, 1.0));
+            } else {
+                vec3 lightColor = lights.lights[i].albedo;
+                float A = getAmbient(i);
+                vec3 Ac = A * lightColor * material;
+                amount += Ac;
             }
         } else if(lights.lights[i].type == SPOT_LIGHT) {
             vec3 l = normalize(lights.lights[i].position - p);
             vec3 h = normalize(l + v);
-            vec3 d = normalize(lights.lights[i].spotDirection);
+            vec3 d = normalize(-lights.lights[i].spotDirection);
             
-            float spotCutOff = cos(lights.lights[i].spotCutOff * (3.14 / 180.0));
-            float spotCutOffOut = (spotCutOff * 1.5);
+            float spotCutOff = lights.lights[i].spotCutOff;
+            float spotCutOffOut = (spotCutOff * 0.86);
             float theta = dot(l, d);
             float epsilon = spotCutOff - spotCutOffOut;
+            float intencity = clamp((theta - spotCutOffOut) / epsilon, 0.0, 1.0);
 
             if(theta > spotCutOff) {
                 float ndotl = max(dot(n, l), 0.0);
@@ -155,9 +161,16 @@ vec3 getLight(
 
                 vec3 Ac = A * lightColor * material;
                 vec3 Dc = mix((D * lightColor * material) * (1.0 - S), Ac * (1.0 - S), metal);
+                Dc *= intencity;
                 vec3 Sc = (S * mix(lightColor, lightColor * material * 2.0, metal));
+                Sc *= intencity;
 
-                amount += (Ac + Dc + Sc) * clamp((theta - spotCutOffOut) / epsilon, 0.0, 1.0);
+                amount += (Ac + Dc + Sc);
+            } else {
+                vec3 lightColor = lights.lights[i].albedo;
+                float A = getAmbient(i);
+                vec3 Ac = A * lightColor * material;
+                amount += Ac;
             }
         }
     }

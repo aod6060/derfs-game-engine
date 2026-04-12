@@ -2,6 +2,7 @@
 #include "glm/ext/quaternion_float.hpp"
 #include "glm/ext/quaternion_trigonometric.hpp"
 #include "glm/geometric.hpp"
+#include "glm/trigonometric.hpp"
 #include "json/value.h"
 
 namespace manager {
@@ -130,22 +131,14 @@ namespace manager {
                 } else if(this->light.type == ::render::shader::lighting::LightType::LT_POINT) {
                     this->light.position = this->entity->transform.getTransformedPosition();
                 } else if(this->light.type == ::render::shader::lighting::LightType::LT_SPOT) {
-                    this->light.position = this->entity->transform.getTransformedPosition();
                     // spotDirection
-                    glm::vec3 rotation = this->entity->transform.getTransformedRotation();
+                    //glm::vec3 rotation = this->entity->transform.getTransformedRotation();
+                    glm::mat4 m = this->entity->transform.toParentMatrix(this->entity->parent) * this->entity->transform.toModel();
+
+                    this->light.position = glm::vec3(m[3][0], m[3][1], m[3][2]);
+
                     //std::cout << rotation.x << ", " << rotation.y << ", " << rotation.z << "\n";
-
-                    float angle = glm::length(rotation);
-                    glm::vec3 axis = glm::normalize(rotation);
-                    glm::vec3 forward = glm::vec3(0.0f, 1.0f, 0.0f);
-
-                    if(angle < 0.001f) {
-                        axis = glm::vec3(1.0f, 0.0f, 0.0f);
-                    }
-
-                    glm::vec3 direction = glm::angleAxis(angle, axis) * forward;
-
-                    this->light.spotDirection = direction;
+                    this->light.spotDirection = glm::vec3(m[2][0], m[2][1], m[2][2]);
                 }
 
                 ::render::shader::lighting::addLight(this->light);
@@ -199,7 +192,7 @@ namespace manager {
                 */
                 this->light.radius = light["radius"].asFloat();
                 // spot-cut-off
-                this->light.spotCutOff = light["spotCutOff"].asFloat();
+                this->light.spotCutOff = glm::cos(glm::radians(light["spot-cut-off"].asFloat()));
             }
 
         }

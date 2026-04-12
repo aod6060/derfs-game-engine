@@ -316,47 +316,6 @@
                 }
             ],
             "entities": []
-        },
-        {
-            "type": "instance",
-            "name": "sun",
-            "behavior": null,
-            "transform": {
-                "position": {
-                    "x": 0.0,
-                    "y": 20.0,
-                    "z": 0.0
-                },
-                "rotation": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            },
-            "components": [
-                {
-                    "type": "light-component",
-                    "light": {
-                        "type": "point",
-                        "albedo": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 0.7
-                        },
-                        "ambient": 0.1,
-                        "diffuse": 1.0,
-                        "specular": 1.0,
-                        "radius": 40.0,
-                        "spot-cut-off": 3.0
-                    }
-                }
-            ],
-            "entities": []
         }
     ]
 }
