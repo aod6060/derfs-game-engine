@@ -2,7 +2,7 @@
     "name": "global",
     "version": 5,
     "behavior": null,
-    "default-scene": "data/scenes/test.scene.json",
+    "default-scene": "data/scenes/direction.scene.json",
     "input": {
         "mapping": [
             {

@@ -1,11 +1,11 @@
 {
     "name": "scene",
     "version": 4,
-    "behavior": "data/scripts/scene/physics_test_scene.lua",
+    "behavior": "data/scripts/scene/physics_test_scene_3.lua",
     "entities": [
         {
             "type": "prefab",
-            "path": "data/prefabs/player_fps.prefab.json",
+            "path": "data/prefabs/player_fps_2.prefab.json",
             "transform": {
                 "position": {
                     "x": 0.0,
@@ -21,7 +21,8 @@
                     "x": 1.0,
                     "y": 1.0,
                     "z": 1.0
-                }
+                },
+                "entities": []
             }
         },
         {

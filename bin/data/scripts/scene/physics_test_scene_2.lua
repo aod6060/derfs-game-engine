@@ -65,7 +65,7 @@ function update(delta)
     end
     
     if input_isKeyPressedOnce(KEYS_R) then
-        manager_global_changeScene(global, "data/scenes/point.scene.json")
+        manager_global_changeScene(global, "data/scenes/spot.scene.json")
     end
 end
 

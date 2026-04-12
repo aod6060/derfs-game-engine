@@ -89,6 +89,7 @@ vec3 getLight(
 )
 {
     vec3 amount = vec3(0.0);
+    vec3 ambient = vec3(0.0);
 
     for(int i = 0; i < lights.lightSize; i++) {
         if(lights.lights[i].type == DIRECTION_LIGHT) {
@@ -98,17 +99,16 @@ vec3 getLight(
             float ndotl = max(dot(n, l), 0.0);
             float ndoth = max(dot(n, h), 0.0);
 
-            float A = getAmbient(i);
             float D = getDiffuse(i, ndotl);
             float S = getSpecular(i, ndoth, computeRoughness(roughness));
 
             vec3 lightColor = lights.lights[i].albedo;
 
-            vec3 Ac = A * lightColor * material;
-            vec3 Dc = mix((D * lightColor * material) * (1.0 - S), Ac * (1.0 - S), metal);
+            vec3 Dc = mix((D * lightColor * material) * (1.0 - S), vec3(0.0), metal);
             vec3 Sc = (S * mix(lightColor, lightColor * material * 2.0, metal));
 
-            amount += (Ac + Dc + Sc);
+            amount += (Dc + Sc);
+            ambient += lightColor * getAmbient(i);
         } else if(lights.lights[i].type == POINT_LIGHT) {
             vec3 l = normalize(lights.lights[i].position - p);
             vec3 h = normalize(l + v);
@@ -121,22 +121,15 @@ vec3 getLight(
                 float ndotl = max(dot(n, l), 0.0);
                 float ndoth = max(dot(n, h), 0.0);
 
-                float A = getAmbient(i);
                 float D = getDiffuse(i, ndotl);
                 float S = getSpecular(i, ndoth, computeRoughness(roughness));
 
                 vec3 lightColor = lights.lights[i].albedo;
-
-                vec3 Ac = A * lightColor * material;
-                vec3 Dc = mix((D * lightColor * material) * (1.0 - S), Ac * (1.0 - S), metal);
+                vec3 Dc = mix((D * lightColor * material) * (1.0 - S), vec3(0.0), metal);
                 vec3 Sc = (S * mix(lightColor, lightColor * material * 2.0, metal));
 
-                amount += (Ac + Dc + Sc) * mix(1.0, 0.0, clamp(dist / rad, 0.0, 1.0));
-            } else {
-                vec3 lightColor = lights.lights[i].albedo;
-                float A = getAmbient(i);
-                vec3 Ac = A * lightColor * material;
-                amount += Ac;
+                amount += (Dc + Sc) * mix(1.0, 0.0, clamp(dist / rad, 0.0, 1.0));
+                ambient += lightColor * getAmbient(i);
             }
         } else if(lights.lights[i].type == SPOT_LIGHT) {
             vec3 l = normalize(lights.lights[i].position - p);
@@ -153,27 +146,24 @@ vec3 getLight(
                 float ndotl = max(dot(n, l), 0.0);
                 float ndoth = max(dot(n, h), 0.0);
 
-                float A = getAmbient(i);
                 float D = getDiffuse(i, ndotl);
                 float S = getSpecular(i, ndoth, computeRoughness(roughness));
 
                 vec3 lightColor = lights.lights[i].albedo;
 
-                vec3 Ac = A * lightColor * material;
-                vec3 Dc = mix((D * lightColor * material) * (1.0 - S), Ac * (1.0 - S), metal);
+                vec3 Dc = mix((D * lightColor * material) * (1.0 - S), vec3(0.0), metal);
                 Dc *= intencity;
                 vec3 Sc = (S * mix(lightColor, lightColor * material * 2.0, metal));
                 Sc *= intencity;
 
-                amount += (Ac + Dc + Sc);
-            } else {
-                vec3 lightColor = lights.lights[i].albedo;
-                float A = getAmbient(i);
-                vec3 Ac = A * lightColor * material;
-                amount += Ac;
+                amount += (Dc + Sc);
+                ambient += lightColor * getAmbient(i);
             }
         }
     }
+
+    // Handle Ambient
+    amount += ambient * 0.1 * (1.0 / lights.lightSize);
 
     return amount;
 }
