@@ -4,7 +4,6 @@
 namespace game {
     // GameApp 
     void GameApp::init() {
-        // This one will chge
         global.global_load();
         input::init();
         render::init();
@@ -12,7 +11,6 @@ namespace game {
         sound::init();
         assets::init();
         util::init();
-        //global.load("data/scenes/testv2.scene.json");
         global.startGame();
         global.init();
     }
