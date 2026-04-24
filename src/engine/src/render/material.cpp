@@ -1,6 +1,4 @@
-#include "../sys.hpp"
-#include "json/value.h"
-#include <fstream>
+#include "render_hidden.hpp"
 
 
 namespace render {

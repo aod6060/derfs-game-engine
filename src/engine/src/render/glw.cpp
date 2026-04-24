@@ -1,10 +1,4 @@
-#include "SDL_image.h"
-#include "SDL_pixels.h"
-#include "SDL_surface.h"
-#include "../sys.hpp"
-#include <algorithm>
-#include <fstream>
-#include <ios>
+#include "render_hidden.hpp"
 
 
 namespace render {

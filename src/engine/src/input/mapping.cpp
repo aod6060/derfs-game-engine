@@ -1,4 +1,4 @@
-#include "../sys.hpp"
+#include "input_hidden.hpp"
 
 
 namespace input {

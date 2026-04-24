@@ -1,7 +1,4 @@
-#include "SDL_events.h"
-#include "SDL_timer.h"
-#include "SDL_video.h"
-#include "sys.hpp"
+#include "app_hidden.hpp"
 
 
 namespace app {

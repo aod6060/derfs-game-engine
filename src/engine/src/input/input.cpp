@@ -1,7 +1,4 @@
-#include "SDL_events.h"
-#include "SDL_mouse.h"
-#include "glm/ext/scalar_common.hpp"
-#include "../sys.hpp"
+#include "input_hidden.hpp"
 
 
 namespace input {

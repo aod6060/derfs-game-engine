@@ -1,6 +1,4 @@
-#include "../sys.hpp"
-#include "glm/ext/quaternion_common.hpp"
-#include "glm/gtc/matrix_inverse.hpp"
+#include "render_hidden.hpp"
 
 namespace render {
     namespace shader {

@@ -1,8 +1,4 @@
-#include "../sys.hpp"
-#include "glm/geometric.hpp"
-#include "glm/trigonometric.hpp"
-#include <algorithm>
-#include <vector>
+#include "render_hidden.hpp"
 
 
 
