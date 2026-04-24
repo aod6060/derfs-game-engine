@@ -1,4 +1,4 @@
-#include "../sys.hpp"
+#include "assets_hidden.hpp"
 
 
 namespace assets {

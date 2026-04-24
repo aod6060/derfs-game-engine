@@ -1,11 +1,4 @@
-#include "../sys.hpp"
-#include "BulletCollision/CollisionDispatch/btCollisionObject.h"
-#include "LinearMath/btMotionState.h"
-#include "LinearMath/btQuaternion.h"
-#include "LinearMath/btScalar.h"
-#include "LinearMath/btTransform.h"
-#include "LinearMath/btVector3.h"
-#include "lua/lua.hpp"
+#include "script_hidden.hpp"
 
 namespace script {
     void manager_component_body_load_library(lua_State* l) {

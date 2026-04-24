@@ -1,4 +1,4 @@
-#include "../sys.hpp"
+#include "script_hidden.hpp"
 
 
 namespace script {

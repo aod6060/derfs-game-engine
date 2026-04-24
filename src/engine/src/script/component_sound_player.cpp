@@ -1,6 +1,4 @@
-#include "../sys.hpp"
-#include "AL/al.h"
-#include "lua/lua.hpp"
+#include "script_hidden.hpp"
 
 
 namespace script {

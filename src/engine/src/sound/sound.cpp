@@ -1,8 +1,4 @@
-#include "../sys.hpp"
-#include "AL/al.h"
-#include "AL/alc.h"
-#include <filesystem>
-#include <functional>
+#include "sound_hidden.hpp"
 
 
 namespace sound {

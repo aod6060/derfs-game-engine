@@ -1,9 +1,4 @@
-#include "../sys.hpp"
-#include "glm/ext/quaternion_float.hpp"
-#include "glm/ext/quaternion_trigonometric.hpp"
-#include "glm/geometric.hpp"
-#include "glm/trigonometric.hpp"
-#include "json/value.h"
+#include "manager_hidden.hpp"
 
 namespace manager {
     namespace component {

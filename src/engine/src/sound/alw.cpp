@@ -1,6 +1,4 @@
-#include "../sys.hpp"
-#include "AL/al.h"
-#include <cstdarg>
+#include "sound_hidden.hpp"
 
 
 namespace sound {

@@ -1,20 +1,4 @@
-#include "LinearMath/btQuaternion.h"
-#include "LinearMath/btScalar.h"
-#include "LinearMath/btTransform.h"
-#include "LinearMath/btVector3.h"
-#include "glm/exponential.hpp"
-#include "glm/ext/matrix_transform.hpp"
-#include "glm/ext/quaternion_common.hpp"
-#include "glm/ext/quaternion_float.hpp"
-#include "glm/ext/quaternion_transform.hpp"
-#include "glm/ext/quaternion_trigonometric.hpp"
-#include "glm/geometric.hpp"
-#include <glm/gtx/matrix_decompose.hpp>
-
-#include "glm/gtc/quaternion.hpp"
-#include "glm/trigonometric.hpp"
-#include "../sys.hpp"
-#include <functional>
+#include "manager_hidden.hpp"
 
 
 namespace manager {

@@ -1,6 +1,4 @@
-#include "lua/lua.hpp"
-#include "../sys.hpp"
-#include <vector>
+#include "script_hidden.hpp"
 
 
 namespace script {

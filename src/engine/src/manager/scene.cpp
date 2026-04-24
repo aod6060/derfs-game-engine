@@ -1,9 +1,4 @@
-#include "lua/lauxlib.hpp"
-#include "lua/lua.hpp"
-#include "lua/lualib.hpp"
-#include "../sys.hpp"
-#include "json/value.h"
-#include <vector>
+#include "manager_hidden.hpp"
 
 
 namespace manager {

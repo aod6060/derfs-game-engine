@@ -1,5 +1,4 @@
-#include "../sys.hpp"
-#include "lua/lua.hpp"
+#include "script_hidden.hpp"
 
 namespace script {
     // RayCast

@@ -1,9 +1,4 @@
-#include "../sys.hpp"
-#include "AL/al.h"
-#include <cstring>
-#include <deque>
-#include <limits>
-#include <vector>
+#include "manager_hidden.hpp"
 
 
 namespace manager {

@@ -1,7 +1,4 @@
-#include "../sys.hpp"
-#include <cstdio>
-#include <fstream>
-
+#include "sound_hidden.hpp"
 
 namespace sound {
     namespace codec {
