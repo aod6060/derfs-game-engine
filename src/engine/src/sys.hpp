@@ -54,17 +54,7 @@
 #include "app/app.hpp"
 #include "input/input.hpp"
 #include "render/render.hpp"
-
-namespace physics {
-    void init();
-    void update();
-    void release();
-
-    btDiscreteDynamicsWorld* getWorld();
-
-    btVector3 getGravity();
-    void setGravity(const btVector3& gravity);
-}
+#include "physics/physics.hpp"
 
 namespace manager {
     struct Transform;
