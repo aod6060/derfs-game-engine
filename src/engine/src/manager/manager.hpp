@@ -79,6 +79,7 @@ namespace manager {
         void load(Json::Value v);
     };
 
+    // I've going to completely redo this in C++ instead of lua
     struct Behavior {
         enum Type {
             T_BOOL = 0,
@@ -189,6 +190,7 @@ namespace manager {
         void removeEntity(Entity* entity);
     };
 
+    // I want the global object to support more then one behavior. 
     struct Global {
         Scene* scene = nullptr;
         
