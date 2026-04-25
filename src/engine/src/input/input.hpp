@@ -1,7 +1,7 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 
 namespace input {

@@ -1,7 +1,7 @@
 #ifndef MANAGER_HPP
 #define MANAGER_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <json/json.h>
 #include <glm/glm.hpp>
 #include <btBulletDynamicsCommon.h>

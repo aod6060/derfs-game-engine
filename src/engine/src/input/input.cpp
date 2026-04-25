@@ -32,23 +32,23 @@ namespace input {
     }
 
     void handleEvent(SDL_Event* e) {
-        if(e->type == SDL_KEYDOWN) {
-            if(keys[e->key.keysym.scancode] == InputState::IS_RELEASED) {
-                keys[e->key.keysym.scancode] = InputState::IS_PRESSED_ONCE;
+        if(e->type == SDL_EVENT_KEY_DOWN) {
+            if(keys[e->key.scancode] == InputState::IS_RELEASED) {
+                keys[e->key.scancode] = InputState::IS_PRESSED_ONCE;
             }
-        } else if(e->type == SDL_KEYUP) {
-            if(keys[e->key.keysym.scancode] == InputState::IS_PRESSED) {
-                keys[e->key.keysym.scancode] = InputState::IS_RELEASED_ONCE;
+        } else if(e->type == SDL_EVENT_KEY_UP) {
+            if(keys[e->key.scancode] == InputState::IS_PRESSED) {
+                keys[e->key.scancode] = InputState::IS_RELEASED_ONCE;
             }
-        } else if(e->type == SDL_MOUSEBUTTONDOWN) {
+        } else if(e->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
             if(mouseButtons[e->button.button - 1] == InputState::IS_RELEASED) {
                 mouseButtons[e->button.button - 1] = InputState::IS_PRESSED_ONCE;
             }
-        } else if(e->type == SDL_MOUSEBUTTONUP) {
+        } else if(e->type == SDL_EVENT_MOUSE_BUTTON_UP) {
             if(mouseButtons[e->button.button - 1] == InputState::IS_PRESSED) {
                 mouseButtons[e->button.button - 1] = InputState::IS_RELEASED_ONCE;
             }
-        } else if(e->type == SDL_MOUSEMOTION) {
+        } else if(e->type == SDL_EVENT_MOUSE_MOTION) {
             mousePosition.x = e->motion.x;
             mousePosition.y = e->motion.y;
             mouseVelocity.x = e->motion.xrel;
@@ -57,7 +57,7 @@ namespace input {
             // Clamp it between -1 to 1
             //mouseVelocity = glm::clamp(mouseVelocity, -1.0f, 1.0f);
 
-        } else if(e->type == SDL_MOUSEWHEEL) {
+        } else if(e->type == SDL_EVENT_MOUSE_WHEEL) {
             mouseWheel.x = e->wheel.x;
             mouseWheel.y = e->wheel.y;
 
@@ -206,11 +206,13 @@ namespace input {
 
     // Input Grab
     bool isGrab() {
-        return SDL_GetRelativeMouseMode() ? true : false;
+        //return SDL_GetRelativ ? true : false;
+        return SDL_GetWindowRelativeMouseMode(app::getWindow()) ? true : false;
     }
 
     void setGrab(bool grab) {
-        SDL_SetRelativeMouseMode((grab) ? SDL_TRUE : SDL_FALSE);
+        //SDL_SetRelativeMouseMode((grab) ? SDL_TRUE : SDL_FALSE);
+        SDL_SetWindowRelativeMouseMode(app::getWindow(), grab);
     }
 
     void toggleGrab() {

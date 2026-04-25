@@ -28,8 +28,13 @@
 #include <chrono>
 #include <filesystem>
 
+/*
 #include <SDL.h>
 #include <SDL_image.h>
+*/
+
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -60,5 +65,6 @@
 #include "util/util.hpp"
 #include "manager/manager.hpp"
 #include "script/script.hpp"
+
 
 #endif

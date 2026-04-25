@@ -401,9 +401,10 @@ namespace render {
                 std::cout << path << " doesn't exist!";
             }
 
-            if(temp->format->format != SDL_PIXELFORMAT_ABGR8888) {
-                SDL_Surface* convert = SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_ABGR8888, 0);
-                SDL_FreeSurface(temp);
+            if(temp->format != SDL_PIXELFORMAT_ABGR8888) {
+                //SDL_Surface* convert = SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_ABGR8888, 0);
+                SDL_Surface* convert = SDL_ConvertSurface(temp, SDL_PIXELFORMAT_ABGR8888);
+                SDL_DestroySurface(temp);
                 temp = convert;
                 convert = nullptr;
             }
@@ -422,7 +423,7 @@ namespace render {
             
             tex->unbind(GL_TEXTURE0);
 
-            SDL_FreeSurface(temp);
+            SDL_DestroySurface(temp);
         }
 
         void Cubemap::init() {
@@ -478,9 +479,9 @@ namespace render {
                     std::cout << paths[i] << " doesn't exist\n";
                 }
 
-                if(temp->format->format != SDL_PIXELFORMAT_ABGR8888) {
-                    SDL_Surface* convert = SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_ABGR8888, 0);
-                    SDL_FreeSurface(temp);
+                if(temp->format != SDL_PIXELFORMAT_ABGR8888) {
+                    SDL_Surface* convert = SDL_ConvertSurface(temp, SDL_PIXELFORMAT_ABGR8888);
+                    SDL_DestroySurface(temp);
                     temp = convert;
                     convert = nullptr;
                 }
@@ -490,7 +491,7 @@ namespace render {
                 map->texImage((Face)i, 0, GL_RGBA, temp->w, temp->h, GL_RGBA, GL_UNSIGNED_BYTE, temp->pixels);
                 map->unbind(GL_TEXTURE0);
 
-                SDL_FreeSurface(temp);
+                SDL_DestroySurface(temp);
             }
 
             map->bind(GL_TEXTURE0);
@@ -598,9 +599,9 @@ namespace render {
                     std::cout << i << "> " << paths.at(i) << " doesn't exist\n";
                 }
 
-                if(s->format->format != SDL_PIXELFORMAT_ABGR8888) {
-                    SDL_Surface* convert = SDL_ConvertSurfaceFormat(s, SDL_PIXELFORMAT_ABGR8888, 0);
-                    SDL_FreeSurface(s);
+                if(s->format != SDL_PIXELFORMAT_ABGR8888) {
+                    SDL_Surface* convert = SDL_ConvertSurface(s, SDL_PIXELFORMAT_ABGR8888);
+                    SDL_DestroySurface(s);
                     s = convert;
                     convert = nullptr;
                 }
@@ -617,7 +618,7 @@ namespace render {
                     GL_UNSIGNED_BYTE,
                     s->pixels);
 
-                SDL_FreeSurface(s);
+                SDL_DestroySurface(s);
             }
 
             tex->texParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -625,7 +626,7 @@ namespace render {
             tex->genMipmaps();
 
             tex->unbind(GL_TEXTURE0);
-            SDL_FreeSurface(temp);
+            SDL_DestroySurface(temp);
         }
 
         // RenderBuffer

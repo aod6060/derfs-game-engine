@@ -18,10 +18,8 @@ env = Environment(
         "#/bin"
     ],
     LIBS=[
-        'SDL2main.lib',
-        'SDL2.lib',
-        'SDL2_image.lib',
-        'SDL2_ttf.lib',
+        'SDL3.lib',
+        'SDL3_image.lib',
         'opengl32.lib',
         'glew32.lib',
         'assimp-vc141-mt.lib',

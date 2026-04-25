@@ -21,14 +21,14 @@ namespace game {
     }
 
     void GameApp::update(float delta) {
-
+        /*
         if(maxTime <= time) {
             time = 0.0f;
             std::cout << "FPS: " << (1.0f / delta) << "\n";
         } else {
             time += delta;
         }
-        
+        */
         global.update(delta);
         input::update();
         physics::update();

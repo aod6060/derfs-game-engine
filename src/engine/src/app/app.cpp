@@ -1,4 +1,5 @@
 #include "app_hidden.hpp"
+#include <sstream>
 
 
 namespace app {
@@ -8,16 +9,20 @@ namespace app {
     static SDL_GLContext g_context = nullptr;
     static bool g_isRunning = true;
 
+
+    float maxTime = 1.0f;
+    float currTime = 0.0f;
+
     void init(Config* config) {
         g_config = config;
 
-        SDL_Init(SDL_INIT_EVERYTHING);
+        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-        g_window = SDL_CreateWindow(g_config->caption.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, g_config->width, g_config->height, SDL_WINDOW_OPENGL);
+        g_window = SDL_CreateWindow(g_config->caption.c_str(), g_config->width, g_config->height, SDL_WINDOW_OPENGL);
         g_context = SDL_GL_CreateContext(g_window);
         glewInit();
 
@@ -40,9 +45,19 @@ namespace app {
             delta = (curr_time - pre_time) / 1000.0f;
             pre_time = curr_time;
 
+            if(maxTime <= currTime) {
+                currTime = 0.0f;
+                //std::cout << "FPS: " << (1.0f / delta) << "\n";
+                std::stringstream ss;
+                ss << g_config->caption << " FPS: (" << (1.0f / delta) << ")";
+                SDL_SetWindowTitle(g_window, ss.str().c_str());
+            } else {
+                currTime += delta;
+            }
+
             // Handle Event Loop
             while(SDL_PollEvent(&event)) {
-                if(event.type == SDL_QUIT) {
+                if(event.type == SDL_EVENT_QUIT) {
                     app::exit();
                 }
 
@@ -67,7 +82,8 @@ namespace app {
         if(g_config->app) {
             g_config->app->release();
         }
-        SDL_GL_DeleteContext(g_context);
+        //SDL_GL_DeleteContext(g_context);
+        SDL_GL_DestroyContext(g_context);
         SDL_DestroyWindow(g_window);
         SDL_Quit();
     }

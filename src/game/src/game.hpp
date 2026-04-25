@@ -8,8 +8,8 @@ namespace game {
     struct GameApp : app::IApp {
         manager::Global global;
 
-        float time = 0.0f;
-        float maxTime = 1.0f;
+        //float time = 0.0f;
+        //float maxTime = 1.0f;
 
         virtual void init();
         virtual void handleEvent(SDL_Event* e);
