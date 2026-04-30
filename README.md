@@ -13,14 +13,13 @@ This repo is under the Mit Licese. See LICENSE for more details.
 
 Dependentcies
 
-1. SDL2
-2. SDL2_image
-3. SDL2_ttf (I might change to FreeType2)
+1. SDL3
+2. SDL3_image
+3. FreeType2
 4. OpenGL
 5. glew
 6. Assimp
 7. BulletPhysics
 8. jsoncpp
-9. solar (solar is a fork of lua that I'm customizing for my purposes. Note need to add repo to github)
 10. OpenAL
 11. Ogg/Vorbis
