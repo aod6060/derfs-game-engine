@@ -1,9 +1,10 @@
 #include "LinearMath/btVector3.h"
 #include "../sys.hpp"
+#include "manager.hpp"
 #include "json/value.h"
 #include <fstream>
 
-#define GLOBAL_VERSION 5
+#define GLOBAL_VERSION 6
 #define SCENE_VERSION 4
 
 namespace manager {
@@ -13,8 +14,17 @@ namespace manager {
             scene->init(this);
         }
 
-        if(this->behavior) {
-            behavior->init(this->script, this);
+        for(std::map<std::string, behavior::IBehavior*>::iterator it = this->behaviors.begin(); it != this->behaviors.end(); it++) {
+            ((behavior::GlobalBehavior*)it->second)->init(this);
+        }
+    }
+
+    void Global::postInit() {
+
+        scene->postInit();
+
+        for(std::map<std::string, behavior::IBehavior*>::iterator it = this->behaviors.begin(); it != this->behaviors.end(); it++) {
+            it->second->ready();
         }
     }
 
@@ -25,7 +35,6 @@ namespace manager {
     }
 
     void Global::update(float delta) {
-
         if(isSceneChange) {
             this->changeScene(scenePath);
             isSceneChange = false;
@@ -35,8 +44,8 @@ namespace manager {
             scene->update(delta);
         }
 
-        if(behavior) {
-            behavior->update(delta);
+        for(std::map<std::string, behavior::IBehavior*>::iterator it = behaviors.begin(); it != behaviors.end(); it++) {
+            it->second->update(delta);
         }
     }
 
@@ -47,11 +56,10 @@ namespace manager {
     }
 
     void Global::release() {
-        if(behavior) {
-            behavior->release();
-            delete behavior;
-            behavior = nullptr;
+        for(std::map<std::string, behavior::IBehavior*>::iterator it = behaviors.begin(); it != behaviors.end(); it++) {
+            it->second->release();
         }
+
         if(scene) {
             scene->release();
         }
@@ -100,6 +108,7 @@ namespace manager {
 
         if(this->scene) {
             this->scene->init(this);
+            this->scene->postInit();
         }
     }
 
@@ -112,9 +121,13 @@ namespace manager {
         std::string name = root["name"].asString();
         int version = root["version"].asInt();
 
-        if(!root["behavior"].isNull()) {
-            this->script = root["behavior"].asString();
-            this->behavior = new Behavior();
+        Json::Value behaviors = root["behaviors"];
+
+        for(int i = 0; i < behaviors.size(); i++) {
+            Json::Value obj = behaviors[i];
+            std::string name = obj["name"].asString();
+            std::string behaviorName = obj["behavior-name"].asString();
+            this->behaviors[name] = manager::behavior::create(behaviorName);
         }
 
         if(!root["default-scene"].isNull()) {

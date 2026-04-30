@@ -1,8 +1,9 @@
+#include "manager.hpp"
 #include "manager_hidden.hpp"
+#include <functional>
 
 namespace manager {
-
-
+    /*
     void Behavior::init(std::string path, Entity* entity) {
         this->state = luaL_newstate();
         luaL_openlibs(this->state);
@@ -151,5 +152,43 @@ namespace manager {
         if(result != LUA_OK) {
             std::cout << lua_tostring(this->state, -1) << "\n";
         }
+    }
+    */
+    
+    namespace behavior {
+        // EntityBehavior
+        void EntityBehavior::init(Entity* entity) {
+            this->entity = entity;
+        }
+
+        // SceneBehavior
+        void SceneBehavior::init(Scene* scene) {
+            this->scene = scene;
+        }
+
+        // GlobalBehavior
+        void GlobalBehavior::init(Global* global) {
+            this->global = global;
+        }
+
+        std::map<std::string, std::function<IBehavior*()>> _behaviorFactory;
+
+        void release() {
+            _behaviorFactory.clear();
+        }
+
+        void registerBehavior(std::string name, std::function<IBehavior*()> cb) {
+            _behaviorFactory[name] = cb;
+        }
+
+        IBehavior* create(std::string name) {
+            if(_behaviorFactory.find(name) != _behaviorFactory.end()) {
+                return _behaviorFactory.at(name)();
+            } else {
+                std::cout << name << " isn't a behavior!\n";
+                return nullptr;
+            }
+        }
+
     }
 }

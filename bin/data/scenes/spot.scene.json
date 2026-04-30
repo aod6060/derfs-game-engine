@@ -1,7 +1,7 @@
 {
     "name": "scene",
     "version": 4,
-    "behavior": "data/scripts/scene/physics_test_scene_3.lua",
+    "behavior": "Scene.SpotPhysicsTest",
     "entities": [
         {
             "type": "prefab",

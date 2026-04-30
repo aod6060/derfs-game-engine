@@ -5,6 +5,7 @@ def source(file):
     return "#/src/engine/src/manager/" + file
 
 env["source_files"] += [
+    source("manager.cpp"),
     source("behavior.cpp"),
     source("component.cpp"),
     source("component_render.cpp"),

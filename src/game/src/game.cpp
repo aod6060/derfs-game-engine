@@ -11,8 +11,19 @@ namespace game {
         sound::init();
         assets::init();
         util::init();
+        manager::init();
+
+        // Register Behaviors
+        // Entity
+        manager::behavior::registerBehavior("Entity.PlayerFPS", BEHAVIOR_INSTANCE(behavior::PlayerFPSEntity));
+        manager::behavior::registerBehavior("Entity.CrateTest", BEHAVIOR_INSTANCE(behavior::CrateTestEntity));
+        // Scene
+        manager::behavior::registerBehavior("Scene.DirectionPhysicsTest", BEHAVIOR_INSTANCE(behavior::DirectionPhysicsTestScene));
+        manager::behavior::registerBehavior("Scene.PointPhysicsTest", BEHAVIOR_INSTANCE(behavior::PointPhysicsTestScene));
+        manager::behavior::registerBehavior("Scene.SpotPhysicsTest", BEHAVIOR_INSTANCE(behavior::SpotPhysicsTestScene));
         global.startGame();
         global.init();
+        global.postInit();
     }
 
     void GameApp::handleEvent(SDL_Event* e) {
@@ -21,14 +32,6 @@ namespace game {
     }
 
     void GameApp::update(float delta) {
-        /*
-        if(maxTime <= time) {
-            time = 0.0f;
-            std::cout << "FPS: " << (1.0f / delta) << "\n";
-        } else {
-            time += delta;
-        }
-        */
         global.update(delta);
         input::update();
         physics::update();
@@ -40,6 +43,7 @@ namespace game {
 
     void GameApp::release() {
         global.release();
+        manager::release();
         util::release();
         assets::release();
         sound::release();

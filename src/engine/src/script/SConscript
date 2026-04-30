@@ -4,6 +4,8 @@ Import("env")
 def source(file):
     return "#/src/engine/src/script/" + file
 
+env["source_files"] += []
+"""
 env["source_files"] += [
     source("app.cpp"),
     source("behavior.cpp"),
@@ -30,3 +32,4 @@ env["source_files"] += [
     source("transform.cpp"),
     source("util_random.cpp")
 ]
+"""

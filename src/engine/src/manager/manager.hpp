@@ -13,12 +13,19 @@
 #include "../render/render.hpp"
 #include "../sound/sound.hpp"
 
+
+#define BEHAVIOR_INSTANCE(NAME) []() { return new NAME();}
+
 namespace manager {
     struct Entity;
     struct Scene;
     struct Global;
     struct Behavior;
 
+
+    void init();
+    void release();
+    
     namespace component {
         struct IComponent {
             virtual void init(Entity* entity) = 0;
@@ -30,7 +37,16 @@ namespace manager {
             virtual void load(Json::Value value) = 0;
 
             virtual ~IComponent() {}
+        };
+    }
 
+    namespace behavior {
+        struct IBehavior {
+            virtual ~IBehavior() {}
+
+            virtual void ready() = 0;
+            virtual void update(float delta) = 0;
+            virtual void release() = 0;
         };
     }
 
@@ -80,7 +96,9 @@ namespace manager {
     };
 
     // I've going to completely redo this in C++ instead of lua
+    /*
     struct Behavior {
+
         enum Type {
             T_BOOL = 0,
             T_INTEGER,
@@ -129,6 +147,7 @@ namespace manager {
         void executeCallback(std::string name, const std::vector<Argument>& args);
 
     };
+    */
 
     struct Entity {
         std::string type;
@@ -141,16 +160,19 @@ namespace manager {
 
         Transform transform;
 
-        std::string script;
-        Behavior* behavior = nullptr;
+        //std::string script;
+        //Behavior* behavior = nullptr;
+
+        std::string behaviorName;
+        behavior::IBehavior* behavior = nullptr;
 
         std::map<std::string, component::IComponent*> components;
 
         bool needRemoval = false;
-
         bool visible = true;
 
         void init(Scene* scene);
+        void postInit();
         void handleEvent(SDL_Event* e);
         void update(float delta);
         void preRender();
@@ -175,10 +197,14 @@ namespace manager {
         Global* global = nullptr;
         std::vector<Entity*> entities;
 
-        std::string script;
-        Behavior* behavior = nullptr;
+        //std::string script;
+        //Behavior* behavior = nullptr;
+        
+        std::string behaviorName;
+        behavior::IBehavior* behavior = nullptr;
 
         void init(Global* global);
+        void postInit();
         void handleEvent(SDL_Event* e);
         void update(float delta);
         void render();
@@ -194,9 +220,11 @@ namespace manager {
     struct Global {
         Scene* scene = nullptr;
         
-        std::string script;
-        Behavior* behavior = nullptr;
-        
+        //std::string script;
+        //Behavior* behavior = nullptr;
+
+        std::map<std::string, behavior::IBehavior*> behaviors;
+
         bool isSceneChange = false;
         std::string scenePath;
 
@@ -464,6 +492,7 @@ namespace manager {
         std::map<std::string, input::mapping::Mapping> mappings;
 
         void init();
+        void postInit();
         void handleEvent(SDL_Event* e);
         void update(float delta);
         void render();
@@ -649,10 +678,10 @@ namespace manager {
                 std::vector<std::string> masks;
 
                 // Behavior Entity Enter
-                Behavior::Callback entityEnter;
+                //Behavior::Callback entityEnter;
 
                 // Behavior Entity Exit
-                Behavior::Callback entityExit;
+                //Behavior::Callback entityExit;
 
                 bool isEntered = false;
 
@@ -865,6 +894,26 @@ namespace manager {
         }
     }
 
+    namespace behavior {
+        struct EntityBehavior : public IBehavior {
+            Entity* entity = nullptr;
+            void init(Entity* entity);
+        };
+
+        struct SceneBehavior : public IBehavior {
+            Scene* scene = nullptr;
+            void init(Scene* scene);
+        };
+
+        struct GlobalBehavior : public IBehavior {
+            Global* global = nullptr;
+            void init(Global* global);
+        };
+
+        void release();
+        void registerBehavior(std::string name, std::function<IBehavior*()> cb);
+        IBehavior* create(std::string name);
+    }
 }
 
 #endif

@@ -403,7 +403,7 @@ namespace manager {
             }
             
             void TriggerComponent::update(float delta) {
-
+                /*
                 if(ghostObject->getNumOverlappingObjects() > 0) {
                     for(int i = 0; i < ghostObject->getNumOverlappingObjects(); i++) {
                         if(this->entityEnter.behavior != nullptr) {
@@ -416,6 +416,7 @@ namespace manager {
                         this->entityExit.behavior->executeCallback(this->entityExit.name, {});
                     }
                 }
+                */
             }
             
             void TriggerComponent::preRender() {
@@ -428,12 +429,14 @@ namespace manager {
             
             void TriggerComponent::release() {
                 ::physics::getWorld()->removeCollisionObject(this->ghostObject);
+                /*
                 if(this->entityEnter.behavior) {
                     this->entityEnter.behavior = nullptr;
                 }
                 if(this->entityExit.behavior) {
                     this->entityExit.behavior = nullptr;
                 }
+                */
                 ::physics::getWorld()->removeCollisionObject(this->ghostObject);
                 delete this->ghostObject;
                 this->ghostObject = nullptr;

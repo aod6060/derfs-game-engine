@@ -1,8 +1,8 @@
 {
     "name": "global",
-    "version": 5,
-    "behavior": null,
+    "version": 6,
     "default-scene": "data/scenes/direction.scene.json",
+    "behaviors": [],
     "input": {
         "mapping": [
             {

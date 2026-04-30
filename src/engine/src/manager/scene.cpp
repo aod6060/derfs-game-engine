@@ -8,9 +8,19 @@ namespace manager {
         for(int i = 0; i < this->entities.size(); i++) {
             this->entities[i]->init(this);
         }
+        
+        if(this->behavior) {
+            ((behavior::SceneBehavior*)this->behavior)->init(this);
+        }
+    }
+
+    void Scene::postInit() {
+        for(int i = 0; i < this->entities.size(); i++) {
+            this->entities[i]->postInit();
+        }
 
         if(this->behavior) {
-            this->behavior->init(this->script, this);
+            this->behavior->ready();
         }
     }
 
@@ -22,6 +32,8 @@ namespace manager {
 
     void Scene::update(float delta) {
         std::vector<Entity*>::iterator it = this->entities.begin();
+
+        int i = 0;
 
         while(it != this->entities.end()) {
             if((*it)->needRemoval) {
@@ -36,28 +48,15 @@ namespace manager {
         }
 
         //camera.update(delta);
+        // if(this->behavior) {
+        //     this->behavior->update(delta);
+        // }
         if(this->behavior) {
             this->behavior->update(delta);
         }
     }
 
     void Scene::render() {
-        /*
-        render::clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-
-        render::shader::geometry::getMeshShader()->bind();
-
-        for(int i = 0; i < this->entities.size(); i++) {
-            this->entities[i]->preRender();
-        }
-
-        for(int i = 0; i < this->entities.size(); i++) {
-            this->entities[i]->render();
-        }
-
-        render::shader::geometry::getMeshShader()->unbind();
-        */
-
         for(int i = 0; i < this->entities.size(); i++) {
             this->entities[i]->preRender();
         }
@@ -75,6 +74,12 @@ namespace manager {
         }
         this->entities.clear();
 
+        // if(this->behavior) {
+        //     this->behavior->release();
+        //     delete this->behavior;
+        //     this->behavior = nullptr;
+        // }
+
         if(this->behavior) {
             this->behavior->release();
             delete this->behavior;
@@ -87,9 +92,14 @@ namespace manager {
     void Scene::load(Json::Value value) {
         // Camera
         //this->camera.load(value["camera"]);
+        // if(!value["behavior"].isNull()) {
+        //     this->script = value["behavior"].asString();
+        //     this->behavior = new Behavior();
+        // }
+
         if(!value["behavior"].isNull()) {
-            this->script = value["behavior"].asString();
-            this->behavior = new Behavior();
+            this->behaviorName = value["behavior"].asString();
+            this->behavior = behavior::create(this->behaviorName);
         }
 
         // Entity

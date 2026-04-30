@@ -4,7 +4,7 @@
     "entity": {
         "type": "instance",
         "name": "crate",
-        "behavior": "data/scripts/entity/crate_test_entity.lua",
+        "behavior": "Entity.CrateTest",
         "transform": {
             "position": {
                 "x": 0.0,

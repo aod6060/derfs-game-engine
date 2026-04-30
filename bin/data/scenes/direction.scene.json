@@ -1,7 +1,7 @@
 {
     "name": "scene",
-    "version": 4,
-    "behavior": "data/scripts/scene/physics_test_scene.lua",
+    "version": 5,
+    "behavior": "Scene.DirectionPhysicsTest",
     "entities": [
         {
             "type": "prefab",

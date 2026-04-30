@@ -47,7 +47,6 @@ namespace app {
 
             if(maxTime <= currTime) {
                 currTime = 0.0f;
-                //std::cout << "FPS: " << (1.0f / delta) << "\n";
                 std::stringstream ss;
                 ss << g_config->caption << " FPS: (" << (1.0f / delta) << ")";
                 SDL_SetWindowTitle(g_window, ss.str().c_str());
@@ -82,7 +81,6 @@ namespace app {
         if(g_config->app) {
             g_config->app->release();
         }
-        //SDL_GL_DeleteContext(g_context);
         SDL_GL_DestroyContext(g_context);
         SDL_DestroyWindow(g_window);
         SDL_Quit();

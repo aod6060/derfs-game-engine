@@ -3,7 +3,7 @@
     "version": 1,
     "entity": {
         "name": "player",
-        "behavior": "data/scripts/entity/player_fps_entity.lua",
+        "behavior": "Entity.PlayerFPS",
         "transform": {
             "position": {
                 "x": 0.0,

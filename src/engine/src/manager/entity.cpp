@@ -2,6 +2,7 @@
 #include "lua/lua.hpp"
 #include "lua/lualib.hpp"
 #include "../sys.hpp"
+#include "manager.hpp"
 #include "json/value.h"
 #include <fstream>
 #include <vector>
@@ -21,9 +22,25 @@ namespace manager {
         this->componentIterator([&](component::IComponent* comp) {
             comp->init(this);
         });
-
+        /*
         if(this->behavior) {
             this->behavior->init(this->script, this);
+        }
+        */
+        if(this->behavior) {
+            ((behavior::EntityBehavior*)this->behavior)->init(this);
+        }
+    }
+
+    void Entity::postInit() {
+        if(this->childeren.size() > 0) {
+            for(int i = 0; i < childeren.size(); i++) {
+                this->childeren.at(i)->postInit();
+            }
+        }
+
+        if(this->behavior) {
+            this->behavior->ready();
         }
     }
 
@@ -58,7 +75,13 @@ namespace manager {
             comp->update(delta);
         });
 
+        /*
         if(this->behavior) {
+            this->behavior->update(delta);
+        }
+        */
+        if(this->behavior) {
+            std::cout << this->name << "\n";
             this->behavior->update(delta);
         }
     }
@@ -107,11 +130,15 @@ namespace manager {
 
         this->components.clear();
 
+        // if(this->behavior) {
+        //     this->behavior->release();
+        //     delete behavior;
+        // }
         if(this->behavior) {
             this->behavior->release();
-            delete behavior;
+            delete this->behavior;
+            this->behavior = nullptr;
         }
-
         this->transform.release();
 
         this->scene = nullptr;
@@ -122,13 +149,17 @@ namespace manager {
             this->name = value["name"].asString();
         }
 
+        // if(!value["behavior"].empty() && !value["behavior"].isNull()) {
+        //     this->script = value["behavior"].asString();
+        //     this->behavior = new Behavior();
+        // }
+
         if(!value["behavior"].empty() && !value["behavior"].isNull()) {
-            this->script = value["behavior"].asString();
-            this->behavior = new Behavior();
+            this->behaviorName = value["behavior"].asString();
+            this->behavior = manager::behavior::create(this->behaviorName);
         }
 
         // Transform
-
         if(!value["transform"].empty()) {
             transform.load(value["transform"]);
         }
