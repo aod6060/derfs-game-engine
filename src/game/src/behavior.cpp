@@ -15,7 +15,6 @@ namespace game {
         }
 
         void CrateTestEntity::update(float delta) {
-            /*
             if(input::isKeyPressedOnce(input::Keyboard::KEYS_LEFT)) {
                 float amount = 128.0f;
 
@@ -54,7 +53,6 @@ namespace game {
                 this->bodyComponent->body->setActivationState(ACTIVE_TAG);
                 this->bodyComponent->body->applyCentralImpulse(p);
             }
-            */
 
             if(this->entity->transform.position.y < -32.0f) {
                 this->reset();
@@ -83,10 +81,14 @@ namespace game {
             this->sceneBehavior = (AbstractPhysicsTestScene*)this->scene->behavior;
             this->global = this->scene->global;
             this->rayCast = (manager::component::physics::RayCastComponent*)this->entity->components.at("ray-cast-component");
+            
             this->yPivotEntity = this->entity->getChildEntity(0);
+            
             this->meshEntity = this->entity->getChildEntity(1);
+           
             this->pivotEntity = this->yPivotEntity->getChildEntity(0);
             this->pivotEntityPushArm = (manager::component::physics::PushArmComponent*)this->pivotEntity->components.at("push-arm-component");
+            
             this->cameraEntity = pivotEntity->getChildEntity(0);
             this->bodyComponent = (manager::component::physics::DynamicBodyComponent*)entity->components.at("dynamic-body-component");
             this->bodyComponent->body->setAngularFactor(0.0f);
@@ -196,6 +198,41 @@ namespace game {
                     reset();
                 }
             }
+
+            float td = this->tdistance;
+
+            if(this->pivotEntityPushArm->distance < tdistance) {
+                td = this->pivotEntityPushArm->distance;
+            }
+
+            if(animatedCamera) {
+                if(toggleFPS) {
+                    if(animateTime >= maxAnimateTime) {
+                        animatedCamera = false;
+                        cdistance = fdistance;
+                        animateTime = 0.0f;
+                    } else {
+                        animateTime += (delta * 3.0f);
+                        cdistance = lerp(td, fdistance, animateTime);
+                    }
+                } else {
+                    meshEntity->visible = true;
+                    if(animateTime >= maxAnimateTime) {
+                        animatedCamera = false;
+                        cdistance = tdistance;
+                        animateTime = 0.0f;
+                    } else {
+                        animateTime += (delta * 3.0f);
+                        cdistance = lerp(fdistance, tdistance, animateTime);
+                    }
+                }
+            } else {
+                meshEntity->visible = !this->toggleFPS;
+            }
+
+            pivotEntityPushArm->distance = cdistance;
+
+
         }
 
         void PlayerFPSEntity::release() {
